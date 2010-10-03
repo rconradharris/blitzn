@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 
 public class SetTime extends Activity {
 	private Spinner minuteSpinner;
+	private Spinner incrementSpinner;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,10 +21,16 @@ public class SetTime extends Activity {
         setContentView(R.layout.set_time);
         
         minuteSpinner = (Spinner) findViewById(R.id.minuteSpinner);
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(
+        ArrayAdapter minuteAdapter = ArrayAdapter.createFromResource(
                 this, R.array.minute_choices, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        minuteSpinner.setAdapter(adapter);
+        minuteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        minuteSpinner.setAdapter(minuteAdapter);
+ 
+        incrementSpinner = (Spinner) findViewById(R.id.incrementSpinner);
+        ArrayAdapter incrementAdapter = ArrayAdapter.createFromResource(
+                this, R.array.increment_choices, android.R.layout.simple_spinner_item);
+        incrementAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        incrementSpinner.setAdapter(incrementAdapter);
         
         Button setTimeOK = (Button) findViewById(R.id.setTimeOK);
 
@@ -34,6 +41,12 @@ public class SetTime extends Activity {
         		if (minuteChoice != null) {
         			extras.putInt("minutes", Integer.parseInt(minuteChoice));
         		}
+
+        		String incrementChoice = (String) incrementSpinner.getSelectedItem();
+        		if (incrementChoice != null) {
+        			extras.putInt("increment", Integer.parseInt(incrementChoice));
+        		}
+        		
         		Intent intent = new Intent();
         		intent.putExtras(extras);
         		setResult(RESULT_OK, intent);

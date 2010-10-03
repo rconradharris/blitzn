@@ -38,10 +38,15 @@ public class ChessClock extends Activity {
 
 	// Member variables
 	private int clockState = NOSTATE;
+	
 	private long duration = 5 * 1 * 1000L;
 	private long player1TimeLeft = 0L;
 	private long player2TimeLeft = 0L;
-
+	
+	private long increment = 0L;
+	private long player1IncrementLeft = 0L;
+	private long player2IncrementLeft = 0L;
+	
 	private ClockView player1Clock;
 	private ClockView player2Clock;
 
@@ -52,16 +57,18 @@ public class ChessClock extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
+		// Setup Player 1
 		player1Clock = (ClockView) findViewById(R.id.player1Clock);
+		player1Clock.setIsFlipped(true);
 		OnClickListener player1ClickListener = new OnClickListener() {
 			public void onClick(View v) {
 				onPlayerClick(PLAYER1);
 			}
 		};
 		player1Clock.setOnClickListener((android.view.View.OnClickListener) player1ClickListener);
-
+		
+		// Setup Player 2
 		player2Clock = (ClockView) findViewById(R.id.player2Clock);
-		player2Clock.setIsFlipped(true);
 		OnClickListener player2ClickListener = new OnClickListener() {
 			public void onClick(View v) {
 				onPlayerClick(PLAYER2);
@@ -114,12 +121,14 @@ public class ChessClock extends Activity {
 	void activateClock(int which) {
 		if (which == PLAYER1) {
 			// TODO(sirp): theme-up colors
+			player1IncrementLeft = increment;
 			player1Clock.setClickable(true);
 			player1Clock.setBackgroundColor(Color.RED);
 			deactivateClock(PLAYER2, false);
 			clockState = PLAYER1_RUNNING;
 		} else {
 			// TODO(sirp): theme-up colors
+			player2IncrementLeft = increment;
 			player2Clock.setClickable(true);
 			player2Clock.setBackgroundColor(Color.RED);
 			deactivateClock(PLAYER1, false);
@@ -137,6 +146,8 @@ public class ChessClock extends Activity {
 		handler.removeCallbacks(updateTimeTask);
 		player1TimeLeft = duration;
 		player2TimeLeft = duration;
+		player1IncrementLeft = increment;
+		player2IncrementLeft = increment;
 		deactivateClock(PLAYER1, true);
 		deactivateClock(PLAYER2, true);
 		updateClockDisplays();
@@ -146,9 +157,11 @@ public class ChessClock extends Activity {
 	void toggleClock() {
 		switch (clockState) {
 		case PLAYER1_RUNNING:
+			player1TimeLeft += player1IncrementLeft;
 			activateClock(PLAYER2);
 			break;
 		case PLAYER2_RUNNING:
+			player2TimeLeft += player2IncrementLeft;
 			activateClock(PLAYER1);
 			break;
 		default:
@@ -200,9 +213,15 @@ public class ChessClock extends Activity {
 			switch (clockState) {
 			case PLAYER1_RUNNING:
 				player1TimeLeft -= CLOCK_RESOLUTION;
+				player1IncrementLeft -= CLOCK_RESOLUTION;
+				if (player1IncrementLeft < 0)
+					player1IncrementLeft = 0L;
 				break;
 			case PLAYER2_RUNNING:
 				player2TimeLeft -= CLOCK_RESOLUTION;
+				player2IncrementLeft -= CLOCK_RESOLUTION;
+				if (player2IncrementLeft < 0)
+					player2IncrementLeft = 0L;
 				break;
 			}
 
@@ -243,6 +262,10 @@ public class ChessClock extends Activity {
 			case RESULT_OK:
 				int minutes = extras.getInt("minutes");
 				duration = minutes * 60 * 1000;
+				
+				int incrementSeconds = extras.getInt("increment");
+				increment = incrementSeconds * 1000;
+				
 				resetClock();
 				break;
 			case RESULT_CANCELED:

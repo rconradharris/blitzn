@@ -12,7 +12,9 @@
 
 
 
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/setTimeOK" android:text="Set Time"></Button>
+<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+"></TextView><Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/incrementSpinner"></Spinner><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/setTimeOK" android:text="Set Time"></Button>
+
+
 
 
 </LinearLayout>
