@@ -1,6 +1,7 @@
 package com.barleysoft.blitzn;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -41,20 +42,30 @@ public class ChessClock extends Activity {
 		setContentView(R.layout.main);
 		
 		player1Clock = (TextView) findViewById(R.id.player1Clock);
+		OnClickListener player1ClickListener = new OnClickListener() {
+			public void onClick(View v) {
+				onPlayerClick(PLAYER1);
+			}
+		};
 		player1Clock.setOnClickListener((android.view.View.OnClickListener) player1ClickListener);
 		
 		player2Clock = (TextView) findViewById(R.id.player2Clock);
+		OnClickListener player2ClickListener = new OnClickListener() {
+			public void onClick(View v) {
+				onPlayerClick(PLAYER2);
+			}
+		};	
 		player2Clock.setOnClickListener((android.view.View.OnClickListener) player2ClickListener);
 		
 		resetClock();
 		updateClockDisplays();
 	}
 
-	OnClickListener player1ClickListener = new OnClickListener() {
-		public void onClick(View v) {
+	void onPlayerClick(int which) {
+		if (which == PLAYER1) {
 			switch (clockState) {
 			case READY:
-				startClock(PLAYER1);
+				initiateClock(PLAYER1);
 				break;
 			case PLAYER1_RUNNING:
 				toggleClock();
@@ -62,15 +73,11 @@ public class ChessClock extends Activity {
 			case PLAYER1_PAUSED:
 				pauseClock(); // unpause
 				break;
-			}
-		}
-	};
-	
-	OnClickListener player2ClickListener = new OnClickListener() {
-		public void onClick(View v) {
+			}	
+		} else {
 			switch (clockState) {
 			case READY:
-				startClock(PLAYER2);
+				initiateClock(PLAYER2);
 				break;
 			case PLAYER2_RUNNING:
 				toggleClock();
@@ -78,38 +85,60 @@ public class ChessClock extends Activity {
 			case PLAYER2_PAUSED:
 				pauseClock(); // unpause
 				break;
-			}
+			}	
 		}
-	};	
+		
+	}
 	
-	void startClock(int which) {
+	void initiateClock(int which) {
 		if (clockState != READY) {
 			// throw new ClockStateException("already started");
 		}
+		
+		activateClock(which);
 
-		if (which == PLAYER1) {
-			clockState = PLAYER1_RUNNING;
-		} else {
-			clockState = PLAYER2_RUNNING;
-		}
 		handler.removeCallbacks(updateTimeTask);
 		handler.postDelayed(updateTimeTask, 100);
+	}
+	
+	void activateClock(int which) {
+		if (which == PLAYER1) {
+			// TODO(sirp): theme-up colors
+			player1Clock.setClickable(true);
+			player1Clock.setBackgroundColor(Color.RED);
+			deactivateClock(PLAYER2, false);
+			clockState = PLAYER1_RUNNING;
+		} else {
+			// TODO(sirp): theme-up colors
+			player2Clock.setClickable(true);
+			player2Clock.setBackgroundColor(Color.RED);
+			deactivateClock(PLAYER1, false);
+			clockState = PLAYER2_RUNNING;
+		}
+	}
+	
+	void deactivateClock(int which, boolean clickable) {
+		TextView clock = (which == PLAYER1) ? player1Clock : player2Clock;
+		clock.setBackgroundColor(Color.BLACK);
+		clock.setClickable(clickable);
 	}
 	
 	void resetClock() {
 		handler.removeCallbacks(updateTimeTask);
 		player1TimeLeft = duration;
 		player2TimeLeft = duration;
+		deactivateClock(PLAYER1, true);
+		deactivateClock(PLAYER2, true);
 		clockState = READY;
 	}
 	
 	void toggleClock() {
 		switch (clockState) {
 		case PLAYER1_RUNNING:
-			clockState = PLAYER2_RUNNING;
+			activateClock(PLAYER2);
 			break;
 		case PLAYER2_RUNNING:
-			clockState = PLAYER1_RUNNING;
+			activateClock(PLAYER1);
 			break;
 		default:
 			// throw ClockStateException("wrong state");
@@ -143,12 +172,14 @@ public class ChessClock extends Activity {
 	
 	void stopClock() {
 		handler.removeCallbacks(updateTimeTask);
-	    clockState = STOPPED;
+		player1Clock.setClickable(false);
+		player2Clock.setClickable(false);
+		clockState = STOPPED;	    
 	}
 	
 	private Runnable updateTimeTask = new Runnable() {
 		public void run() {
-			
+			// Check for either clock expiring
 			if ((player1TimeLeft < CLOCK_RESOLUTION) ||
 			    (player2TimeLeft < CLOCK_RESOLUTION)) {
 				stopClock();
