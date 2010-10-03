@@ -2,5 +2,7 @@
 <resources>
     
     <string name="app_name">Blitzn</string>
-<string name="set_time_minutes_prompt">Minutes</string>
+
+<string name="duration">Duration</string>
+<string name="increment">Increment</string>
 </resources>

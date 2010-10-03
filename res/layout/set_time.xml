@@ -3,16 +3,18 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  android:orientation="vertical">
+  android:orientation="vertical" android:paddingTop="50px" android:paddingLeft="75px">
 
 
-<Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/minuteSpinner"></Spinner>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/durationLabel" android:text="@string/duration"></TextView><Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/minuteSpinner"></Spinner>
 
 
 
 
 
-<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+"></TextView><Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/incrementSpinner"></Spinner><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/setTimeOK" android:text="Set Time"></Button>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/increment" android:id="@+id/incrementLabel" android:paddingTop="25px"></TextView><Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/incrementSpinner"></Spinner><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/OKSpacer" android:paddingBottom="25px"></TextView><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/setTimeOK" android:text="Set Time" android:width="200px" android:height="80px"></Button>
+
+
 
 
 

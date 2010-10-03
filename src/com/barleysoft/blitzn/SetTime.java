@@ -39,12 +39,14 @@ public class SetTime extends Activity {
         		Bundle extras = new Bundle();
         		String minuteChoice = (String) minuteSpinner.getSelectedItem();
         		if (minuteChoice != null) {
-        			extras.putInt("minutes", Integer.parseInt(minuteChoice));
+        			int minutes = Integer.parseInt(minuteChoice.split(" ")[0]);
+        			extras.putInt("minutes", minutes);
         		}
 
         		String incrementChoice = (String) incrementSpinner.getSelectedItem();
         		if (incrementChoice != null) {
-        			extras.putInt("increment", Integer.parseInt(incrementChoice));
+        			int increment = Integer.parseInt(incrementChoice.split(" ")[0]);
+        			extras.putInt("increment", increment);
         		}
         		
         		Intent intent = new Intent();
