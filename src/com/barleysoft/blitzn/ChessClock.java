@@ -1,17 +1,18 @@
 package com.barleysoft.blitzn;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.TextView;
 
 public class ChessClock extends Activity {
 
@@ -76,8 +77,22 @@ public class ChessClock extends Activity {
 		};
 		player2Clock.setOnClickListener((android.view.View.OnClickListener) player2ClickListener);
 		resetClock();
-	}
+		
+		installShakeListener();
+	}	
 
+	void installShakeListener() {
+		final Vibrator vibe = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+		// TODO(sirp): add configuration setting for shake
+		ShakeListener shakeListener = new ShakeListener(this);
+		shakeListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
+			public void onShake() {
+				vibe.vibrate(100);
+				resetClock();
+			}
+		});
+	}
+	
 	void onPlayerClick(int which) {
 		if (which == PLAYER1) {
 			switch (clockState) {
@@ -122,34 +137,47 @@ public class ChessClock extends Activity {
 		if (which == PLAYER1) {
 			// TODO(sirp): theme-up colors
 			player1IncrementLeft = increment;
+			
+			// Activate Player 1
 			player1Clock.setClickable(true);
-			player1Clock.setBackgroundColor(Color.RED);
-			deactivateClock(PLAYER2, false);
+			player1Clock.setBackgroundColor(Color.BLACK);
+			
+			// Deactivate Player 2
+			player2Clock.setBackgroundColor(Color.TRANSPARENT);
+			player2Clock.setClickable(false);
+
 			clockState = PLAYER1_RUNNING;
 		} else {
 			// TODO(sirp): theme-up colors
 			player2IncrementLeft = increment;
+			
+			// Activate Player 2
 			player2Clock.setClickable(true);
-			player2Clock.setBackgroundColor(Color.RED);
-			deactivateClock(PLAYER1, false);
+			player2Clock.setBackgroundColor(Color.BLACK);
+			
+			// Deactivate Player 1
+			player1Clock.setBackgroundColor(Color.TRANSPARENT);
+			player1Clock.setClickable(false);
+			
 			clockState = PLAYER2_RUNNING;
 		}
 	}
 
-	void deactivateClock(int which, boolean clickable) {
-		TextView clock = (which == PLAYER1) ? player1Clock : player2Clock;
-		clock.setBackgroundColor(Color.BLACK);
-		clock.setClickable(clickable);
-	}
-
 	void resetClock() {
 		handler.removeCallbacks(updateTimeTask);
+		
 		player1TimeLeft = duration;
 		player2TimeLeft = duration;
+		
 		player1IncrementLeft = increment;
 		player2IncrementLeft = increment;
-		deactivateClock(PLAYER1, true);
-		deactivateClock(PLAYER2, true);
+
+		player1Clock.setBackgroundColor(Color.BLACK);
+		player1Clock.setClickable(true);
+		
+		player2Clock.setBackgroundColor(Color.BLACK);
+		player2Clock.setClickable(true);
+		
 		updateClockDisplays();
 		clockState = READY;
 	}

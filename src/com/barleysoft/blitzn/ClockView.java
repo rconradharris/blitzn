@@ -2,6 +2,7 @@ package com.barleysoft.blitzn;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -11,6 +12,9 @@ public class ClockView extends TextView {
 
 	public ClockView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		String fontLocation = context.getString(R.string.clock_font);
+		Typeface face = Typeface.createFromAsset(context.getAssets(), fontLocation); 
+		setTypeface(face); 
 	}
 
 	void setIsFlipped(boolean isFlipped) {

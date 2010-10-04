@@ -36,6 +36,7 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f050000;
+        public static final int clock_font=0x7f050003;
         public static final int duration=0x7f050001;
         public static final int increment=0x7f050002;
     }
