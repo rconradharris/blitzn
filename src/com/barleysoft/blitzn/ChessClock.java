@@ -3,6 +3,7 @@ package com.barleysoft.blitzn;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +31,9 @@ public class ChessClock extends Activity {
 	public static final int MENU_RESET = Menu.FIRST;
 	public static final int MENU_SET_TIME = Menu.FIRST + 1;
 
+	// Preference Key-Value Store
+	public static final String PREFS_NAME = "BlitznPrefs";
+
 	// Clock State Machine
 	public static final int NOSTATE = 0;
 	public static final int READY = 1;
@@ -41,7 +45,6 @@ public class ChessClock extends Activity {
 
 	// Member variables
 	private int clockState = NOSTATE;
-
 
 	private long player1TimeLeft = 0L;
 	private long player2TimeLeft = 0L;
@@ -58,8 +61,7 @@ public class ChessClock extends Activity {
 	private long duration = 5 * 1 * 1000L;
 	private long increment = 0L;
 	private boolean shakeEnabled = true;
-	
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -91,10 +93,27 @@ public class ChessClock extends Activity {
 		};
 		player2Clock
 				.setOnClickListener((android.view.View.OnClickListener) player2ClickListener);
-		
+
 		// Initialize UI
+		restorePreferences();
 		installShakeListener();
 		resetClock();
+	}
+
+	void restorePreferences() {
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		duration = settings.getLong("duration", 5 * 60 * 1000L);
+		increment = settings.getLong("increment", 0L);
+		shakeEnabled = settings.getBoolean("shakeEnabled", true);
+	}
+
+	void savePreferences() {
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putLong("duration", duration);
+		editor.putLong("increment", increment);
+		editor.putBoolean("shakeEnabled", shakeEnabled);
+		editor.commit();
 	}
 
 	void installShakeListener() {
@@ -320,11 +339,11 @@ public class ChessClock extends Activity {
 	private void setTime() {
 		Intent setTimeIntent = new Intent(this, SetTime.class);
 		Log.i("Blitzn", "Launching SetTime Intent");
-		
+
 		setTimeIntent.putExtra("durationMinutes", (int) duration / 60 / 1000);
 		setTimeIntent.putExtra("incrementSeconds", (int) increment / 1000);
 		setTimeIntent.putExtra("shakeEnabled", shakeEnabled);
-		
+
 		startActivityForResult(setTimeIntent, ACTIVITY_SET_TIME);
 	}
 
@@ -348,5 +367,10 @@ public class ChessClock extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
+	
+    @Override
+    protected void onStop(){
+       super.onStop();
+       savePreferences();
+    }
 }
