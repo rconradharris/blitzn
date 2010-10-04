@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string-array name="minute_choices">
+<string-array name="duration_choices">
 <item>1 minute</item>
 <item>3 minutes</item>
 <item>5 minutes</item>

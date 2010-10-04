@@ -42,11 +42,10 @@ public class ChessClock extends Activity {
 	// Member variables
 	private int clockState = NOSTATE;
 
-	private long duration = 5 * 1 * 1000L;
+
 	private long player1TimeLeft = 0L;
 	private long player2TimeLeft = 0L;
 
-	private long increment = 0L;
 	private long player1IncrementLeft = 0L;
 	private long player2IncrementLeft = 0L;
 
@@ -55,6 +54,12 @@ public class ChessClock extends Activity {
 
 	private Handler handler = new Handler();
 
+	// Configurations
+	private long duration = 5 * 1 * 1000L;
+	private long increment = 0L;
+	private boolean shakeEnabled = true;
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -86,9 +91,10 @@ public class ChessClock extends Activity {
 		};
 		player2Clock
 				.setOnClickListener((android.view.View.OnClickListener) player2ClickListener);
-		resetClock();
-
+		
+		// Initialize UI
 		installShakeListener();
+		resetClock();
 	}
 
 	void installShakeListener() {
@@ -97,8 +103,10 @@ public class ChessClock extends Activity {
 		ShakeListener shakeListener = new ShakeListener(this);
 		shakeListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
 			public void onShake() {
-				vibe.vibrate(100);
-				resetClock();
+				if (shakeEnabled) {
+					vibe.vibrate(100);
+					resetClock();
+				}
 			}
 		});
 	}
@@ -297,12 +305,9 @@ public class ChessClock extends Activity {
 		case ACTIVITY_SET_TIME:
 			switch (resultCode) {
 			case RESULT_OK:
-				int minutes = extras.getInt("minutes");
-				duration = minutes * 60 * 1000;
-
-				int incrementSeconds = extras.getInt("increment");
-				increment = incrementSeconds * 1000;
-
+				duration = extras.getInt("durationMinutes") * 60 * 1000;
+				increment = extras.getInt("incrementSeconds") * 1000;
+				shakeEnabled = extras.getBoolean("shakeEnabled");
 				resetClock();
 				break;
 			case RESULT_CANCELED:
@@ -315,6 +320,11 @@ public class ChessClock extends Activity {
 	private void setTime() {
 		Intent setTimeIntent = new Intent(this, SetTime.class);
 		Log.i("Blitzn", "Launching SetTime Intent");
+		
+		setTimeIntent.putExtra("durationMinutes", (int) duration / 60 / 1000);
+		setTimeIntent.putExtra("incrementSeconds", (int) increment / 1000);
+		setTimeIntent.putExtra("shakeEnabled", shakeEnabled);
+		
 		startActivityForResult(setTimeIntent, ACTIVITY_SET_TIME);
 	}
 

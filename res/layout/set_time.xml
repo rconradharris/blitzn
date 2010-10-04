@@ -6,13 +6,14 @@
   android:orientation="vertical" android:paddingTop="50px" android:paddingLeft="75px">
 
 
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/durationLabel" android:text="@string/duration"></TextView><Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/minuteSpinner"></Spinner>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/durationLabel" android:text="@string/duration"></TextView><Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/durationSpinner"></Spinner>
 
 
 
 
 
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/increment" android:id="@+id/incrementLabel" android:paddingTop="25px"></TextView><Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/incrementSpinner"></Spinner><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/OKSpacer" android:paddingBottom="25px"></TextView><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/setTimeOK" android:text="Set Time" android:width="200px" android:height="80px"></Button>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/increment" android:id="@+id/incrementLabel" android:paddingTop="25px"></TextView><Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/incrementSpinner"></Spinner><CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/shakeCheckbox" android:text="Shake To Reset"></CheckBox><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/OKSpacer" android:paddingBottom="25px"></TextView><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/setTimeOK" android:text="Set Time" android:width="200px" android:height="80px"></Button>
+
 
 
 
