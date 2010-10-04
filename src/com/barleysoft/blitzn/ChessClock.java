@@ -25,10 +25,10 @@ public class ChessClock extends Activity {
 
 	// Activities
 	public static final int ACTIVITY_SET_TIME = 0;
-	
+
 	// Menu Items
-    public static final int MENU_RESET = Menu.FIRST;
-    public static final int MENU_SET_TIME = Menu.FIRST + 1;
+	public static final int MENU_RESET = Menu.FIRST;
+	public static final int MENU_SET_TIME = Menu.FIRST + 1;
 
 	// Clock State Machine
 	public static final int NOSTATE = 0;
@@ -41,15 +41,15 @@ public class ChessClock extends Activity {
 
 	// Member variables
 	private int clockState = NOSTATE;
-	
+
 	private long duration = 5 * 1 * 1000L;
 	private long player1TimeLeft = 0L;
 	private long player2TimeLeft = 0L;
-	
+
 	private long increment = 0L;
 	private long player1IncrementLeft = 0L;
 	private long player2IncrementLeft = 0L;
-	
+
 	private ClockView player1Clock;
 	private ClockView player2Clock;
 
@@ -74,8 +74,9 @@ public class ChessClock extends Activity {
 				onPlayerClick(PLAYER1);
 			}
 		};
-		player1Clock.setOnClickListener((android.view.View.OnClickListener) player1ClickListener);
-		
+		player1Clock
+				.setOnClickListener((android.view.View.OnClickListener) player1ClickListener);
+
 		// Setup Player 2
 		player2Clock = (ClockView) findViewById(R.id.player2Clock);
 		OnClickListener player2ClickListener = new OnClickListener() {
@@ -83,14 +84,15 @@ public class ChessClock extends Activity {
 				onPlayerClick(PLAYER2);
 			}
 		};
-		player2Clock.setOnClickListener((android.view.View.OnClickListener) player2ClickListener);
+		player2Clock
+				.setOnClickListener((android.view.View.OnClickListener) player2ClickListener);
 		resetClock();
-		
+
 		installShakeListener();
-	}	
+	}
 
 	void installShakeListener() {
-		final Vibrator vibe = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+		final Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		// TODO(sirp): add configuration setting for shake
 		ShakeListener shakeListener = new ShakeListener(this);
 		shakeListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
@@ -100,7 +102,7 @@ public class ChessClock extends Activity {
 			}
 		});
 	}
-	
+
 	void onPlayerClick(int which) {
 		if (which == PLAYER1) {
 			switch (clockState) {
@@ -145,11 +147,11 @@ public class ChessClock extends Activity {
 		if (which == PLAYER1) {
 			// TODO(sirp): theme-up colors
 			player1IncrementLeft = increment;
-			
+
 			// Activate Player 1
 			player1Clock.setClickable(true);
 			player1Clock.setBackgroundColor(Color.BLACK);
-			
+
 			// Deactivate Player 2
 			player2Clock.setBackgroundColor(Color.TRANSPARENT);
 			player2Clock.setClickable(false);
@@ -158,34 +160,34 @@ public class ChessClock extends Activity {
 		} else {
 			// TODO(sirp): theme-up colors
 			player2IncrementLeft = increment;
-			
+
 			// Activate Player 2
 			player2Clock.setClickable(true);
 			player2Clock.setBackgroundColor(Color.BLACK);
-			
+
 			// Deactivate Player 1
 			player1Clock.setBackgroundColor(Color.TRANSPARENT);
 			player1Clock.setClickable(false);
-			
+
 			clockState = PLAYER2_RUNNING;
 		}
 	}
 
 	void resetClock() {
 		handler.removeCallbacks(updateTimeTask);
-		
+
 		player1TimeLeft = duration;
 		player2TimeLeft = duration;
-		
+
 		player1IncrementLeft = increment;
 		player2IncrementLeft = increment;
 
 		player1Clock.setBackgroundColor(Color.BLACK);
 		player1Clock.setClickable(true);
-		
+
 		player2Clock.setBackgroundColor(Color.BLACK);
 		player2Clock.setClickable(true);
-		
+
 		updateClockDisplays();
 		clockState = READY;
 	}
@@ -281,8 +283,7 @@ public class ChessClock extends Activity {
 		String clockText = String.format("%02d:%02d", minutes, seconds);
 		clockView.setText(clockText);
 	}
-	
-	
+
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
 		Log.i("Blitzn", "onActivityResult called");
@@ -291,17 +292,17 @@ public class ChessClock extends Activity {
 		if (intent == null)
 			return;
 
-		 Bundle extras = intent.getExtras();
+		Bundle extras = intent.getExtras();
 		switch (requestCode) {
 		case ACTIVITY_SET_TIME:
 			switch (resultCode) {
 			case RESULT_OK:
 				int minutes = extras.getInt("minutes");
 				duration = minutes * 60 * 1000;
-				
+
 				int incrementSeconds = extras.getInt("increment");
 				increment = incrementSeconds * 1000;
-				
+
 				resetClock();
 				break;
 			case RESULT_CANCELED:
@@ -310,18 +311,18 @@ public class ChessClock extends Activity {
 			break;
 		}
 	}
-	
-    private void setTime() {
-        Intent setTimeIntent = new Intent(this, SetTime.class);
-        Log.i("Blitzn", "Launching SetTime Intent");
-        startActivityForResult(setTimeIntent, ACTIVITY_SET_TIME);
-    }
-	
+
+	private void setTime() {
+		Intent setTimeIntent = new Intent(this, SetTime.class);
+		Log.i("Blitzn", "Launching SetTime Intent");
+		startActivityForResult(setTimeIntent, ACTIVITY_SET_TIME);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
 		menu.add(0, MENU_RESET, 0, "Reset");
-        menu.add(0, MENU_SET_TIME, 0, "Set Time");
+		menu.add(0, MENU_SET_TIME, 0, "Set Time");
 		return result;
 	}
 
@@ -331,14 +332,11 @@ public class ChessClock extends Activity {
 		case MENU_RESET:
 			resetClock();
 			return true;
-        case MENU_SET_TIME:
-            setTime();
-            return true;
+		case MENU_SET_TIME:
+			setTime();
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-
-	
 
 }
