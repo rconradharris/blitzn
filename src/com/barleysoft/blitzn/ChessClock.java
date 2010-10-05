@@ -1,7 +1,9 @@
 package com.barleysoft.blitzn;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -103,6 +105,36 @@ public class ChessClock extends Activity {
 		installShakeListener();
 		resetClock();
 	}
+
+	// NOTE(sirp): leaving this out (a bit cargo-cult-ish at the moment
+	// @Override
+	// public void onSaveInstanceState(Bundle savedInstanceState) {
+	// // Save UI state changes to the savedInstanceState.
+	// // This bundle will be passed to onCreate if the process is
+	// // killed and restarted.
+	// savedInstanceState.putInt("clockState", clockState);
+	// savedInstanceState.putLong("player1TimeLeft", player1TimeLeft);
+	// savedInstanceState.putLong("player2TimeLeft", player2TimeLeft);
+	// savedInstanceState
+	// .putLong("player1IncrementLeft", player1IncrementLeft);
+	// savedInstanceState
+	// .putLong("player2IncrementLeft", player2IncrementLeft);
+	// super.onSaveInstanceState(savedInstanceState);
+	// }
+	//
+	// @Override
+	// public void onRestoreInstanceState(Bundle savedInstanceState) {
+	// super.onRestoreInstanceState(savedInstanceState);
+	// // Restore UI state from the savedInstanceState.
+	// // This bundle has also been passed to onCreate.
+	// clockState = savedInstanceState.getInt("clockState");
+	// player1TimeLeft = savedInstanceState.getLong("player1TimeLeft");
+	// player2TimeLeft = savedInstanceState.getLong("player2TimeLeft");
+	// player1IncrementLeft =
+	// savedInstanceState.getLong("player1IncrementLeft");
+	// player2IncrementLeft =
+	// savedInstanceState.getLong("player2IncrementLeft");
+	// }
 
 	void initializeSound() {
 		clicker = MediaPlayer.create(this, R.raw.click1);
@@ -389,5 +421,40 @@ public class ChessClock extends Activity {
 	protected void onStop() {
 		super.onStop();
 		savePreferences();
+	}
+
+	private void showExitDialog() {
+		// Ask the user if they want to quit
+		new AlertDialog.Builder(this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle(R.string.quit)
+				.setMessage(R.string.leave_in_progress)
+				.setPositiveButton(R.string.yes,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+
+								// Stop the activity
+								ChessClock.this.finish();
+							}
+						}).setNegativeButton(R.string.no, null).show();
+	}
+
+	public boolean isGameInProgress() {
+		switch (clockState) {
+		case NOSTATE:
+		case READY:
+		case STOPPED:
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (isGameInProgress())
+			showExitDialog();
+		else
+			super.onBackPressed();
 	}
 }

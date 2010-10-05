@@ -6,4 +6,8 @@
 <string name="duration">Duration</string>
 <string name="increment">Increment</string>
 <string name="clock_font">fonts/digital-7-mono.ttf</string>
+<string name="yes">Yes</string>
+<string name="no">No</string>
+<string name="quit">Quit</string>
+<string name="leave_in_progress">Abandon game in progress?</string>
 </resources>

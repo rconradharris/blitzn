@@ -1,14 +1,10 @@
-Bring up modal dialog Sure you want to exit if game in progress
-
 Save Activity State - see onSaveInstanceState() onRestoreInstanceState()
-
 
 Perhaps pull "Settings" onto different page, and leave time related settings on
 SetTime. Idea is "Settings" is rare, "SetTime" is common.
 
 Splash screen that run on first install that explains basic operation.
 Possible help button.
-
 
 Icon
 
