@@ -1,13 +1,38 @@
-Improve game ending state
+App:
+    Add version information on Settings page (define versionCode and versionName)
+    
+    Specify API version requirement in manifest
+        Requirements enforced by the Android Market server:
+        Your application must be signed with a cryptographic private key whose
+        validity period ends after 22 October 2033.
+        Your application must define both an android:versionCode and an
+        android:versionName attribute in the <manifest> element of its manifest. The
+        server uses the android:versionCode as the basis for identifying the
+        application internally and handling updates, and it displays the
+        android:versionName to users as the application's version.
+        Your application must define both an android:icon and an android:label
+        attribute in the <application> element of its manifest.
 
-Test power management: Does screen dim after certain period of time, does
-phone goto sleep. Do we need to add setting to disable that?
+    Improve game ending state
 
-Font change?
+    Font change?
 
-Splash Screen
+    Splash Screen
 
-About Page
+    About Page
+
+    Cut Release:
+        versionCode 1
+        vresionName 0.1
+
+Barleysoft:
+    Make small demonstration video
+    Create Small website. "What's Brewing?"/ Colors Yellow & Brown.
+    Create Barleysoft logo: Barley leaf
+    Create email acct that forwards to gmail (rick@barleysoft.com)
+    Get Market publishing account
+    Create Twitter Account
+
 
 == Next Release ==
 
@@ -25,6 +50,7 @@ Settings page with swipe-to-set widget:
     * Support common settings
     * Support customer times
 
+Only keepScreenOn while game isInProgress
 
 Themes?
 
