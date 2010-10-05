@@ -1,6 +1,8 @@
 App:
-    Add version information on Settings page (define versionCode and versionName)
-    
+    Font change?
+
+    Improve game ending state
+
     Specify API version requirement in manifest
         Requirements enforced by the Android Market server:
         Your application must be signed with a cryptographic private key whose
@@ -13,19 +15,17 @@ App:
         Your application must define both an android:icon and an android:label
         attribute in the <application> element of its manifest.
 
-    Improve game ending state
-
-    Font change?
-
-    Splash Screen
-
-    About Page
-
     Cut Release:
         versionCode 1
         vresionName 0.1
 
+    Create screen shots
+    Write description, enumerate features
+    Sign w/ release key
+    zipalign apk
+
 Barleysoft:
+
     Make small demonstration video
     Create Small website. "What's Brewing?"/ Colors Yellow & Brown.
     Create Barleysoft logo: Barley leaf
@@ -35,6 +35,10 @@ Barleysoft:
 
 
 == Next Release ==
+
+Splash Screen
+
+About Page
 
 Better Icon
 
