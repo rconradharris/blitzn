@@ -313,27 +313,13 @@ public class ChessClock extends Activity {
 
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
-		Log.i("Blitzn", "onActivityResult called");
-
-		// Back button pressed while in SetTime Intent
-		if (intent == null)
-			return;
-
+		// Back button on SetTime sub-Activity is overridden to bundle the
+		// results and RETURN_OK
 		Bundle extras = intent.getExtras();
-		switch (requestCode) {
-		case ACTIVITY_SET_TIME:
-			switch (resultCode) {
-			case RESULT_OK:
-				duration = extras.getInt("durationMinutes") * 60 * 1000;
-				increment = extras.getInt("incrementSeconds") * 1000;
-				shakeEnabled = extras.getBoolean("shakeEnabled");
-				resetClock();
-				break;
-			case RESULT_CANCELED:
-				break;
-			}
-			break;
-		}
+		duration = extras.getInt("durationMinutes") * 60 * 1000;
+		increment = extras.getInt("incrementSeconds") * 1000;
+		shakeEnabled = extras.getBoolean("shakeEnabled");
+		resetClock();
 	}
 
 	private void setTime() {
@@ -367,10 +353,10 @@ public class ChessClock extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-    @Override
-    protected void onStop(){
-       super.onStop();
-       savePreferences();
-    }
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		savePreferences();
+	}
 }

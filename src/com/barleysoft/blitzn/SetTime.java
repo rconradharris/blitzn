@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.CheckBox;
-import android.view.View.OnClickListener;
 
 public class SetTime extends Activity {
 	private Spinner durationSpinner;
@@ -25,6 +22,25 @@ public class SetTime extends Activity {
 		return -1;
 	}
 
+	Spinner setupSpinner(int spinnerId, int choicesId, int value) {
+		// value is value of the selection to pre-pop the spinner with
+
+		Spinner spinner = (Spinner) findViewById(spinnerId);
+		ArrayAdapter<?> arrayAdapter = ArrayAdapter.createFromResource(this,
+				choicesId, android.R.layout.simple_spinner_item);
+		arrayAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(arrayAdapter);
+
+		// Pre-pop the duration spinner
+		String[] arrayChoices = getResources().getStringArray(choicesId);
+		int spinnerSelection = getIndexOfChoice(arrayChoices, value);
+		if (spinnerSelection != -1)
+			spinner.setSelection(spinnerSelection);
+
+		return spinner;
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,75 +48,40 @@ public class SetTime extends Activity {
 		setContentView(R.layout.set_time);
 
 		Bundle extras = getIntent().getExtras();
-
-		// Setup Duration Spinner
-		durationSpinner = (Spinner) findViewById(R.id.durationSpinner);
-		ArrayAdapter<?> durationAdapter = ArrayAdapter.createFromResource(this,
-				R.array.duration_choices, android.R.layout.simple_spinner_item);
-		durationAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		durationSpinner.setAdapter(durationAdapter);
-
-		// Pre-pop the duration spinner
-		String[] durationChoices = getResources().getStringArray(
-				R.array.duration_choices);
-		int durationSelection = getIndexOfChoice(durationChoices,
-				extras.getInt("durationMinutes"));
-		if (durationSelection != -1)
-			durationSpinner.setSelection(durationSelection);
-
-		// Setup Increment Spinner
-		incrementSpinner = (Spinner) findViewById(R.id.incrementSpinner);
-		ArrayAdapter<?> incrementAdapter = ArrayAdapter.createFromResource(
-				this, R.array.increment_choices,
-				android.R.layout.simple_spinner_item);
-		incrementAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		incrementSpinner.setAdapter(incrementAdapter);
-
-		// Pre-pop the increment spinner
-		String[] incrementChoices = getResources().getStringArray(
-				R.array.increment_choices);
-		int incrementSelection = getIndexOfChoice(incrementChoices,
-				extras.getInt("incrementSeconds"));
-		if (incrementSelection != -1)
-			incrementSpinner.setSelection(incrementSelection);
+		durationSpinner = setupSpinner(R.id.durationSpinner,
+				R.array.duration_choices, extras.getInt("durationMinutes"));
+		incrementSpinner = setupSpinner(R.id.incrementSpinner,
+				R.array.increment_choices, extras.getInt("incrementSeconds"));
 
 		// Setup Shake To Reset Checkbox
 		shakeCheckbox = (CheckBox) findViewById(R.id.shakeCheckbox);
 		shakeCheckbox.setChecked(extras.getBoolean("shakeEnabled"));
+	}
 
-		// Setup SetTime Button
-		Button setTimeOK = (Button) findViewById(R.id.setTimeOK);
+	@Override
+	public void onBackPressed() {
+		Bundle extras = new Bundle();
 
-		setTimeOK.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Bundle extras = new Bundle();
+		// Duration selection
+		String minuteChoice = (String) durationSpinner.getSelectedItem();
+		if (minuteChoice != null) {
+			int minutes = Integer.parseInt(minuteChoice.split(" ")[0]);
+			extras.putInt("durationMinutes", minutes);
+		}
 
-				// Duration selection
-				String minuteChoice = (String) durationSpinner
-						.getSelectedItem();
-				if (minuteChoice != null) {
-					int minutes = Integer.parseInt(minuteChoice.split(" ")[0]);
-					extras.putInt("durationMinutes", minutes);
-				}
+		// Increment selection
+		String incrementChoice = (String) incrementSpinner.getSelectedItem();
+		if (incrementChoice != null) {
+			int increment = Integer.parseInt(incrementChoice.split(" ")[0]);
+			extras.putInt("incrementSeconds", increment);
+		}
 
-				// Increment selection
-				String incrementChoice = (String) incrementSpinner
-						.getSelectedItem();
-				if (incrementChoice != null) {
-					int increment = Integer.parseInt(incrementChoice.split(" ")[0]);
-					extras.putInt("incrementSeconds", increment);
-				}
+		// Shake to Reset selection
+		extras.putBoolean("shakeEnabled", shakeCheckbox.isChecked());
 
-				// Shake to Reset selection
-				extras.putBoolean("shakeEnabled", shakeCheckbox.isChecked());
-
-				Intent intent = new Intent();
-				intent.putExtras(extras);
-				setResult(RESULT_OK, intent);
-				finish();
-			}
-		});
+		Intent intent = new Intent();
+		intent.putExtras(extras);
+		setResult(RESULT_OK, intent);
+		finish();
 	}
 }

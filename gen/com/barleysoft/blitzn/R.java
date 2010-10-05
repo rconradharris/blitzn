@@ -19,7 +19,6 @@ public final class R {
         public static final int woodgrain=0x7f020001;
     }
     public static final class id {
-        public static final int OKSpacer=0x7f060009;
         public static final int TextView01=0x7f060000;
         public static final int TextView02=0x7f060002;
         public static final int durationLabel=0x7f060004;
@@ -28,7 +27,6 @@ public final class R {
         public static final int incrementSpinner=0x7f060007;
         public static final int player1Clock=0x7f060001;
         public static final int player2Clock=0x7f060003;
-        public static final int setTimeOK=0x7f06000a;
         public static final int shakeCheckbox=0x7f060008;
     }
     public static final class layout {
