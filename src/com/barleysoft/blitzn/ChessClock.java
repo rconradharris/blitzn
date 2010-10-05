@@ -338,11 +338,18 @@ public class ChessClock extends Activity {
 		// Back button on SetTime sub-Activity is overridden to bundle the
 		// results and RETURN_OK
 		Bundle extras = intent.getExtras();
+		long old_duration = duration;
 		duration = extras.getInt("durationMinutes") * 60 * 1000;
+
+		long old_increment = increment;
 		increment = extras.getInt("incrementSeconds") * 1000;
+
 		shakeEnabled = extras.getBoolean("shakeEnabled");
 		soundEnabled = extras.getBoolean("soundEnabled");
-		resetClock();
+
+		// Only reset the clock if we changed something related to time-keeping
+		if ((old_duration != duration) || (old_increment != increment))
+			resetClock();
 	}
 
 	private void setTime() {
