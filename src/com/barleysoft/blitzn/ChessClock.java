@@ -105,6 +105,7 @@ public class ChessClock extends Activity {
 		resetClock();
 	}
 
+
 	// NOTE(sirp): leaving this out (a bit cargo-cult-ish at the moment
 	// @Override
 	// public void onSaveInstanceState(Bundle savedInstanceState) {

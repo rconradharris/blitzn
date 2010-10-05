@@ -2,11 +2,14 @@ package com.barleysoft.blitzn;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 public class SetTime extends Activity {
 	private Spinner durationSpinner;
@@ -61,6 +64,23 @@ public class SetTime extends Activity {
 		// Setup Sounds Checkbox
 		soundCheckbox = (CheckBox) findViewById(R.id.soundCheckbox);
 		soundCheckbox.setChecked(extras.getBoolean("soundEnabled"));
+
+		setVersionLabel();
+	}
+
+	private void setVersionLabel() {
+		TextView versionLabel = (TextView) findViewById(R.id.versionLabel);
+		versionLabel.setText("v" + getVersionName());
+	}
+
+	public String getVersionName() {
+		try {
+			PackageInfo manager = getPackageManager().getPackageInfo(
+					getPackageName(), 0);
+			return manager.versionName;
+		} catch (NameNotFoundException e) {
+			return "0.0";
+		}
 	}
 
 	@Override
