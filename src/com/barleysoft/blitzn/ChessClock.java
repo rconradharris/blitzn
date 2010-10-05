@@ -58,12 +58,14 @@ public class ChessClock extends Activity {
 	private ClockButton player2Clock;
 
 	private Handler handler = new Handler();
+	private AlertDialog pausedDialog;
 	private MediaPlayer clicker;
 
 	// Configurations
 	private long duration = 5 * 1 * 1000L;
 	private long increment = 0L;
 	private boolean shakeEnabled = true;
+	private boolean flipEnabled = true;
 	private boolean soundEnabled = true;
 
 	@Override
@@ -95,16 +97,24 @@ public class ChessClock extends Activity {
 				onPlayerClick(PLAYER2);
 			}
 		};
+
 		player2Clock
 				.setOnClickListener((android.view.View.OnClickListener) player2ClickListener);
 
 		// Initialize everything
-		initializeSound();
+		pausedDialog = createPausedDialog();
 		restorePreferences();
+		initializeSound();
 		installShakeListener();
+		installPitchFlipListener();
 		resetClock();
 	}
 
+	private AlertDialog createPausedDialog() {
+		return new AlertDialog.Builder(this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle(R.string.paused).create();
+	}
 
 	// NOTE(sirp): leaving this out (a bit cargo-cult-ish at the moment
 	// @Override
@@ -153,6 +163,7 @@ public class ChessClock extends Activity {
 		duration = settings.getLong("duration", 5 * 60 * 1000L);
 		increment = settings.getLong("increment", 0L);
 		shakeEnabled = settings.getBoolean("shakeEnabled", true);
+		flipEnabled = settings.getBoolean("flipEnabled", true);
 		soundEnabled = settings.getBoolean("soundEnabled", true);
 	}
 
@@ -162,6 +173,7 @@ public class ChessClock extends Activity {
 		editor.putLong("duration", duration);
 		editor.putLong("increment", increment);
 		editor.putBoolean("shakeEnabled", shakeEnabled);
+		editor.putBoolean("flipEnabled", flipEnabled);
 		editor.putBoolean("soundEnabled", soundEnabled);
 		editor.commit();
 	}
@@ -178,6 +190,29 @@ public class ChessClock extends Activity {
 				}
 			}
 		});
+	}
+
+	void installPitchFlipListener() {
+		final Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		// TODO(sirp): add configuration setting for shake
+		PitchFlipListener pitchFlipListener = new PitchFlipListener(this);
+		pitchFlipListener
+				.setOnPitchFlipListener(new PitchFlipListener.OnPitchFlipListener() {
+					public void onPitchFlip(int state) {
+						if (flipEnabled) {
+							vibe.vibrate(100);
+							if (isGameInProgress()) {
+								if ((state == PitchFlipListener.FACE_UP) && isGamePaused()) {
+								Log.i("Blitzn", "flip detected, unpausing");
+								unPauseClock();
+								} else if ((state == PitchFlipListener.FACE_DOWN) && !isGamePaused()) {
+									Log.i("Blitzn", "flip detected, pausing");
+									pauseClock();
+								}
+							}
+						}
+					}
+				});
 	}
 
 	void onPlayerClick(int which) {
@@ -271,24 +306,36 @@ public class ChessClock extends Activity {
 		case PLAYER1_RUNNING:
 			handler.removeCallbacks(updateTimeTask);
 			clockState = PLAYER1_PAUSED;
+			pausedDialog.show();
 			break;
 		case PLAYER2_RUNNING:
 			handler.removeCallbacks(updateTimeTask);
 			clockState = PLAYER2_PAUSED;
+			pausedDialog.show();
 			break;
+		default:
+			// throw ClockStateException("wrong state");
+		}
+	}
+
+	void unPauseClock() {
+		switch (clockState) {
 		case PLAYER1_PAUSED:
 			handler.removeCallbacks(updateTimeTask);
 			handler.postDelayed(updateTimeTask, 100);
 			clockState = PLAYER1_RUNNING;
+			pausedDialog.dismiss();
 			break;
 		case PLAYER2_PAUSED:
 			handler.removeCallbacks(updateTimeTask);
 			handler.postDelayed(updateTimeTask, 100);
 			clockState = PLAYER2_RUNNING;
+			pausedDialog.dismiss();
 			break;
 		default:
 			// throw ClockStateException("wrong state");
 		}
+
 	}
 
 	void stopClock() {
@@ -355,6 +402,7 @@ public class ChessClock extends Activity {
 		increment = extras.getInt("incrementSeconds") * 1000;
 
 		shakeEnabled = extras.getBoolean("shakeEnabled");
+		flipEnabled = extras.getBoolean("flipEnabled");
 		soundEnabled = extras.getBoolean("soundEnabled");
 
 		// Only reset the clock if we changed something related to time-keeping
@@ -369,6 +417,7 @@ public class ChessClock extends Activity {
 		setTimeIntent.putExtra("durationMinutes", (int) duration / 60 / 1000);
 		setTimeIntent.putExtra("incrementSeconds", (int) increment / 1000);
 		setTimeIntent.putExtra("shakeEnabled", shakeEnabled);
+		setTimeIntent.putExtra("flipEnabled", flipEnabled);
 		setTimeIntent.putExtra("soundEnabled", soundEnabled);
 
 		startActivityForResult(setTimeIntent, ACTIVITY_SET_TIME);
@@ -428,6 +477,15 @@ public class ChessClock extends Activity {
 		return true;
 	}
 
+	public boolean isGamePaused() {
+		switch (clockState) {
+		case PLAYER1_PAUSED:
+		case PLAYER2_PAUSED:
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public void onBackPressed() {
 		if (isGameInProgress())
@@ -435,4 +493,11 @@ public class ChessClock extends Activity {
 		else
 			super.onBackPressed();
 	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO(sirp): Should we be cleaning up stuff here?
+		super.onDestroy();
+	}
+
 }

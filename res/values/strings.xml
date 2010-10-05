@@ -10,4 +10,5 @@
 <string name="no">No</string>
 <string name="quit">Quit</string>
 <string name="leave_in_progress">Abandon game in progress?</string>
+<string name="paused">Paused</string>
 </resources>

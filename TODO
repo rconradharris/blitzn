@@ -1,4 +1,13 @@
 App:
+    Pull Shake-to-reset and Flip to Pause into strings.xml
+
+    Catch UnsupportedOperation exceptions from ShakeListener and
+    PitchFlipListener
+
+    Disable shakeListener onDestroy (?)
+
+    Flip phone over to Pause
+
     Font change?
 
     Improve game ending state
@@ -58,4 +67,5 @@ Only keepScreenOn while game isInProgress
 
 Themes?
 
+Make states an Enum
 
