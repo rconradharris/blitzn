@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -56,11 +57,13 @@ public class ChessClock extends Activity {
 	private ClockView player2Clock;
 
 	private Handler handler = new Handler();
+	private MediaPlayer clicker;
 
 	// Configurations
 	private long duration = 5 * 1 * 1000L;
 	private long increment = 0L;
 	private boolean shakeEnabled = true;
+	private boolean soundEnabled = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -94,10 +97,23 @@ public class ChessClock extends Activity {
 		player2Clock
 				.setOnClickListener((android.view.View.OnClickListener) player2ClickListener);
 
-		// Initialize UI
+		// Initialize everything
+		initializeSound();
 		restorePreferences();
 		installShakeListener();
 		resetClock();
+	}
+
+	void initializeSound() {
+		clicker = MediaPlayer.create(this, R.raw.click1);
+		// clicker will be null if sound is not supported on device
+		if (clicker != null)
+			clicker.setVolume(1.0f, 1.0f);
+	}
+
+	void playClick() {
+		if ((clicker != null) && soundEnabled)
+			clicker.start();
 	}
 
 	void restorePreferences() {
@@ -105,6 +121,7 @@ public class ChessClock extends Activity {
 		duration = settings.getLong("duration", 5 * 60 * 1000L);
 		increment = settings.getLong("increment", 0L);
 		shakeEnabled = settings.getBoolean("shakeEnabled", true);
+		soundEnabled = settings.getBoolean("soundEnabled", true);
 	}
 
 	void savePreferences() {
@@ -113,6 +130,7 @@ public class ChessClock extends Activity {
 		editor.putLong("duration", duration);
 		editor.putLong("increment", increment);
 		editor.putBoolean("shakeEnabled", shakeEnabled);
+		editor.putBoolean("soundEnabled", soundEnabled);
 		editor.commit();
 	}
 
@@ -183,6 +201,8 @@ public class ChessClock extends Activity {
 			player2Clock.setBackgroundColor(Color.TRANSPARENT);
 			player2Clock.setClickable(false);
 
+			playClick();
+
 			clockState = PLAYER1_RUNNING;
 		} else {
 			// TODO(sirp): theme-up colors
@@ -195,6 +215,8 @@ public class ChessClock extends Activity {
 			// Deactivate Player 1
 			player1Clock.setBackgroundColor(Color.TRANSPARENT);
 			player1Clock.setClickable(false);
+
+			playClick();
 
 			clockState = PLAYER2_RUNNING;
 		}
@@ -319,6 +341,7 @@ public class ChessClock extends Activity {
 		duration = extras.getInt("durationMinutes") * 60 * 1000;
 		increment = extras.getInt("incrementSeconds") * 1000;
 		shakeEnabled = extras.getBoolean("shakeEnabled");
+		soundEnabled = extras.getBoolean("soundEnabled");
 		resetClock();
 	}
 
@@ -329,6 +352,7 @@ public class ChessClock extends Activity {
 		setTimeIntent.putExtra("durationMinutes", (int) duration / 60 / 1000);
 		setTimeIntent.putExtra("incrementSeconds", (int) increment / 1000);
 		setTimeIntent.putExtra("shakeEnabled", shakeEnabled);
+		setTimeIntent.putExtra("soundEnabled", soundEnabled);
 
 		startActivityForResult(setTimeIntent, ACTIVITY_SET_TIME);
 	}

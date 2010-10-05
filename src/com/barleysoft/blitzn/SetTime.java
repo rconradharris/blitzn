@@ -12,6 +12,7 @@ public class SetTime extends Activity {
 	private Spinner durationSpinner;
 	private Spinner incrementSpinner;
 	private CheckBox shakeCheckbox;
+	private CheckBox soundCheckbox;
 
 	int getIndexOfChoice(String[] choices, int value) {
 		for (int i = 0; i < choices.length; i++) {
@@ -56,6 +57,10 @@ public class SetTime extends Activity {
 		// Setup Shake To Reset Checkbox
 		shakeCheckbox = (CheckBox) findViewById(R.id.shakeCheckbox);
 		shakeCheckbox.setChecked(extras.getBoolean("shakeEnabled"));
+
+		// Setup Sounds Checkbox
+		soundCheckbox = (CheckBox) findViewById(R.id.soundCheckbox);
+		soundCheckbox.setChecked(extras.getBoolean("soundEnabled"));
 	}
 
 	@Override
@@ -78,6 +83,9 @@ public class SetTime extends Activity {
 
 		// Shake to Reset selection
 		extras.putBoolean("shakeEnabled", shakeCheckbox.isChecked());
+
+		// Sound selection
+		extras.putBoolean("soundEnabled", soundCheckbox.isChecked());
 
 		Intent intent = new Intent();
 		intent.putExtras(extras);
