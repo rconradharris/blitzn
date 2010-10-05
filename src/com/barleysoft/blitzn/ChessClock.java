@@ -377,7 +377,7 @@ public class ChessClock extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
 		menu.add(0, MENU_RESET, 0, "Reset");
-		menu.add(0, MENU_SET_TIME, 0, "Set Time");
+		menu.add(0, MENU_SET_TIME, 0, "Settings");
 		return result;
 	}
 

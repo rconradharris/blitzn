@@ -3,6 +3,7 @@
 <string-array name="increment_choices">
 <item>0 seconds</item>
 <item>1 second</item>
+<item>2 seconds</item>
 <item>3 seconds</item>
 <item>5 seconds</item>
 <item>10 seconds</item>

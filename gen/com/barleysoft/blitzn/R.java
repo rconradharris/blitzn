@@ -19,6 +19,8 @@ public final class R {
         public static final int woodgrain=0x7f020001;
     }
     public static final class id {
+        public static final int Copyright=0x7f07000b;
+        public static final int RelativeLayout01=0x7f07000a;
         public static final int TextView01=0x7f070000;
         public static final int TextView02=0x7f070002;
         public static final int durationLabel=0x7f070004;

@@ -1,12 +1,17 @@
-Half of screen should be clickable
+Improve game ending state
 
-Beautify settings page
+Test power management: Does screen dim after certain period of time, does
+phone goto sleep. Do we need to add setting to disable that?
+
+Font change?
+
+Splash Screen
 
 About Page
 
-Icon
+== Next Release ==
 
-Next Release
+Better Icon
 
 Save Activity State - see onSaveInstanceState() onRestoreInstanceState()
 
@@ -15,7 +20,6 @@ SetTime. Idea is "Settings" is rare, "SetTime" is common.
 
 Splash screen that run on first install that explains basic operation.
 Possible help button.
-
 
 Settings page with swipe-to-set widget:
     * Support common settings
