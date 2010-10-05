@@ -1,3 +1,13 @@
+Half of screen should be clickable
+
+Beautify settings page
+
+About Page
+
+Icon
+
+Next Release
+
 Save Activity State - see onSaveInstanceState() onRestoreInstanceState()
 
 Perhaps pull "Settings" onto different page, and leave time related settings on
@@ -6,13 +16,6 @@ SetTime. Idea is "Settings" is rare, "SetTime" is common.
 Splash screen that run on first install that explains basic operation.
 Possible help button.
 
-Icon
-
-Beautify settings page
-
-About Page
-
-Half of screen should be clickable
 
 Settings page with swipe-to-set widget:
     * Support common settings

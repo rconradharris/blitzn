@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -55,8 +54,8 @@ public class ChessClock extends Activity {
 	private long player1IncrementLeft = 0L;
 	private long player2IncrementLeft = 0L;
 
-	private ClockView player1Clock;
-	private ClockView player2Clock;
+	private ClockButton player1Clock;
+	private ClockButton player2Clock;
 
 	private Handler handler = new Handler();
 	private MediaPlayer clicker;
@@ -79,7 +78,7 @@ public class ChessClock extends Activity {
 		setContentView(R.layout.main);
 
 		// Setup Player 1
-		player1Clock = (ClockView) findViewById(R.id.player1Clock);
+		player1Clock = (ClockButton) findViewById(R.id.player1Clock);
 		player1Clock.setIsFlipped(true);
 		OnClickListener player1ClickListener = new OnClickListener() {
 			public void onClick(View v) {
@@ -90,7 +89,7 @@ public class ChessClock extends Activity {
 				.setOnClickListener((android.view.View.OnClickListener) player1ClickListener);
 
 		// Setup Player 2
-		player2Clock = (ClockView) findViewById(R.id.player2Clock);
+		player2Clock = (ClockButton) findViewById(R.id.player2Clock);
 		OnClickListener player2ClickListener = new OnClickListener() {
 			public void onClick(View v) {
 				onPlayerClick(PLAYER2);
@@ -222,34 +221,16 @@ public class ChessClock extends Activity {
 
 	void activateClock(int which) {
 		if (which == PLAYER1) {
-			// TODO(sirp): theme-up colors
 			player1IncrementLeft = increment;
-
-			// Activate Player 1
-			player1Clock.setClickable(true);
-			player1Clock.setBackgroundColor(Color.BLACK);
-
-			// Deactivate Player 2
-			player2Clock.setBackgroundColor(Color.TRANSPARENT);
-			player2Clock.setClickable(false);
-
+			player1Clock.setIsActivated(true);
+			player2Clock.setIsActivated(false);
 			playClick();
-
 			clockState = PLAYER1_RUNNING;
 		} else {
-			// TODO(sirp): theme-up colors
 			player2IncrementLeft = increment;
-
-			// Activate Player 2
-			player2Clock.setClickable(true);
-			player2Clock.setBackgroundColor(Color.BLACK);
-
-			// Deactivate Player 1
-			player1Clock.setBackgroundColor(Color.TRANSPARENT);
-			player1Clock.setClickable(false);
-
+			player2Clock.setIsActivated(true);
+			player1Clock.setIsActivated(false);
 			playClick();
-
 			clockState = PLAYER2_RUNNING;
 		}
 	}
@@ -258,16 +239,12 @@ public class ChessClock extends Activity {
 		handler.removeCallbacks(updateTimeTask);
 
 		player1TimeLeft = duration;
-		player2TimeLeft = duration;
-
 		player1IncrementLeft = increment;
+		player1Clock.setIsActivated(true);
+
+		player2TimeLeft = duration;
 		player2IncrementLeft = increment;
-
-		player1Clock.setBackgroundColor(Color.BLACK);
-		player1Clock.setClickable(true);
-
-		player2Clock.setBackgroundColor(Color.BLACK);
-		player2Clock.setClickable(true);
+		player2Clock.setIsActivated(true);
 
 		updateClockDisplays();
 		clockState = READY;
@@ -357,7 +334,7 @@ public class ChessClock extends Activity {
 		updateClockForPlayer(player2Clock, player2TimeLeft);
 	}
 
-	private void updateClockForPlayer(ClockView clockView, long timeLeft) {
+	private void updateClockForPlayer(ClockButton clockView, long timeLeft) {
 		int seconds = (int) timeLeft / 1000;
 		int minutes = seconds / 60;
 		seconds = seconds % 60;
