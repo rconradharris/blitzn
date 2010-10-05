@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/woodgrain"
     >
-<com.barleysoft.blitzn.ClockButton android:textColor="@android:color/white" android:layout_centerHorizontal="true" android:layout_alignParentTop="true" android:textSize="50px" android:text="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/player1Clock" android:padding="20px"></com.barleysoft.blitzn.ClockButton>
-<com.barleysoft.blitzn.ClockButton android:textColor="@android:color/white" android:layout_centerHorizontal="true" android:layout_alignParentBottom="true" android:textSize="50px" android:padding="20px" android:text="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/player2Clock"></com.barleysoft.blitzn.ClockButton>
-</RelativeLayout>
+<com.barleysoft.blitzn.ClockButton android:textColor="@android:color/white" android:layout_centerHorizontal="true" android:layout_alignParentTop="true" android:text="@+id/TextView01" android:layout_height="wrap_content" android:id="@+id/player1Clock" android:padding="20px" android:layout_weight="1" android:layout_width="fill_parent" android:layout_margin="20px" android:textSize="100px"></com.barleysoft.blitzn.ClockButton>
+<com.barleysoft.blitzn.ClockButton android:textColor="@android:color/white" android:layout_centerHorizontal="true" android:layout_alignParentBottom="true" android:padding="20px" android:text="@+id/TextView02" android:layout_height="wrap_content" android:id="@+id/player2Clock" android:layout_weight="1" android:layout_width="fill_parent" android:layout_margin="20px" android:textSize="100px"></com.barleysoft.blitzn.ClockButton>
+</LinearLayout>
     
