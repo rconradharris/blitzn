@@ -363,16 +363,33 @@ public class ChessClock extends Activity {
 
 	void stopClock() {
 		handler.removeCallbacks(updateTimeTask);
-		player1Clock.setClickable(false);
-		player2Clock.setClickable(false);
 		clockState = STOPPED;
+
+		boolean player1Lost = hasPlayerLost(PLAYER1);
+		boolean player2Lost = hasPlayerLost(PLAYER2);
+
+		if (player1Lost && player2Lost) {
+			Log.e("Blitzn", "both players lost, we have a problem!");
+		}
+
+		if (player1Lost) {
+			player1Clock.setLost();
+		}
+
+		if (player2Lost) {
+			player2Clock.setLost();
+		}
+	}
+
+	boolean hasPlayerLost(int which) {
+		long timeLeft = (which == PLAYER1) ? player1TimeLeft : player2TimeLeft;
+		return (timeLeft < CLOCK_RESOLUTION);
 	}
 
 	private Runnable updateTimeTask = new Runnable() {
 		public void run() {
 			// Check for either clock expiring
-			if ((player1TimeLeft < CLOCK_RESOLUTION)
-					|| (player2TimeLeft < CLOCK_RESOLUTION)) {
+			if (hasPlayerLost(PLAYER1) || hasPlayerLost(PLAYER2)) {
 				stopClock();
 				return;
 			}

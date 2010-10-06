@@ -33,6 +33,11 @@ public class ClockButton extends Button {
 		}
 	}
 
+	public void setLost() {
+		setBackgroundColor(Color.RED);
+		setClickable(false);
+	}
+
 	@Override
 	protected void onDraw(Canvas canvas) {
 		if (isFlipped) {
