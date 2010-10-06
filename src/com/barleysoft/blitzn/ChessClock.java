@@ -32,6 +32,7 @@ public class ChessClock extends Activity {
 	// Menu Items
 	public static final int MENU_RESET = Menu.FIRST;
 	public static final int MENU_SET_TIME = Menu.FIRST + 1;
+	public static final int MENU_PAUSE = Menu.FIRST + 2;
 
 	// Preference Key-Value Store
 	public static final String PREFS_NAME = "BlitznPrefs";
@@ -117,9 +118,17 @@ public class ChessClock extends Activity {
 	}
 
 	private AlertDialog createPausedDialog() {
-		return new AlertDialog.Builder(this)
+		AlertDialog alertDialog = new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.paused).create();
+		alertDialog
+				.setOnDismissListener(new DialogInterface.OnDismissListener() {
+					public void onDismiss(DialogInterface dialog) {
+						if (isGamePaused())
+							unPauseClock();
+					}
+				});
+		return alertDialog;
 	}
 
 	// NOTE(sirp): leaving this out (a bit cargo-cult-ish at the moment
@@ -244,9 +253,6 @@ public class ChessClock extends Activity {
 			case PLAYER1_RUNNING:
 				toggleClock();
 				break;
-			case PLAYER1_PAUSED:
-				pauseClock(); // unpause
-				break;
 			}
 		} else {
 			switch (clockState) {
@@ -255,9 +261,6 @@ public class ChessClock extends Activity {
 				break;
 			case PLAYER2_RUNNING:
 				toggleClock();
-				break;
-			case PLAYER2_PAUSED:
-				pauseClock(); // unpause
 				break;
 			}
 		}
@@ -447,6 +450,7 @@ public class ChessClock extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
 		menu.add(0, MENU_RESET, 0, "Reset");
+		menu.add(0, MENU_PAUSE, 0, "Pause");
 		menu.add(0, MENU_SET_TIME, 0, "Settings");
 		return result;
 	}
@@ -460,8 +464,24 @@ public class ChessClock extends Activity {
 		case MENU_SET_TIME:
 			setTime();
 			return true;
+		case MENU_PAUSE:
+			pauseClock();
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+
+		MenuItem pauseMenu = menu.findItem(MENU_PAUSE);
+		pauseMenu.setEnabled(isGameInProgress() && !isGamePaused());
+
+		MenuItem resetMenu = menu.findItem(MENU_RESET);
+		resetMenu.setEnabled((clockState != READY) && !isGamePaused());
+
+		return true;
 	}
 
 	@Override

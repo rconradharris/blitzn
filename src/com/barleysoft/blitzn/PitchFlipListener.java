@@ -17,7 +17,9 @@ public class PitchFlipListener implements SensorEventListener {
 	public static final int DOWN = 2;
 
 	// Parameters
-	private static final int WINDOW_SIZE = 10;
+	// 25 was empirically derived on an HTC Incredible
+	// 10 was too sensitive and 25 was too laggy
+	private static final int WINDOW_SIZE = 15;
 
 	// Notice that DOWN -> UP is preferred over UP -> DOWN
 	private static final int DOWN_THRESHOLD = 20; // degrees
@@ -95,9 +97,9 @@ public class PitchFlipListener implements SensorEventListener {
 		float meanPitch;
 		try {
 			meanPitch = mWindow.addAndComputeMean(pitch);
-			if (meanPitch < UP_THRESHOLD)
+			if (meanPitch < (0 + UP_THRESHOLD))
 				curState = UP;
-			else if ((180 - pitch) < DOWN_THRESHOLD)
+			else if (meanPitch > (180 - DOWN_THRESHOLD))
 				curState = DOWN;
 			else
 				curState = SIDE;

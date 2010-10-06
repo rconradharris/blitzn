@@ -1,11 +1,10 @@
 App:
     Better Icon
-
+    Font change?
+    
     Catch UnsupportedOperation exceptions from ShakeListener and
     PitchFlipListener
-
-    Font change?
-
+    
     Improve game ending state
 
     Specify API version requirement in manifest
@@ -21,9 +20,10 @@ App:
         attribute in the <application> element of its manifest.
 
     Cut Release:
-        versionCode 1
-        vresionName 0.1
-
+        versionCode: 100
+        versionName: 1.0
+        
+        
     Create screen shots
     Write description, enumerate features
     Sign w/ release key
