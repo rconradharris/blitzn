@@ -59,10 +59,13 @@ public class ChessClock extends Activity {
 
 	private ShakeListener shakeListener;
 	private PitchFlipListener pitchFlipListener;
-	
+
 	private Handler handler = new Handler();
 	private AlertDialog pausedDialog;
-	private MediaPlayer clicker;
+
+	// Two players are used to get fast playback
+	private MediaPlayer clicker1;
+	private MediaPlayer clicker2;
 
 	// Configurations
 	private long duration = 5 * 1 * 1000L;
@@ -149,16 +152,29 @@ public class ChessClock extends Activity {
 	// savedInstanceState.getLong("player2IncrementLeft");
 	// }
 
-	void initializeSound() {
-		clicker = MediaPlayer.create(this, R.raw.click1);
+	private void initializeSound() {
+		clicker1 = createMediaPlayer(R.raw.click1);
+		clicker2 = createMediaPlayer(R.raw.click1);
+	}
+
+	private MediaPlayer createMediaPlayer(int resId) {
+		MediaPlayer clicker = MediaPlayer.create(this, R.raw.click1);
 		// clicker will be null if sound is not supported on device
 		if (clicker != null)
 			clicker.setVolume(1.0f, 1.0f);
+		return clicker;
 	}
 
 	void playClick() {
-		if ((clicker != null) && soundEnabled)
-			clicker.start();
+		if ((clicker1 == null) || !soundEnabled)
+			return;
+
+		// Fall-back to second clicker so that we can play clicks nearly
+		// simultaneously
+		if (clicker1.isPlaying())
+			clicker2.start();
+		else
+			clicker1.start();
 	}
 
 	void restorePreferences() {
