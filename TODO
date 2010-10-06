@@ -1,12 +1,7 @@
 App:
-    Pull Shake-to-reset and Flip to Pause into strings.xml
 
     Catch UnsupportedOperation exceptions from ShakeListener and
     PitchFlipListener
-
-    Disable shakeListener onDestroy (?)
-
-    Flip phone over to Pause
 
     Font change?
 
@@ -44,6 +39,10 @@ Barleysoft:
 
 
 == Next Release ==
+
+Pull Shake-to-reset and Flip to Pause into strings.xml
+
+Disable shakeListener onDestroy (?)
 
 Splash Screen
 

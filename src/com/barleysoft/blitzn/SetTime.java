@@ -61,11 +61,11 @@ public class SetTime extends Activity {
 		// Setup Shake To Reset Checkbox
 		shakeCheckbox = (CheckBox) findViewById(R.id.shakeCheckbox);
 		shakeCheckbox.setChecked(extras.getBoolean("shakeEnabled"));
-		
+
 		// Setup Flip To Pause Checkbox
 		flipCheckbox = (CheckBox) findViewById(R.id.flipCheckbox);
 		flipCheckbox.setChecked(extras.getBoolean("flipEnabled"));
-		
+
 		// Setup Sounds Checkbox
 		soundCheckbox = (CheckBox) findViewById(R.id.soundCheckbox);
 		soundCheckbox.setChecked(extras.getBoolean("soundEnabled"));
@@ -111,7 +111,7 @@ public class SetTime extends Activity {
 
 		// Flip to Pause selection
 		extras.putBoolean("flipEnabled", flipCheckbox.isChecked());
-		
+
 		// Sound selection
 		extras.putBoolean("soundEnabled", soundCheckbox.isChecked());
 
