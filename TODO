@@ -1,4 +1,6 @@
 App:
+    Turn off Shake-To-Reset on SettingsPage
+
     Catch UnsupportedOperation exceptions from ShakeListener and
     PitchFlipListener
 

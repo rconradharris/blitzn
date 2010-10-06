@@ -1,5 +1,8 @@
 package com.barleysoft.blitzn;
 
+import com.barleysoft.runningmean.RunningMeanWindow;
+import com.barleysoft.runningmean.WindowTooSmall;
+
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -8,19 +11,25 @@ import android.hardware.SensorManager;
 import android.util.Log;
 
 public class PitchFlipListener implements SensorEventListener {
-	public static final int FACE_UNKNOWN = 0;
-	public static final int FACE_UP = 1;
-	public static final int FACE_DOWN = 2;
+	// States
+	public static final int UP = 0;
+	public static final int SIDE = 1;
+	public static final int DOWN = 2;
 
-	private static final int PITCH_FLIP_THRESHOLD = 20; // degrees
-	private static final int TIME_THRESHOLD = 100; // ms
+	// Parameters
+	private static final int WINDOW_SIZE = 10;
+
+	// Notice that DOWN -> UP is preferred over UP -> DOWN
+	private static final int DOWN_THRESHOLD = 20; // degrees
+	private static final int UP_THRESHOLD = 40; //
+
+	private int mState = UP;
+	private RunningMeanWindow mWindow = new RunningMeanWindow(WINDOW_SIZE);
 
 	private Context mContext;
 	private OnPitchFlipListener mPitchFlipListener;
 	private Sensor mOrientSensor;
 	private SensorManager mSensorMgr;
-	private long mLastTime = 0;
-	private int mLastState = FACE_UNKNOWN;
 
 	public interface OnPitchFlipListener {
 		public void onPitchFlip(int state);
@@ -67,53 +76,62 @@ public class PitchFlipListener implements SensorEventListener {
 
 	public String getPrettyState(int state) {
 		switch (state) {
-		case FACE_UP:
-			return "FACE UP";
-		case FACE_DOWN:
-			return "FACE DOWN";
+		case UP:
+			return "UP";
+		case DOWN:
+			return "DOWN";
+		case SIDE:
+			return "SIDE";
 		default:
 			return "FACE_UKNOWN";
 		}
 	}
 
 	public void onSensorChanged(SensorEvent event) {
-		// TODO Auto-generated method stub
-		long now = System.currentTimeMillis();
-
-		if ((now - mLastTime) < TIME_THRESHOLD)
+		// Since we only care about 0 (UP) and 180 (DOWN)
+		// we can just take abs
+		float pitch = Math.abs(event.values[1]);
+		int curState;
+		float meanPitch;
+		try {
+			meanPitch = mWindow.addAndComputeMean(pitch);
+			if (meanPitch < UP_THRESHOLD)
+				curState = UP;
+			else if ((180 - pitch) < DOWN_THRESHOLD)
+				curState = DOWN;
+			else
+				curState = SIDE;
+		} catch (WindowTooSmall e) {
+			// Return while we accrue readings
 			return;
-
-		float pitch = event.values[1];
-
-		int state;
-		if (Math.abs(180 + pitch) < PITCH_FLIP_THRESHOLD)
-			state = FACE_DOWN;
-		else if (Math.abs(0 - pitch) < PITCH_FLIP_THRESHOLD)
-			state = FACE_UP;
-		else
-			state = FACE_UNKNOWN;
-
-		if ((mLastState == FACE_UNKNOWN) && (state != FACE_UNKNOWN))
-			mLastState = state;
-
-		String prettyState = getPrettyState(state);
-		String prettyLastState = getPrettyState(mLastState);
-		Log.i("PitchFlipListener", "Pitch: " + String.valueOf(pitch)
-				+ " Last: " + prettyLastState + " Current: " + prettyState);
-
-		if ((state != FACE_UNKNOWN) && (mLastState != FACE_UNKNOWN)
-				&& (state != mLastState)) {
-
-			// FACE_UP -> FACE_DOWN or FACE_DOWN -> FACE_UP
-			if (mPitchFlipListener != null) {
-				Log.i("PitchFlipListener", "pitch flip detected: "
-						+ prettyState);
-				mPitchFlipListener.onPitchFlip(state);
-			}
-			mLastState = state;
 		}
 
-		mLastTime = now;
+		boolean flip = false;
+		if ((mState == DOWN) && (curState == UP)) {
+			// DOWN -> UP
+			flip = true;
+			mState = UP;
+		} else if ((mState == UP) && (curState == DOWN)) {
+			// UP -> DOWN
+			flip = true;
+			mState = DOWN;
+		}
+
+		String prettyState = getPrettyState(mState);
+		String prettyCurState = getPrettyState(curState);
+		String meanPitchStr = String.valueOf(meanPitch);
+		String pitchStr = String.valueOf(pitch);
+		String logMsg = "";
+		logMsg += "mState=" + prettyState;
+		logMsg += " state=" + prettyCurState;
+		logMsg += " meanPitch=" + meanPitchStr;
+		logMsg += " pitch=" + pitchStr;
+		Log.i("PitchFlipListener", logMsg);
+
+		if (flip) {
+			Log.i("PitchFlipListener", "pitch flipped");
+			mPitchFlipListener.onPitchFlip(curState);
+		}
 
 	}
 

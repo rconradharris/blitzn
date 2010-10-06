@@ -203,7 +203,7 @@ public class ChessClock extends Activity {
 		shakeListener = new ShakeListener(this);
 		shakeListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
 			public void onShake() {
-				if (shakeEnabled) {
+				if (shakeEnabled && !isGamePaused()) {
 					vibe.vibrate(100);
 					resetClock();
 				}
@@ -219,12 +219,12 @@ public class ChessClock extends Activity {
 				.setOnPitchFlipListener(new PitchFlipListener.OnPitchFlipListener() {
 					public void onPitchFlip(int state) {
 						if (flipEnabled && isGameInProgress()) {
-							if ((state == PitchFlipListener.FACE_UP)
+							if ((state == PitchFlipListener.UP)
 									&& isGamePaused()) {
 								Log.i("Blitzn", "flip detected, unpausing");
 								vibe.vibrate(100);
 								unPauseClock();
-							} else if ((state == PitchFlipListener.FACE_DOWN)
+							} else if ((state == PitchFlipListener.DOWN)
 									&& !isGamePaused()) {
 								Log.i("Blitzn", "flip detected, pausing");
 								vibe.vibrate(100);
