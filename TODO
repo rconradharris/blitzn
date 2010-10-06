@@ -1,7 +1,9 @@
 App:
-
     Catch UnsupportedOperation exceptions from ShakeListener and
     PitchFlipListener
+
+    Sound only plays once when toggled twice. May need to create new
+    MediaPlayer object (or associate the clicks with ClockButton)
 
     Font change?
 

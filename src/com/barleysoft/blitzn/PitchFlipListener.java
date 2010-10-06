@@ -19,8 +19,8 @@ public class PitchFlipListener implements SensorEventListener {
 	private OnPitchFlipListener mPitchFlipListener;
 	private Sensor mOrientSensor;
 	private SensorManager mSensorMgr;
-	private long mLastTime;
-	private int mLastState;
+	private long mLastTime = 0;
+	private int mLastState = FACE_UNKNOWN;
 
 	public interface OnPitchFlipListener {
 		public void onPitchFlip(int state);
@@ -98,8 +98,8 @@ public class PitchFlipListener implements SensorEventListener {
 
 		String prettyState = getPrettyState(state);
 		String prettyLastState = getPrettyState(mLastState);
-		Log.i("PitchFlipListener", "Pitch: " + String.valueOf(pitch) + " Last: " + prettyLastState + " Current: " 
-				+ prettyState);
+		Log.i("PitchFlipListener", "Pitch: " + String.valueOf(pitch)
+				+ " Last: " + prettyLastState + " Current: " + prettyState);
 
 		if ((state != FACE_UNKNOWN) && (mLastState != FACE_UNKNOWN)
 				&& (state != mLastState)) {

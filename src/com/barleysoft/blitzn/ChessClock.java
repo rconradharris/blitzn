@@ -57,6 +57,9 @@ public class ChessClock extends Activity {
 	private ClockButton player1Clock;
 	private ClockButton player2Clock;
 
+	private ShakeListener shakeListener;
+	private PitchFlipListener pitchFlipListener;
+	
 	private Handler handler = new Handler();
 	private AlertDialog pausedDialog;
 	private MediaPlayer clicker;
@@ -181,7 +184,7 @@ public class ChessClock extends Activity {
 	void installShakeListener() {
 		final Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		// TODO(sirp): add configuration setting for shake
-		ShakeListener shakeListener = new ShakeListener(this);
+		shakeListener = new ShakeListener(this);
 		shakeListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
 			public void onShake() {
 				if (shakeEnabled) {
@@ -195,20 +198,21 @@ public class ChessClock extends Activity {
 	void installPitchFlipListener() {
 		final Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		// TODO(sirp): add configuration setting for shake
-		PitchFlipListener pitchFlipListener = new PitchFlipListener(this);
+		pitchFlipListener = new PitchFlipListener(this);
 		pitchFlipListener
 				.setOnPitchFlipListener(new PitchFlipListener.OnPitchFlipListener() {
 					public void onPitchFlip(int state) {
-						if (flipEnabled) {
-							vibe.vibrate(100);
-							if (isGameInProgress()) {
-								if ((state == PitchFlipListener.FACE_UP) && isGamePaused()) {
+						if (flipEnabled && isGameInProgress()) {
+							if ((state == PitchFlipListener.FACE_UP)
+									&& isGamePaused()) {
 								Log.i("Blitzn", "flip detected, unpausing");
+								vibe.vibrate(100);
 								unPauseClock();
-								} else if ((state == PitchFlipListener.FACE_DOWN) && !isGamePaused()) {
-									Log.i("Blitzn", "flip detected, pausing");
-									pauseClock();
-								}
+							} else if ((state == PitchFlipListener.FACE_DOWN)
+									&& !isGamePaused()) {
+								Log.i("Blitzn", "flip detected, pausing");
+								vibe.vibrate(100);
+								pauseClock();
 							}
 						}
 					}
@@ -497,6 +501,10 @@ public class ChessClock extends Activity {
 	@Override
 	protected void onDestroy() {
 		// TODO(sirp): Should we be cleaning up stuff here?
+		if (shakeListener != null)
+			shakeListener.pause();
+		if (pitchFlipListener != null)
+			pitchFlipListener.pause();
 		super.onDestroy();
 	}
 
