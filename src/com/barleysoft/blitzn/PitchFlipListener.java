@@ -83,7 +83,7 @@ public class PitchFlipListener implements SensorEventListener {
 		case SIDE:
 			return "SIDE";
 		default:
-			return "FACE_UKNOWN";
+			return "UNKNOWN";
 		}
 	}
 

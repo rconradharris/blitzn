@@ -1,5 +1,5 @@
 App:
-    Turn off Shake-To-Reset on SettingsPage
+    Better Icon
 
     Catch UnsupportedOperation exceptions from ShakeListener and
     PitchFlipListener
@@ -41,6 +41,10 @@ Barleysoft:
 
 == Next Release ==
 
+Turn off Shake-To-Reset on SettingsPage
+
+Show Opponent Time right side up for each player
+
 Pull Shake-to-reset and Flip to Pause into strings.xml
 
 Should this be onPause or onDestroy????? Disable shakeListener onDestroy (?)
@@ -49,7 +53,6 @@ Splash Screen
 
 About Page
 
-Better Icon
 
 Save Activity State - see onSaveInstanceState() onRestoreInstanceState()
 
