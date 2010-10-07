@@ -1,8 +1,12 @@
 App:
+    Deallocate Listeners (Phone shakes after Activity exists)
+
     Rotate numbers sideways vs mirror
+
     Font options (non LED?) Underline perhaps? or a different font
 
     Better Icon
+
     Font change?
     
     Catch UnsupportedOperation exceptions from ShakeListener and

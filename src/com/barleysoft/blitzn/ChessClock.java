@@ -212,7 +212,7 @@ public class ChessClock extends Activity {
 		shakeListener = new ShakeListener(this);
 		shakeListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
 			public void onShake() {
-				if (shakeEnabled && !isGamePaused()) {
+				if (shakeEnabled && !isGamePaused() && !isGameReady()) {
 					vibe.vibrate(100);
 					resetClock();
 				}
@@ -541,6 +541,10 @@ public class ChessClock extends Activity {
 			return true;
 		}
 		return false;
+	}
+
+	public boolean isGameReady() {
+		return (clockState == READY);
 	}
 
 	@Override
