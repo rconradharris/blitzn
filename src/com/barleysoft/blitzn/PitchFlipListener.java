@@ -132,14 +132,14 @@ public class PitchFlipListener implements SensorEventListener {
 			return -1;
 		}
 
-		// Log.i("PitchFlipListner", "smoothedPitch=" +
-		// String.valueOf(smoothedPitch));
+		Log.i("PitchFlipListner", "smoothedPitch=" +
+				String.valueOf(smoothedPitch));
 		int state;
 		if (Math.abs(FORWARD - smoothedPitch) < ANGLE_THRESHOLD)
 			state = PITCH_FORWARD;
-		else if (Math.abs(UP - smoothedPitch) < ANGLE_THRESHOLD)
+		else if (Math.abs(UP - smoothedPitch) <= ANGLE_THRESHOLD)
 			state = PITCH_UP;
-		else if (Math.abs(DOWN - smoothedPitch) < ANGLE_THRESHOLD)
+		else if (Math.abs(DOWN - smoothedPitch) <= ANGLE_THRESHOLD)
 			state = PITCH_DOWN;
 		else
 			state = PITCH_BACKWARDS;

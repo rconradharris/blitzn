@@ -1,10 +1,6 @@
 App:
 
-    Better Icon
-
     Font change?
-
-    Pause jumped back and forth held at -45 pitch and ROLL_LEVEL
 
     Deallocate Listeners (Phone shakes after Activity exists)
     
