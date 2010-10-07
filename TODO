@@ -1,4 +1,6 @@
 App:
+    Add ding on game end.
+
     Make default something other than 1+0
 
     Font change?
@@ -38,6 +40,8 @@ Barleysoft:
 
 
 == Next Release ==
+
+Add milliseconds (just under 5 seconds, or forever?)
 
 Turn off Shake-To-Reset on SettingsPage
 
