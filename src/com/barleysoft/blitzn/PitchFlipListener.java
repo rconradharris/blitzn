@@ -87,6 +87,10 @@ public class PitchFlipListener implements SensorEventListener {
 		}
 	}
 
+	public boolean isListening() {
+		return (mSensorMgr != null);
+	}
+
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// TODO Auto-generated method stub
 
@@ -132,8 +136,8 @@ public class PitchFlipListener implements SensorEventListener {
 			return -1;
 		}
 
-		Log.i("PitchFlipListner", "smoothedPitch=" +
-				String.valueOf(smoothedPitch));
+		Log.i("PitchFlipListner",
+				"smoothedPitch=" + String.valueOf(smoothedPitch));
 		int state;
 		if (Math.abs(FORWARD - smoothedPitch) < ANGLE_THRESHOLD)
 			state = PITCH_FORWARD;

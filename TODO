@@ -1,11 +1,8 @@
 App:
+    Make default something other than 1+0
 
     Font change?
 
-    Deallocate Listeners (Phone shakes after Activity exists)
-    
-    Should this be onPause or onDestroy????? Disable shakeListener onDestroy (?)
-    
     Catch UnsupportedOperation exceptions from ShakeListener and
     PitchFlipListener
     
@@ -47,7 +44,6 @@ Turn off Shake-To-Reset on SettingsPage
 Show Opponent Time right side up for each player
 
 Pull Shake-to-reset and Flip to Pause into strings.xml
-
 
 Splash Screen
 

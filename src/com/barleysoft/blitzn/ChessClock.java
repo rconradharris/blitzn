@@ -117,6 +117,32 @@ public class ChessClock extends Activity {
 		resetClock();
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if ((shakeListener != null) && !shakeListener.isListening())
+			shakeListener.resume();
+		if ((pitchFlipListener != null) && !pitchFlipListener.isListening())
+			pitchFlipListener.resume();
+	}
+
+	@Override
+	protected void onPause() {
+		if (shakeListener != null)
+			shakeListener.pause();
+		if (pitchFlipListener != null)
+			pitchFlipListener.pause();
+		super.onPause();
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (isGameInProgress())
+			showExitDialog();
+		else
+			super.onBackPressed();
+	}
+
 	private AlertDialog createPausedDialog() {
 		AlertDialog alertDialog = new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
@@ -130,36 +156,6 @@ public class ChessClock extends Activity {
 				});
 		return alertDialog;
 	}
-
-	// NOTE(sirp): leaving this out (a bit cargo-cult-ish at the moment
-	// @Override
-	// public void onSaveInstanceState(Bundle savedInstanceState) {
-	// // Save UI state changes to the savedInstanceState.
-	// // This bundle will be passed to onCreate if the process is
-	// // killed and restarted.
-	// savedInstanceState.putInt("clockState", clockState);
-	// savedInstanceState.putLong("player1TimeLeft", player1TimeLeft);
-	// savedInstanceState.putLong("player2TimeLeft", player2TimeLeft);
-	// savedInstanceState
-	// .putLong("player1IncrementLeft", player1IncrementLeft);
-	// savedInstanceState
-	// .putLong("player2IncrementLeft", player2IncrementLeft);
-	// super.onSaveInstanceState(savedInstanceState);
-	// }
-	//
-	// @Override
-	// public void onRestoreInstanceState(Bundle savedInstanceState) {
-	// super.onRestoreInstanceState(savedInstanceState);
-	// // Restore UI state from the savedInstanceState.
-	// // This bundle has also been passed to onCreate.
-	// clockState = savedInstanceState.getInt("clockState");
-	// player1TimeLeft = savedInstanceState.getLong("player1TimeLeft");
-	// player2TimeLeft = savedInstanceState.getLong("player2TimeLeft");
-	// player1IncrementLeft =
-	// savedInstanceState.getLong("player1IncrementLeft");
-	// player2IncrementLeft =
-	// savedInstanceState.getLong("player2IncrementLeft");
-	// }
 
 	private void initializeSound() {
 		clicker1 = createMediaPlayer(R.raw.click1);
@@ -545,24 +541,6 @@ public class ChessClock extends Activity {
 
 	public boolean isGameReady() {
 		return (clockState == READY);
-	}
-
-	@Override
-	public void onBackPressed() {
-		if (isGameInProgress())
-			showExitDialog();
-		else
-			super.onBackPressed();
-	}
-
-	@Override
-	protected void onDestroy() {
-		// TODO(sirp): Should we be cleaning up stuff here?
-		if (shakeListener != null)
-			shakeListener.pause();
-		if (pitchFlipListener != null)
-			pitchFlipListener.pause();
-		super.onDestroy();
 	}
 
 }

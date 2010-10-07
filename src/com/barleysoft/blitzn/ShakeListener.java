@@ -69,6 +69,10 @@ public class ShakeListener implements SensorEventListener {
 		}
 	}
 
+	public boolean isListening() {
+		return (mSensorMgr != null);
+	}
+
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 	}
 
