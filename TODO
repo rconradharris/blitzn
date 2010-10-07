@@ -1,12 +1,13 @@
 App:
+    Rotate numbers sideways vs mirror
+    Font options (non LED?) Underline perhaps? or a different font
+
     Better Icon
     Font change?
     
     Catch UnsupportedOperation exceptions from ShakeListener and
     PitchFlipListener
     
-    Improve game ending state
-
     Specify API version requirement in manifest
         Requirements enforced by the Android Market server:
         Your application must be signed with a cryptographic private key whose
@@ -22,7 +23,6 @@ App:
     Cut Release:
         versionCode: 100
         versionName: 1.0
-        
         
     Create screen shots
     Write description, enumerate features
@@ -52,7 +52,6 @@ Should this be onPause or onDestroy????? Disable shakeListener onDestroy (?)
 Splash Screen
 
 About Page
-
 
 Save Activity State - see onSaveInstanceState() onRestoreInstanceState()
 
