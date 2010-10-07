@@ -1,13 +1,11 @@
 App:
-    Deallocate Listeners (Phone shakes after Activity exists)
-
-    Rotate numbers sideways vs mirror
-
-    Font options (non LED?) Underline perhaps? or a different font
-
     Better Icon
 
     Font change?
+
+    Deallocate Listeners (Phone shakes after Activity exists)
+    
+    Should this be onPause or onDestroy????? Disable shakeListener onDestroy (?)
     
     Catch UnsupportedOperation exceptions from ShakeListener and
     PitchFlipListener
@@ -51,7 +49,6 @@ Show Opponent Time right side up for each player
 
 Pull Shake-to-reset and Flip to Pause into strings.xml
 
-Should this be onPause or onDestroy????? Disable shakeListener onDestroy (?)
 
 Splash Screen
 
@@ -74,4 +71,8 @@ Only keepScreenOn while game isInProgress
 Themes?
 
 Make states an Enum
+
+Rotate numbers sideways vs mirror
+
+Font options (non LED?) Underline perhaps? or a different font
 
