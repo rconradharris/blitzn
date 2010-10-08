@@ -11,4 +11,11 @@
 <string name="quit">Quit</string>
 <string name="leave_in_progress">Abandon game in progress?</string>
 <string name="paused">Paused</string>
+<string name="intro_title">Blitzn Hints</string>
+<string name="intro_text">
+<li>Pick from common game lengths, including Bullet and Blitz</li>\n\n
+<li>Supports Fischer increment</li>\n\n
+<li>Flip the phone onto its face to pause</li>\n\n
+<li>Shake the phone to reset the clock</li></string>
+<string name="ok">OK</string>
 </resources>

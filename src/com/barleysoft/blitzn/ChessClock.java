@@ -75,6 +75,7 @@ public class ChessClock extends Activity {
 	private boolean shakeEnabled = true;
 	private boolean flipEnabled = true;
 	private boolean soundEnabled = true;
+	private boolean showIntroDialog = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -116,6 +117,8 @@ public class ChessClock extends Activity {
 		installShakeListener();
 		installPitchFlipListener();
 		resetClock();
+		if (showIntroDialog)
+			showIntroDialogBox();
 	}
 
 	@Override
@@ -173,6 +176,15 @@ public class ChessClock extends Activity {
 		return alertDialog;
 	}
 
+	private void showIntroDialogBox() {
+		// Ask the user if they want to quit
+		new AlertDialog.Builder(this)
+				// .setIcon(android.R.drawable.ic_dialog_info)
+				.setTitle(R.string.intro_title).setMessage(R.string.intro_text)
+				.setNegativeButton(R.string.ok, null).show();
+		showIntroDialog = false;
+	}
+
 	private void initializeSound() {
 		clicker1 = createMediaPlayer(R.raw.click1);
 		clicker2 = createMediaPlayer(R.raw.click1);
@@ -212,6 +224,7 @@ public class ChessClock extends Activity {
 		shakeEnabled = settings.getBoolean("shakeEnabled", true);
 		flipEnabled = settings.getBoolean("flipEnabled", true);
 		soundEnabled = settings.getBoolean("soundEnabled", true);
+		showIntroDialog = settings.getBoolean("showIntroDialog", true);
 	}
 
 	void savePreferences() {
@@ -222,6 +235,7 @@ public class ChessClock extends Activity {
 		editor.putBoolean("shakeEnabled", shakeEnabled);
 		editor.putBoolean("flipEnabled", flipEnabled);
 		editor.putBoolean("soundEnabled", soundEnabled);
+		editor.putBoolean("showIntroDialog", showIntroDialog);
 		editor.commit();
 	}
 

@@ -48,8 +48,11 @@ public final class R {
         public static final int clock_font=0x7f060003;
         public static final int duration=0x7f060001;
         public static final int increment=0x7f060002;
+        public static final int intro_text=0x7f06000a;
+        public static final int intro_title=0x7f060009;
         public static final int leave_in_progress=0x7f060007;
         public static final int no=0x7f060005;
+        public static final int ok=0x7f06000b;
         public static final int paused=0x7f060008;
         public static final int quit=0x7f060006;
         public static final int yes=0x7f060004;
