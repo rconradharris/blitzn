@@ -292,6 +292,7 @@ public class ChessClock extends Activity {
 	}
 
 	void resetClock() {
+		setKeepScreenOn(false);
 		handler.removeCallbacks(updateTimeTask);
 
 		player1TimeLeft = duration;

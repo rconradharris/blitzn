@@ -20,5 +20,6 @@ Sound
       simultaneous clicks.
 
 Power Management
-    - Phone should turn off when game is not in progress
+    - Phone should turn off when game is not in progress: clock never started,
+      clock STOPPED after a player loss, clock READY after a reset
     - Phone should remain on when game is in progress
