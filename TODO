@@ -1,12 +1,9 @@
 App:
+    Remove "debuggable" from manifest before release
+
     Add ding on game end.
 
-    Make default something other than 1+0
-
     Font change?
-
-    Catch UnsupportedOperation exceptions from ShakeListener and
-    PitchFlipListener
     
     Specify API version requirement in manifest
         Requirements enforced by the Android Market server:
@@ -37,17 +34,26 @@ Barleysoft:
     Create email acct that forwards to gmail (rick@barleysoft.com)
     Get Market publishing account
     Create Twitter Account
+    Play inaugural game, then tweet it
 
 
 == Next Release ==
 
-Add milliseconds (just under 5 seconds, or forever?)
+Make default something other than 1+0 (might not be an issue)
 
-Turn off Shake-To-Reset on SettingsPage
+Padding (or margin) on lower button to bottom of screen looks smaller than
+Top Button to Top of screen (occurs sporadically on HTC Incredible)
+
+Add setting for "Keep Screen On Running" ?
+
+Catch UnsupportedOperation exceptions from ShakeListener and
+PitchFlipListener
+
+Add milliseconds (just under 5 seconds, or forever?)
 
 Show Opponent Time right side up for each player
 
-Pull Shake-to-reset and Flip to Pause into strings.xml
+Pull Shake-to-reset and Flip to Pause into strings.xml as well as menu text.
 
 Splash Screen
 
@@ -65,8 +71,6 @@ Settings page with swipe-to-set widget:
     * Support common settings
     * Support customer times
 
-Only keepScreenOn while game isInProgress
-
 Themes?
 
 Make states an Enum
@@ -74,4 +78,6 @@ Make states an Enum
 Rotate numbers sideways vs mirror
 
 Font options (non LED?) Underline perhaps? or a different font
+
+Extract PitchFlipListener and ShakeListener to "sensor" package
 

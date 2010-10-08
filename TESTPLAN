@@ -1,0 +1,24 @@
+Time Control
+    - Increment should increase time in clock when appropriate
+
+Persistence
+    - The app should persist configuration options when activity is left and
+      returned to
+
+Motion Detection
+    - Clock should pause when phone is flipped face down
+    - Clock should unpause when phone is turned face up
+
+    - Clock should reset (if game is in progress or stopped but not already
+      reset) when shaken
+    - The motion detection not be active when on settings page
+
+Sound
+    - Sound enable/disable on the settings page should work (and persist
+      between sessions)
+    - Clock should still click if players click fast enough to cause two
+      simultaneous clicks.
+
+Power Management
+    - Phone should turn off when game is not in progress
+    - Phone should remain on when game is in progress

@@ -272,6 +272,7 @@ public class ChessClock extends Activity {
 
 		handler.removeCallbacks(updateTimeTask);
 		handler.postDelayed(updateTimeTask, 100);
+		setKeepScreenOn(true);
 	}
 
 	void activateClock(int which) {
@@ -357,7 +358,13 @@ public class ChessClock extends Activity {
 
 	}
 
+	void setKeepScreenOn(boolean keepScreenOn) {
+		View layout = (View) findViewById(R.id.mainLayout);
+		layout.setKeepScreenOn(keepScreenOn);
+	}
+
 	void stopClock() {
+		setKeepScreenOn(false);
 		handler.removeCallbacks(updateTimeTask);
 		clockState = STOPPED;
 
