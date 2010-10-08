@@ -67,6 +67,7 @@ public class ChessClock extends Activity {
 	// Two players are used to get fast playback
 	private MediaPlayer clicker1;
 	private MediaPlayer clicker2;
+	private MediaPlayer gameOverSoundPlayer;
 
 	// Configurations
 	private long duration = 5 * 1 * 1000L;
@@ -160,10 +161,11 @@ public class ChessClock extends Activity {
 	private void initializeSound() {
 		clicker1 = createMediaPlayer(R.raw.click1);
 		clicker2 = createMediaPlayer(R.raw.click1);
+		gameOverSoundPlayer = createMediaPlayer(R.raw.gameover);
 	}
 
 	private MediaPlayer createMediaPlayer(int resId) {
-		MediaPlayer clicker = MediaPlayer.create(this, R.raw.click1);
+		MediaPlayer clicker = MediaPlayer.create(this, resId);
 		// clicker will be null if sound is not supported on device
 		if (clicker != null)
 			clicker.setVolume(1.0f, 1.0f);
@@ -180,6 +182,12 @@ public class ChessClock extends Activity {
 			clicker2.start();
 		else
 			clicker1.start();
+	}
+
+	void playGameOverSound() {
+		if ((gameOverSoundPlayer == null) || !soundEnabled)
+			return;
+		gameOverSoundPlayer.start();
 	}
 
 	void restorePreferences() {
@@ -383,6 +391,7 @@ public class ChessClock extends Activity {
 		if (player2Lost) {
 			player2Clock.setLost();
 		}
+		playGameOverSound();
 	}
 
 	boolean hasPlayerLost(int which) {
