@@ -1,6 +1,4 @@
 App:
-    Allow player to click on Paused dialog to unapuse it.
-
     Remove "debuggable" from manifest before release
     
     Specify API version requirement in manifest
@@ -81,4 +79,7 @@ Rotate numbers sideways vs mirror
 Font options (non LED?) Underline perhaps? or a different font
 
 Extract PitchFlipListener and ShakeListener to "sensor" package
+
+Allow player to click on Paused dialog to unapuse it. Tried this, more
+difficult than I thought it would be. Punting for now.
 
