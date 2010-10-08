@@ -1,3 +1,11 @@
+Mechanics
+    - A dialog should appear when pause is initated by the player (via phone
+      flip or via menu)
+    - A dialog should not appear when paused by system by leaving the activity
+      (via Settings Page or hitting Home button)
+    - On resuming from a non-player initiated pause, we should leave the clock
+      puased and re-emit the paused dialog.
+
 Time Control
     - Increment should increase time in clock when appropriate
 

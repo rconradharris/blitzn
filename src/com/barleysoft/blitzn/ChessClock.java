@@ -123,8 +123,18 @@ public class ChessClock extends Activity {
 		super.onResume();
 		if ((shakeListener != null) && !shakeListener.isListening())
 			shakeListener.resume();
+
 		if ((pitchFlipListener != null) && !pitchFlipListener.isListening())
 			pitchFlipListener.resume();
+
+		// When a paused game is resumed, we don't want to immediately start the
+		// clock,
+		// lest the player is not ready. Rather, we re-emit the paused dialog
+		// box. Since the
+		// clock was placed into the PAUSED state in onPause, we're in a
+		// consistent state.
+		if (isGamePaused() && !pausedDialog.isShowing())
+			pausedDialog.show();
 	}
 
 	@Override
@@ -133,6 +143,11 @@ public class ChessClock extends Activity {
 			shakeListener.pause();
 		if (pitchFlipListener != null)
 			pitchFlipListener.pause();
+
+		// Don't show the dialog box on a system initiated pause
+		if (isGameInProgress())
+			pauseClock(false);
+
 		super.onPause();
 	}
 
@@ -241,7 +256,7 @@ public class ChessClock extends Activity {
 									&& !isGamePaused()) {
 								Log.i("Blitzn", "flip detected, pausing");
 								vibe.vibrate(100);
-								pauseClock();
+								pauseClock(true);
 							}
 						}
 					}
@@ -330,17 +345,27 @@ public class ChessClock extends Activity {
 		}
 	}
 
-	void pauseClock() {
+	void pauseClock(boolean showDialog) {
+		// There are two types of pauses:
+		// a) Player initiated, where the player flips the phone over
+		// or hits pause from the menu
+		// b) Where the system pauses the clock because the clock is
+		// no longer visible (hit the settings page or the home button)
+		//
+		// For a) we want to display a paused dialog; however, for b)
+		// we do not.
 		switch (clockState) {
 		case PLAYER1_RUNNING:
 			handler.removeCallbacks(updateTimeTask);
 			clockState = PLAYER1_PAUSED;
-			pausedDialog.show();
+			if (showDialog)
+				pausedDialog.show();
 			break;
 		case PLAYER2_RUNNING:
 			handler.removeCallbacks(updateTimeTask);
 			clockState = PLAYER2_PAUSED;
-			pausedDialog.show();
+			if (showDialog)
+				pausedDialog.show();
 			break;
 		default:
 			// throw ClockStateException("wrong state");
@@ -353,18 +378,19 @@ public class ChessClock extends Activity {
 			handler.removeCallbacks(updateTimeTask);
 			handler.postDelayed(updateTimeTask, 100);
 			clockState = PLAYER1_RUNNING;
-			pausedDialog.dismiss();
+			if (pausedDialog.isShowing())
+				pausedDialog.dismiss();
 			break;
 		case PLAYER2_PAUSED:
 			handler.removeCallbacks(updateTimeTask);
 			handler.postDelayed(updateTimeTask, 100);
 			clockState = PLAYER2_RUNNING;
-			pausedDialog.dismiss();
+			if (pausedDialog.isShowing())
+				pausedDialog.dismiss();
 			break;
 		default:
 			// throw ClockStateException("wrong state");
 		}
-
 	}
 
 	void setKeepScreenOn(boolean keepScreenOn) {
@@ -495,7 +521,7 @@ public class ChessClock extends Activity {
 			setTime();
 			return true;
 		case MENU_PAUSE:
-			pauseClock();
+			pauseClock(true);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

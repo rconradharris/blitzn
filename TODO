@@ -1,4 +1,6 @@
 App:
+    Allow player to click on Paused dialog to unapuse it.
+
     Remove "debuggable" from manifest before release
     
     Specify API version requirement in manifest
