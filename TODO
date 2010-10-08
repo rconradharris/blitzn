@@ -1,9 +1,5 @@
 App:
     Remove "debuggable" from manifest before release
-
-    Add ding on game end.
-
-    Font change?
     
     Specify API version requirement in manifest
         Requirements enforced by the Android Market server:
@@ -42,7 +38,10 @@ Barleysoft:
 Make default something other than 1+0 (might not be an issue)
 
 Padding (or margin) on lower button to bottom of screen looks smaller than
-Top Button to Top of screen (occurs sporadically on HTC Incredible)
+Top Button to Top of screen (occurs sporadically on HTC Incredible).
+Replicated this by hitting settings button, then hit back. Bottom margin
+should be missing. Now hit menu again, layout should be pushed up and margin
+restored.
 
 Add setting for "Keep Screen On Running" ?
 
