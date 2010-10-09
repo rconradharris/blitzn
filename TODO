@@ -1,40 +1,40 @@
-App:
-    Remove "debuggable" from manifest before release
-    
-    Specify API version requirement in manifest
-        Requirements enforced by the Android Market server:
-        Your application must be signed with a cryptographic private key whose
-        validity period ends after 22 October 2033.
-        Your application must define both an android:versionCode and an
-        android:versionName attribute in the <manifest> element of its manifest. The
-        server uses the android:versionCode as the basis for identifying the
-        application internally and handling updates, and it displays the
-        android:versionName to users as the application's version.
-        Your application must define both an android:icon and an android:label
-        attribute in the <application> element of its manifest.
-
-    Cut Release:
-        versionCode: 100
-        versionName: 1.0
-        
-    Create screen shots
-    Write description, enumerate features
-    Sign w/ release key
-    zipalign apk
+Essential:
+    Copy keystore onto USB key
+    Move release materials into github wiki.
 
 Barleysoft:
-
     Make small demonstration video
     Create Small website. "What's Brewing?"/ Colors Yellow & Brown.
     Create Barleysoft logo: Barley leaf
     Create email acct that forwards to gmail (rick@barleysoft.com)
     Take a photo of blitzn used on a park table
-    Get Market publishing account
-    Create Twitter Account
     Play inaugural game, then tweet it
 
+Blitzn Next Release v1.1:
+    Features:
+        Improved Time-delay code:
+            Support Bronstein, Fischer, Fischer after, Simple delay
+            Add delay counter on main page.
+        
+        Improve UI Phase 1:
+            Make LED timer look more realistic
+            Add 3D to the buttons.
+            Add glowing red light to indicate time is running.
 
-== Next Release ==
+    Code-cleanup:
+        Use XML for menu definition
+        Extract PitchFlipListener and ShakeListener to "sensor" package
+        Pull Shake-to-reset and Flip to Pause into strings.xml as well as menu text.
+        Make states an Enum
+
+    Bugs:
+        Catch UnsupportedOperation exceptions from ShakeListener and
+        PitchFlipListener
+        
+        Unpause dialog currently shakes as the screen returns to full-screen.
+        Is there a fix here?
+
+== Unpriortizied ==
 
 Provide a way to get back to the hints page
 
@@ -45,9 +45,6 @@ From Wikipedia:
 events: 90 minutes for the first 40 moves followed by 30 minutes for the rest
 of the game with an addition of 30 seconds per move starting from move one."
 
-
-Make default something other than 1+0 (might not be an issue)
-
 Padding (or margin) on lower button to bottom of screen looks smaller than
 Top Button to Top of screen (occurs sporadically on HTC Incredible).
 Replicated this by hitting settings button, then hit back. Bottom margin
@@ -56,14 +53,9 @@ restored.
 
 Add setting for "Keep Screen On Running" ?
 
-Catch UnsupportedOperation exceptions from ShakeListener and
-PitchFlipListener
-
 Add milliseconds (just under 5 seconds, or forever?)
 
 Show Opponent Time right side up for each player
-
-Pull Shake-to-reset and Flip to Pause into strings.xml as well as menu text.
 
 Splash Screen
 
@@ -74,22 +66,16 @@ Save Activity State - see onSaveInstanceState() onRestoreInstanceState()
 Perhaps pull "Settings" onto different page, and leave time related settings on
 SetTime. Idea is "Settings" is rare, "SetTime" is common.
 
-Splash screen that run on first install that explains basic operation.
-Possible help button.
-
 Settings page with swipe-to-set widget:
     * Support common settings
-    * Support customer times
+    * Support custom times
+    * Allow favoriting of custom times
 
 Themes?
-
-Make states an Enum
 
 Rotate numbers sideways vs mirror
 
 Font options (non LED?) Underline perhaps? or a different font
-
-Extract PitchFlipListener and ShakeListener to "sensor" package
 
 Allow player to click on Paused dialog to unapuse it. Tried this, more
 difficult than I thought it would be. Punting for now.
