@@ -33,17 +33,11 @@ public class ChessClock extends Activity {
 
 	// Constants
 	public static int CLOCK_RESOLUTION = 100; // ms
-
-	// Activities
+	public static final String PREFS_NAME = "BlitznPrefs";
 	public static final int ACTIVITY_SET_TIME = 0;
-
-	// Menu Items
 	public static final int MENU_RESET = Menu.FIRST;
 	public static final int MENU_SET_TIME = Menu.FIRST + 1;
 	public static final int MENU_PAUSE = Menu.FIRST + 2;
-
-	// Preference Key-Value Store
-	public static final String PREFS_NAME = "BlitznPrefs";
 
 	// Member variables
 	private CLOCK_STATE clockState = CLOCK_STATE.NOSTATE;
@@ -258,14 +252,14 @@ public class ChessClock extends Activity {
 		pitchFlipListener = new PitchFlipListener(this);
 		pitchFlipListener
 				.setOnPitchFlipListener(new PitchFlipListener.OnPitchFlipListener() {
-					public void onPitchFlip(int state) {
+					public void onPitchFlip(PitchFlipListener.STATE state) {
 						if (flipEnabled && isGameInProgress()) {
-							if ((state == PitchFlipListener.UP)
+							if ((state == PitchFlipListener.STATE.UP)
 									&& isGamePaused()) {
 								Log.i("Blitzn", "flip detected, unpausing");
 								vibe.vibrate(100);
 								unPauseClock();
-							} else if ((state == PitchFlipListener.DOWN)
+							} else if ((state == PitchFlipListener.STATE.DOWN)
 									&& !isGamePaused()) {
 								Log.i("Blitzn", "flip detected, pausing");
 								vibe.vibrate(100);
