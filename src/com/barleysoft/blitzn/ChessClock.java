@@ -23,9 +23,15 @@ import android.view.Window;
 import android.view.WindowManager;
 
 public class ChessClock extends Activity {
+	public enum PLAYER {
+		ONE, TWO
+	}
+
+	public enum CLOCK_STATE {
+		NOSTATE, READY, PLAYER1_RUNNING, PLAYER2_RUNNING, PLAYER1_PAUSED, PLAYER2_PAUSED, STOPPED
+	}
 
 	// Constants
-	public enum PLAYER { ONE, TWO }
 	public static int CLOCK_RESOLUTION = 100; // ms
 
 	// Activities
@@ -39,17 +45,8 @@ public class ChessClock extends Activity {
 	// Preference Key-Value Store
 	public static final String PREFS_NAME = "BlitznPrefs";
 
-	// Clock State Machine
-	public static final int NOSTATE = 0;
-	public static final int READY = 1;
-	public static final int PLAYER1_RUNNING = 2;
-	public static final int PLAYER2_RUNNING = 3;
-	public static final int PLAYER1_PAUSED = 4;
-	public static final int PLAYER2_PAUSED = 5;
-	public static final int STOPPED = 6;
-
 	// Member variables
-	private int clockState = NOSTATE;
+	private CLOCK_STATE clockState = CLOCK_STATE.NOSTATE;
 
 	private long player1TimeLeft = 0L;
 	private long player2TimeLeft = 0L;
@@ -303,7 +300,7 @@ public class ChessClock extends Activity {
 	}
 
 	void initiateClock(PLAYER which) {
-		if (clockState != READY) {
+		if (clockState != CLOCK_STATE.READY) {
 			// throw new ClockStateException("already started");
 		}
 
@@ -320,13 +317,13 @@ public class ChessClock extends Activity {
 			player1Clock.setIsActivated(true);
 			player2Clock.setIsActivated(false);
 			playClick();
-			clockState = PLAYER1_RUNNING;
+			clockState = CLOCK_STATE.PLAYER1_RUNNING;
 		} else {
 			player2IncrementLeft = increment;
 			player2Clock.setIsActivated(true);
 			player1Clock.setIsActivated(false);
 			playClick();
-			clockState = PLAYER2_RUNNING;
+			clockState = CLOCK_STATE.PLAYER2_RUNNING;
 		}
 	}
 
@@ -343,7 +340,7 @@ public class ChessClock extends Activity {
 		player2Clock.setIsActivated(true);
 
 		updateClockDisplays();
-		clockState = READY;
+		clockState = CLOCK_STATE.READY;
 	}
 
 	void toggleClock() {
@@ -373,13 +370,13 @@ public class ChessClock extends Activity {
 		switch (clockState) {
 		case PLAYER1_RUNNING:
 			handler.removeCallbacks(updateTimeTask);
-			clockState = PLAYER1_PAUSED;
+			clockState = CLOCK_STATE.PLAYER1_PAUSED;
 			if (showDialog)
 				pausedDialog.show();
 			break;
 		case PLAYER2_RUNNING:
 			handler.removeCallbacks(updateTimeTask);
-			clockState = PLAYER2_PAUSED;
+			clockState = CLOCK_STATE.PLAYER2_PAUSED;
 			if (showDialog)
 				pausedDialog.show();
 			break;
@@ -393,14 +390,14 @@ public class ChessClock extends Activity {
 		case PLAYER1_PAUSED:
 			handler.removeCallbacks(updateTimeTask);
 			handler.postDelayed(updateTimeTask, 100);
-			clockState = PLAYER1_RUNNING;
+			clockState = CLOCK_STATE.PLAYER1_RUNNING;
 			if (pausedDialog.isShowing())
 				pausedDialog.dismiss();
 			break;
 		case PLAYER2_PAUSED:
 			handler.removeCallbacks(updateTimeTask);
 			handler.postDelayed(updateTimeTask, 100);
-			clockState = PLAYER2_RUNNING;
+			clockState = CLOCK_STATE.PLAYER2_RUNNING;
 			if (pausedDialog.isShowing())
 				pausedDialog.dismiss();
 			break;
@@ -417,7 +414,7 @@ public class ChessClock extends Activity {
 	void stopClock() {
 		setKeepScreenOn(false);
 		handler.removeCallbacks(updateTimeTask);
-		clockState = STOPPED;
+		clockState = CLOCK_STATE.STOPPED;
 
 		boolean player1Lost = hasPlayerLost(PLAYER.ONE);
 		boolean player2Lost = hasPlayerLost(PLAYER.TWO);
@@ -437,7 +434,8 @@ public class ChessClock extends Activity {
 	}
 
 	boolean hasPlayerLost(PLAYER which) {
-		long timeLeft = (which == PLAYER.ONE) ? player1TimeLeft : player2TimeLeft;
+		long timeLeft = (which == PLAYER.ONE) ? player1TimeLeft
+				: player2TimeLeft;
 		return (timeLeft < CLOCK_RESOLUTION);
 	}
 
@@ -551,7 +549,8 @@ public class ChessClock extends Activity {
 		pauseMenu.setEnabled(isGameInProgress() && !isGamePaused());
 
 		MenuItem resetMenu = menu.findItem(MENU_RESET);
-		resetMenu.setEnabled((clockState != READY) && !isGamePaused());
+		resetMenu.setEnabled((clockState != CLOCK_STATE.READY)
+				&& !isGamePaused());
 
 		return true;
 	}
@@ -599,7 +598,7 @@ public class ChessClock extends Activity {
 	}
 
 	public boolean isGameReady() {
-		return (clockState == READY);
+		return (clockState == CLOCK_STATE.READY);
 	}
 
 }
