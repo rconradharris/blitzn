@@ -23,9 +23,9 @@ Blitzn Next Release v1.1:
 
     Code-cleanup:
         Use XML for menu definition
-        Extract PitchFlipListener and ShakeListener to "sensor" package
         Pull Shake-to-reset and Flip to Pause into strings.xml as well as menu text.
         Make states an Enum
+        Make member variables all use mBlah.
 
     Bugs:
         Catch UnsupportedOperation exceptions from ShakeListener and

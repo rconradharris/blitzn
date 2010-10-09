@@ -1,5 +1,8 @@
 package com.barleysoft.blitzn;
 
+import com.barleysoft.motion.PitchFlipListener;
+import com.barleysoft.motion.ShakeListener;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -22,8 +25,7 @@ import android.view.WindowManager;
 public class ChessClock extends Activity {
 
 	// Constants
-	public static int PLAYER1 = 1;
-	public static int PLAYER2 = 2;
+	public enum PLAYER { ONE, TWO }
 	public static int CLOCK_RESOLUTION = 100; // ms
 
 	// Activities
@@ -93,7 +95,7 @@ public class ChessClock extends Activity {
 		player1Clock.setIsFlipped(true);
 		OnClickListener player1ClickListener = new OnClickListener() {
 			public void onClick(View v) {
-				onPlayerClick(PLAYER1);
+				onPlayerClick(PLAYER.ONE);
 			}
 		};
 		player1Clock
@@ -103,7 +105,7 @@ public class ChessClock extends Activity {
 		player2Clock = (ClockButton) findViewById(R.id.player2Clock);
 		OnClickListener player2ClickListener = new OnClickListener() {
 			public void onClick(View v) {
-				onPlayerClick(PLAYER2);
+				onPlayerClick(PLAYER.TWO);
 			}
 		};
 
@@ -277,11 +279,11 @@ public class ChessClock extends Activity {
 				});
 	}
 
-	void onPlayerClick(int which) {
-		if (which == PLAYER1) {
+	void onPlayerClick(PLAYER which) {
+		if (which == PLAYER.ONE) {
 			switch (clockState) {
 			case READY:
-				initiateClock(PLAYER1);
+				initiateClock(PLAYER.ONE);
 				break;
 			case PLAYER1_RUNNING:
 				toggleClock();
@@ -290,7 +292,7 @@ public class ChessClock extends Activity {
 		} else {
 			switch (clockState) {
 			case READY:
-				initiateClock(PLAYER2);
+				initiateClock(PLAYER.TWO);
 				break;
 			case PLAYER2_RUNNING:
 				toggleClock();
@@ -300,7 +302,7 @@ public class ChessClock extends Activity {
 
 	}
 
-	void initiateClock(int which) {
+	void initiateClock(PLAYER which) {
 		if (clockState != READY) {
 			// throw new ClockStateException("already started");
 		}
@@ -312,8 +314,8 @@ public class ChessClock extends Activity {
 		setKeepScreenOn(true);
 	}
 
-	void activateClock(int which) {
-		if (which == PLAYER1) {
+	void activateClock(PLAYER which) {
+		if (which == PLAYER.ONE) {
 			player1IncrementLeft = increment;
 			player1Clock.setIsActivated(true);
 			player2Clock.setIsActivated(false);
@@ -348,11 +350,11 @@ public class ChessClock extends Activity {
 		switch (clockState) {
 		case PLAYER1_RUNNING:
 			player1TimeLeft += player1IncrementLeft;
-			activateClock(PLAYER2);
+			activateClock(PLAYER.TWO);
 			break;
 		case PLAYER2_RUNNING:
 			player2TimeLeft += player2IncrementLeft;
-			activateClock(PLAYER1);
+			activateClock(PLAYER.ONE);
 			break;
 		default:
 			// throw ClockStateException("wrong state");
@@ -417,8 +419,8 @@ public class ChessClock extends Activity {
 		handler.removeCallbacks(updateTimeTask);
 		clockState = STOPPED;
 
-		boolean player1Lost = hasPlayerLost(PLAYER1);
-		boolean player2Lost = hasPlayerLost(PLAYER2);
+		boolean player1Lost = hasPlayerLost(PLAYER.ONE);
+		boolean player2Lost = hasPlayerLost(PLAYER.TWO);
 
 		if (player1Lost && player2Lost) {
 			Log.e("Blitzn", "both players lost, we have a problem!");
@@ -434,15 +436,15 @@ public class ChessClock extends Activity {
 		playGameOverSound();
 	}
 
-	boolean hasPlayerLost(int which) {
-		long timeLeft = (which == PLAYER1) ? player1TimeLeft : player2TimeLeft;
+	boolean hasPlayerLost(PLAYER which) {
+		long timeLeft = (which == PLAYER.ONE) ? player1TimeLeft : player2TimeLeft;
 		return (timeLeft < CLOCK_RESOLUTION);
 	}
 
 	private Runnable updateTimeTask = new Runnable() {
 		public void run() {
 			// Check for either clock expiring
-			if (hasPlayerLost(PLAYER1) || hasPlayerLost(PLAYER2)) {
+			if (hasPlayerLost(PLAYER.ONE) || hasPlayerLost(PLAYER.TWO)) {
 				stopClock();
 				return;
 			}
