@@ -1,7 +1,3 @@
-Essential:
-    Copy keystore onto USB key
-    Move release materials into github wiki.
-
 Barleysoft:
     Make small demonstration video
     Create Small website. "What's Brewing?"/ Colors Yellow & Brown.
@@ -22,9 +18,6 @@ Blitzn Next Release v1.1:
             Add glowing red light to indicate time is running.
 
     Code-cleanup:
-        Use XML for menu definition
-        Pull Shake-to-reset and Flip to Pause into strings.xml as well as menu text.
-        Make states an Enum
         Make member variables all use mBlah.
 
     Bugs:

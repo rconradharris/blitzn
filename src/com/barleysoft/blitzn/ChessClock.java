@@ -16,6 +16,7 @@ import android.os.SystemClock;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,11 +24,11 @@ import android.view.Window;
 import android.view.WindowManager;
 
 public class ChessClock extends Activity {
-	public enum PLAYER {
+	public enum Player {
 		ONE, TWO
 	}
 
-	public enum CLOCK_STATE {
+	public enum ClockState {
 		NOSTATE, READY, PLAYER1_RUNNING, PLAYER2_RUNNING, PLAYER1_PAUSED, PLAYER2_PAUSED, STOPPED
 	}
 
@@ -35,12 +36,9 @@ public class ChessClock extends Activity {
 	public static int CLOCK_RESOLUTION = 100; // ms
 	public static final String PREFS_NAME = "BlitznPrefs";
 	public static final int ACTIVITY_SET_TIME = 0;
-	public static final int MENU_RESET = Menu.FIRST;
-	public static final int MENU_SET_TIME = Menu.FIRST + 1;
-	public static final int MENU_PAUSE = Menu.FIRST + 2;
 
 	// Member variables
-	private CLOCK_STATE clockState = CLOCK_STATE.NOSTATE;
+	private ClockState clockState = ClockState.NOSTATE;
 
 	private long player1TimeLeft = 0L;
 	private long player2TimeLeft = 0L;
@@ -86,7 +84,7 @@ public class ChessClock extends Activity {
 		player1Clock.setIsFlipped(true);
 		OnClickListener player1ClickListener = new OnClickListener() {
 			public void onClick(View v) {
-				onPlayerClick(PLAYER.ONE);
+				onPlayerClick(Player.ONE);
 			}
 		};
 		player1Clock
@@ -96,7 +94,7 @@ public class ChessClock extends Activity {
 		player2Clock = (ClockButton) findViewById(R.id.player2Clock);
 		OnClickListener player2ClickListener = new OnClickListener() {
 			public void onClick(View v) {
-				onPlayerClick(PLAYER.TWO);
+				onPlayerClick(Player.TWO);
 			}
 		};
 
@@ -252,14 +250,14 @@ public class ChessClock extends Activity {
 		pitchFlipListener = new PitchFlipListener(this);
 		pitchFlipListener
 				.setOnPitchFlipListener(new PitchFlipListener.OnPitchFlipListener() {
-					public void onPitchFlip(PitchFlipListener.STATE state) {
+					public void onPitchFlip(PitchFlipListener.State state) {
 						if (flipEnabled && isGameInProgress()) {
-							if ((state == PitchFlipListener.STATE.UP)
+							if ((state == PitchFlipListener.State.UP)
 									&& isGamePaused()) {
 								Log.i("Blitzn", "flip detected, unpausing");
 								vibe.vibrate(100);
 								unPauseClock();
-							} else if ((state == PitchFlipListener.STATE.DOWN)
+							} else if ((state == PitchFlipListener.State.DOWN)
 									&& !isGamePaused()) {
 								Log.i("Blitzn", "flip detected, pausing");
 								vibe.vibrate(100);
@@ -270,11 +268,11 @@ public class ChessClock extends Activity {
 				});
 	}
 
-	void onPlayerClick(PLAYER which) {
-		if (which == PLAYER.ONE) {
+	void onPlayerClick(Player which) {
+		if (which == Player.ONE) {
 			switch (clockState) {
 			case READY:
-				initiateClock(PLAYER.ONE);
+				initiateClock(Player.ONE);
 				break;
 			case PLAYER1_RUNNING:
 				toggleClock();
@@ -283,7 +281,7 @@ public class ChessClock extends Activity {
 		} else {
 			switch (clockState) {
 			case READY:
-				initiateClock(PLAYER.TWO);
+				initiateClock(Player.TWO);
 				break;
 			case PLAYER2_RUNNING:
 				toggleClock();
@@ -293,8 +291,8 @@ public class ChessClock extends Activity {
 
 	}
 
-	void initiateClock(PLAYER which) {
-		if (clockState != CLOCK_STATE.READY) {
+	void initiateClock(Player which) {
+		if (clockState != ClockState.READY) {
 			// throw new ClockStateException("already started");
 		}
 
@@ -305,19 +303,19 @@ public class ChessClock extends Activity {
 		setKeepScreenOn(true);
 	}
 
-	void activateClock(PLAYER which) {
-		if (which == PLAYER.ONE) {
+	void activateClock(Player which) {
+		if (which == Player.ONE) {
 			player1IncrementLeft = increment;
 			player1Clock.setIsActivated(true);
 			player2Clock.setIsActivated(false);
 			playClick();
-			clockState = CLOCK_STATE.PLAYER1_RUNNING;
+			clockState = ClockState.PLAYER1_RUNNING;
 		} else {
 			player2IncrementLeft = increment;
 			player2Clock.setIsActivated(true);
 			player1Clock.setIsActivated(false);
 			playClick();
-			clockState = CLOCK_STATE.PLAYER2_RUNNING;
+			clockState = ClockState.PLAYER2_RUNNING;
 		}
 	}
 
@@ -334,18 +332,18 @@ public class ChessClock extends Activity {
 		player2Clock.setIsActivated(true);
 
 		updateClockDisplays();
-		clockState = CLOCK_STATE.READY;
+		clockState = ClockState.READY;
 	}
 
 	void toggleClock() {
 		switch (clockState) {
 		case PLAYER1_RUNNING:
 			player1TimeLeft += player1IncrementLeft;
-			activateClock(PLAYER.TWO);
+			activateClock(Player.TWO);
 			break;
 		case PLAYER2_RUNNING:
 			player2TimeLeft += player2IncrementLeft;
-			activateClock(PLAYER.ONE);
+			activateClock(Player.ONE);
 			break;
 		default:
 			// throw ClockStateException("wrong state");
@@ -364,13 +362,13 @@ public class ChessClock extends Activity {
 		switch (clockState) {
 		case PLAYER1_RUNNING:
 			handler.removeCallbacks(updateTimeTask);
-			clockState = CLOCK_STATE.PLAYER1_PAUSED;
+			clockState = ClockState.PLAYER1_PAUSED;
 			if (showDialog)
 				pausedDialog.show();
 			break;
 		case PLAYER2_RUNNING:
 			handler.removeCallbacks(updateTimeTask);
-			clockState = CLOCK_STATE.PLAYER2_PAUSED;
+			clockState = ClockState.PLAYER2_PAUSED;
 			if (showDialog)
 				pausedDialog.show();
 			break;
@@ -384,14 +382,14 @@ public class ChessClock extends Activity {
 		case PLAYER1_PAUSED:
 			handler.removeCallbacks(updateTimeTask);
 			handler.postDelayed(updateTimeTask, 100);
-			clockState = CLOCK_STATE.PLAYER1_RUNNING;
+			clockState = ClockState.PLAYER1_RUNNING;
 			if (pausedDialog.isShowing())
 				pausedDialog.dismiss();
 			break;
 		case PLAYER2_PAUSED:
 			handler.removeCallbacks(updateTimeTask);
 			handler.postDelayed(updateTimeTask, 100);
-			clockState = CLOCK_STATE.PLAYER2_RUNNING;
+			clockState = ClockState.PLAYER2_RUNNING;
 			if (pausedDialog.isShowing())
 				pausedDialog.dismiss();
 			break;
@@ -408,10 +406,10 @@ public class ChessClock extends Activity {
 	void stopClock() {
 		setKeepScreenOn(false);
 		handler.removeCallbacks(updateTimeTask);
-		clockState = CLOCK_STATE.STOPPED;
+		clockState = ClockState.STOPPED;
 
-		boolean player1Lost = hasPlayerLost(PLAYER.ONE);
-		boolean player2Lost = hasPlayerLost(PLAYER.TWO);
+		boolean player1Lost = hasPlayerLost(Player.ONE);
+		boolean player2Lost = hasPlayerLost(Player.TWO);
 
 		if (player1Lost && player2Lost) {
 			Log.e("Blitzn", "both players lost, we have a problem!");
@@ -427,8 +425,8 @@ public class ChessClock extends Activity {
 		playGameOverSound();
 	}
 
-	boolean hasPlayerLost(PLAYER which) {
-		long timeLeft = (which == PLAYER.ONE) ? player1TimeLeft
+	boolean hasPlayerLost(Player which) {
+		long timeLeft = (which == Player.ONE) ? player1TimeLeft
 				: player2TimeLeft;
 		return (timeLeft < CLOCK_RESOLUTION);
 	}
@@ -436,7 +434,7 @@ public class ChessClock extends Activity {
 	private Runnable updateTimeTask = new Runnable() {
 		public void run() {
 			// Check for either clock expiring
-			if (hasPlayerLost(PLAYER.ONE) || hasPlayerLost(PLAYER.TWO)) {
+			if (hasPlayerLost(Player.ONE) || hasPlayerLost(Player.TWO)) {
 				stopClock();
 				return;
 			}
@@ -513,22 +511,21 @@ public class ChessClock extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
-		menu.add(0, MENU_RESET, 0, "Reset");
-		menu.add(0, MENU_PAUSE, 0, "Pause");
-		menu.add(0, MENU_SET_TIME, 0, "Settings");
-		return result;
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main, menu);
+	    return result;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case MENU_RESET:
+		case R.id.resetMenu:
 			resetClock();
 			return true;
-		case MENU_SET_TIME:
+		case R.id.settingsMenu:
 			setTime();
 			return true;
-		case MENU_PAUSE:
+		case R.id.pauseMenu:
 			pauseClock(true);
 			return true;
 		}
@@ -537,16 +534,14 @@ public class ChessClock extends Activity {
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		super.onPrepareOptionsMenu(menu);
-
-		MenuItem pauseMenu = menu.findItem(MENU_PAUSE);
+		MenuItem pauseMenu = menu.findItem(R.id.pauseMenu);
 		pauseMenu.setEnabled(isGameInProgress() && !isGamePaused());
 
-		MenuItem resetMenu = menu.findItem(MENU_RESET);
-		resetMenu.setEnabled((clockState != CLOCK_STATE.READY)
+		MenuItem resetMenu = menu.findItem(R.id.resetMenu);
+		resetMenu.setEnabled((clockState != ClockState.READY)
 				&& !isGamePaused());
 
-		return true;
+		return super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override
@@ -592,7 +587,7 @@ public class ChessClock extends Activity {
 	}
 
 	public boolean isGameReady() {
-		return (clockState == CLOCK_STATE.READY);
+		return (clockState == ClockState.READY);
 	}
 
 }
