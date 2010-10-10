@@ -18,7 +18,6 @@ Blitzn Next Release v1.1:
             Add glowing red light to indicate time is running.
 
     Code-cleanup:
-        Make member variables all use mBlah.
 
     Bugs:
         Catch UnsupportedOperation exceptions from ShakeListener and

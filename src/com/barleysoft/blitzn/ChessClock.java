@@ -290,15 +290,22 @@ public class ChessClock extends Activity {
 
 	}
 
+	void startClockTimer() {
+		mHandler.removeCallbacks(updateTimeTask);
+		mHandler.postDelayed(updateTimeTask, CLOCK_RESOLUTION);
+	}
+
+	void stopClockTimer() {
+		mHandler.removeCallbacks(updateTimeTask);
+	}
+
 	void initiateClock(Player which) {
 		if (mClockState != ClockState.READY) {
 			// throw new ClockStateException("already started");
 		}
 
 		activateClock(which);
-
-		mHandler.removeCallbacks(updateTimeTask);
-		mHandler.postDelayed(updateTimeTask, 100);
+		startClockTimer();
 		setKeepScreenOn(true);
 	}
 
@@ -320,7 +327,7 @@ public class ChessClock extends Activity {
 
 	void resetClock() {
 		setKeepScreenOn(false);
-		mHandler.removeCallbacks(updateTimeTask);
+		stopClockTimer();
 
 		mPlayer1TimeLeft = mDuration;
 		mPlayer1IncrementLeft = mIncrement;
@@ -360,13 +367,13 @@ public class ChessClock extends Activity {
 		// we do not.
 		switch (mClockState) {
 		case PLAYER1_RUNNING:
-			mHandler.removeCallbacks(updateTimeTask);
+			stopClockTimer();
 			mClockState = ClockState.PLAYER1_PAUSED;
 			if (showDialog)
 				mPausedDialog.show();
 			break;
 		case PLAYER2_RUNNING:
-			mHandler.removeCallbacks(updateTimeTask);
+			stopClockTimer();
 			mClockState = ClockState.PLAYER2_PAUSED;
 			if (showDialog)
 				mPausedDialog.show();
@@ -379,15 +386,13 @@ public class ChessClock extends Activity {
 	void unPauseClock() {
 		switch (mClockState) {
 		case PLAYER1_PAUSED:
-			mHandler.removeCallbacks(updateTimeTask);
-			mHandler.postDelayed(updateTimeTask, 100);
+			startClockTimer();
 			mClockState = ClockState.PLAYER1_RUNNING;
 			if (mPausedDialog.isShowing())
 				mPausedDialog.dismiss();
 			break;
 		case PLAYER2_PAUSED:
-			mHandler.removeCallbacks(updateTimeTask);
-			mHandler.postDelayed(updateTimeTask, 100);
+			startClockTimer();
 			mClockState = ClockState.PLAYER2_RUNNING;
 			if (mPausedDialog.isShowing())
 				mPausedDialog.dismiss();
@@ -404,7 +409,7 @@ public class ChessClock extends Activity {
 
 	void stopClock() {
 		setKeepScreenOn(false);
-		mHandler.removeCallbacks(updateTimeTask);
+		stopClockTimer();
 		mClockState = ClockState.STOPPED;
 
 		boolean player1Lost = hasPlayerLost(Player.ONE);
