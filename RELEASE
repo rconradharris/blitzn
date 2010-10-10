@@ -1,0 +1,25 @@
+Bump version:
+    versionCode: 100
+    versionName: 1.0
+
+Tag in git - v1.0
+
+Remove "debuggable=true" from manifest before release
+
+Sign w/ release key
+    Use Eclipse ADT Wizard to Export signed apk
+
+Zipalign apk
+
+Create screen shots
+    Use sdk/tools/ddms
+    Use gimp to resize to 320wx480h
+
+Write description, enumerate features
+
+Optional: Create Promo Image, write Promo text
+
+Update site (barleysoft.com)
+
+Tweet release (@barleysoft)
+

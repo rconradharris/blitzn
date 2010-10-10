@@ -8,8 +8,10 @@ Barleysoft:
 
 Blitzn Next Release v1.1:
     Features:
+        Menu Icons
+
         Improved Time-delay code:
-            Support Bronstein, Fischer, Fischer after, Simple delay
+            Support Bronstein, Fischer, Fischer after, Simple delay, Hourglass
             Add delay counter on main page.
         
         Improve UI Phase 1:
