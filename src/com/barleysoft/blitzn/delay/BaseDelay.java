@@ -1,5 +1,6 @@
-package com.barleysoft.blitzn;
+package com.barleysoft.blitzn.delay;
 
+import com.barleysoft.blitzn.BlitznChessClock;
 import com.barleysoft.blitzn.BlitznChessClock.Player;
 
 public abstract class BaseDelay implements Delay {

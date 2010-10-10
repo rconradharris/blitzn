@@ -1,5 +1,6 @@
 package com.barleysoft.blitzn;
 
+import com.barleysoft.blitzn.delay.FischerAfterDelay;
 import com.barleysoft.motion.PitchFlipListener;
 import com.barleysoft.motion.ShakeListener;
 

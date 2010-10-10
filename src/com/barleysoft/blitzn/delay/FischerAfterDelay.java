@@ -1,10 +1,11 @@
-package com.barleysoft.blitzn;
+package com.barleysoft.blitzn.delay;
 
+import com.barleysoft.blitzn.BlitznChessClock;
 import com.barleysoft.blitzn.BlitznChessClock.Player;
 
 public class FischerAfterDelay extends BaseDelay {
 
-	FischerAfterDelay(BlitznChessClock chessClock) {
+	public FischerAfterDelay(BlitznChessClock chessClock) {
 		super(chessClock);
 	}
 
