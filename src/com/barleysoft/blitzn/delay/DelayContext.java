@@ -19,6 +19,10 @@ public class DelayContext {
 		mDelayStrategy = delayStrategy;
 	}
 
+	public boolean isDelayEnabled() {
+		return !(mDelayStrategy instanceof NoneDelayStrategy);
+	}
+
 	public DelayStrategy getStrategy() {
 		return mDelayStrategy;
 	}

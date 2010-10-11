@@ -28,11 +28,9 @@ import android.view.WindowManager;
 
 public class BlitznChessClock extends Activity implements ChessClock {
 	// NOTE(sirp); Android optimization document[1] considers enum bad since
-	// they
-	// add overhead. They recommend using a static final int instead.
-	// I am purposefully ignoring this advice since performance isn't critical
-	// here,
-	// and writing correct code is.
+	// they add overhead. They recommend using a static final int instead.
+	// I am purposefully ignoring this advice since performance isn't
+	// critical here, and writing correct code is.
 	//
 	// [1]
 	// http://developer.android.com/guide/practices/design/performance.html#avoid_enums
@@ -627,6 +625,10 @@ public class BlitznChessClock extends Activity implements ChessClock {
 
 	public boolean isGameReady() {
 		return (mClockState == ClockState.READY);
+	}
+
+	public boolean isDelayEnabled() {
+		return mDelayContext.isDelayEnabled();
 	}
 
 	public long getTimeLeftForPlayer(Player player) {

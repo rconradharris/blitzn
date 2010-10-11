@@ -5,12 +5,17 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 public class SetTime extends Activity {
+	static private int NO_DELAY_POSITION = 0;
+
 	private Spinner durationSpinner;
 	private Spinner delayTimeSpinner;
 	private Spinner delayMethodSpinner;
@@ -45,6 +50,16 @@ public class SetTime extends Activity {
 			spinner.setSelection(spinnerSelection);
 	}
 
+	boolean isDelayEnabled() {
+		int pos = delayMethodSpinner.getSelectedItemPosition();
+		return pos != NO_DELAY_POSITION;
+	}
+
+	void toggleDelayTimeSpinnerVisibility() {
+		delayTimeSpinner.setVisibility(isDelayEnabled() ? View.VISIBLE
+				: View.INVISIBLE);
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,6 +82,20 @@ public class SetTime extends Activity {
 
 		delayMethodSpinner.setSelection(extras.getInt("delayMethod"));
 
+		OnItemSelectedListener delayMethodSelected = new OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				toggleDelayTimeSpinnerVisibility();
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+
+			}
+		};
+
+		delayMethodSpinner.setOnItemSelectedListener(delayMethodSelected);
+
 		// Setup Shake To Reset Checkbox
 		shakeCheckbox = (CheckBox) findViewById(R.id.shakeCheckbox);
 		shakeCheckbox.setChecked(extras.getBoolean("shakeEnabled"));
@@ -80,6 +109,7 @@ public class SetTime extends Activity {
 		soundCheckbox.setChecked(extras.getBoolean("soundEnabled"));
 
 		setVersionLabel();
+		toggleDelayTimeSpinnerVisibility();
 	}
 
 	private void setVersionLabel() {

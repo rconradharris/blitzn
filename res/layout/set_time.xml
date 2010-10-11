@@ -1,28 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_height="wrap_content"
-  android:orientation="vertical" android:layout_width="fill_parent" android:paddingTop="50px" android:paddingLeft="25px">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content" android:orientation="vertical"
+	android:layout_width="fill_parent" android:paddingTop="50px"
+	android:paddingLeft="25px">
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/durationLabel"
+		android:text="@string/duration" android:textStyle="bold"></TextView>
+	<Spinner android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/durationSpinner"></Spinner>
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:paddingTop="25px"
+		android:textStyle="bold" android:id="@+id/delayLabel" android:text="@string/delay"></TextView>
 
+	<LinearLayout android:id="@+id/LinearLayout01"
+		android:orientation="horizontal" android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+		<Spinner android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/delayMethodSpinner"></Spinner>
+		<Spinner android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/delayTimeSpinner"></Spinner>
+	</LinearLayout>
 
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/durationLabel" android:text="@string/duration" android:textStyle="bold"></TextView><Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/durationSpinner"></Spinner>
-
-
-
-
-
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingTop="25px" android:textStyle="bold" android:id="@+id/delayLabel" android:text="@string/delay"></TextView><Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/delayTimeSpinner"></Spinner><Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/delayMethodSpinner"></Spinner><CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/shakeCheckbox" android:layout_marginTop="25px" android:text="@string/shake_to_reset"></CheckBox><CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/flipCheckbox" android:layout_marginTop="25px" android:text="@string/flip_to_pause"></CheckBox><CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/soundCheckbox" android:layout_marginTop="25px" android:text="@string/sounds"></CheckBox><RelativeLayout android:id="@+id/RelativeLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content"><TextView android:text="@+id/TextView01" android:layout_height="wrap_content" android:id="@+id/versionLabel" android:layout_width="wrap_content" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:paddingBottom="10px" android:paddingRight="10px"></TextView><TextView android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true" android:id="@+id/Copyright" android:text="© 2010 Barleysoft" android:paddingBottom="10px" android:layout_width="fill_parent" android:gravity="center_vertical|center_horizontal"></TextView></RelativeLayout>
-
-
-
-
-
-
-
-
-
-
-
-
+	<CheckBox android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/shakeCheckbox"
+		android:layout_marginTop="25px" android:text="@string/shake_to_reset"></CheckBox>
+	<CheckBox android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/flipCheckbox"
+		android:layout_marginTop="25px" android:text="@string/flip_to_pause"></CheckBox>
+	<CheckBox android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/soundCheckbox"
+		android:layout_marginTop="25px" android:text="@string/sounds"></CheckBox>
+	<RelativeLayout android:id="@+id/RelativeLayout01"
+		android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<TextView android:text="@+id/TextView01"
+			android:layout_height="wrap_content" android:id="@+id/versionLabel"
+			android:layout_width="wrap_content" android:layout_alignParentRight="true"
+			android:layout_alignParentBottom="true" android:paddingBottom="10px"
+			android:paddingRight="10px"></TextView>
+		<TextView android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true" android:id="@+id/Copyright"
+			android:text="© 2010 Barleysoft" android:paddingBottom="10px"
+			android:layout_width="fill_parent" android:gravity="center_vertical|center_horizontal"></TextView>
+	</RelativeLayout>
 
 </LinearLayout>

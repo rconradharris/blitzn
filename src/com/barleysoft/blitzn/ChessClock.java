@@ -8,4 +8,5 @@ public interface ChessClock {
 
 	void adjustTimeLeftForPlayer(Player player, long adjustment);
 
+	boolean isDelayEnabled();
 }
