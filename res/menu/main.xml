@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-  xmlns:android="http://schemas.android.com/apk/res/android">
-<item android:title="@string/reset" android:id="@+id/resetMenu"></item>
-<item android:title="@string/pause" android:id="@+id/pauseMenu"></item>
-<item android:title="@string/settings" android:id="@+id/settingsMenu"></item>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:title="@string/reset" android:id="@+id/resetMenu"></item>
+	<item android:title="@string/pause" android:id="@+id/pauseMenu"></item>
+	<item android:title="@string/settings" android:id="@+id/settingsMenu"></item>
 </menu>

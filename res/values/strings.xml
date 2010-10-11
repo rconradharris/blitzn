@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="settings">Settings</string>
-    <string name="pause">Pause</string>
-    <string name="reset">Reset</string>
-    
-    <string name="app_name">Blitzn</string>
-
-<string name="duration">Duration</string>
-<string name="delay">Delay</string>
-<string name="clock_font">fonts/lcd_mono_normal.ttf</string>
-<string name="yes">Yes</string>
-<string name="no">No</string>
-<string name="quit">Quit</string>
-<string name="leave_in_progress">Abandon game in progress?</string>
-<string name="paused">Paused</string>
-<string name="intro_title">Blitzn Hints</string>
-<string name="intro_text">
-<li>Pick from common game lengths, including Bullet and Blitz</li>\n\n
-<li>Supports Fischer After Delay</li>\n\n
-<li>Flip the phone onto its face to pause</li>\n\n
-<li>Shake the phone to reset the clock</li></string>
-<string name="ok">OK</string>
-<string name="shake_to_reset">Shake to Reset</string>
-<string name="flip_to_pause">Flip to Pause</string>
-<string name="sounds">Sounds</string>
+	<string name="settings">Settings</string>
+	<string name="pause">Pause</string>
+	<string name="reset">Reset</string>
+	<string name="app_name">Blitzn</string>
+	<string name="duration">Duration</string>
+	<string name="delay">Delay</string>
+	<string name="clock_font">fonts/lcd_mono_normal.ttf</string>
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
+	<string name="quit">Quit</string>
+	<string name="leave_in_progress">Abandon game in progress?</string>
+	<string name="paused">Paused</string>
+	<string name="intro_title">Blitzn Hints</string>
+	<string name="intro_text">
+		<li>Pick from common game lengths, including Bullet and Blitz</li>
+		\n\n
+		<li>Supports Fischer After Delay</li>
+		\n\n
+		<li>Flip the phone onto its face to pause</li>
+		\n\n
+		<li>Shake the phone to reset the clock</li>
+	</string>
+	<string name="ok">OK</string>
+	<string name="shake_to_reset">Shake to Reset</string>
+	<string name="flip_to_pause">Flip to Pause</string>
+	<string name="sounds">Sounds</string>
 </resources>

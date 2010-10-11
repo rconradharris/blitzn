@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string-array name="duration_choices">
-<item>1 minute</item>
-<item>3 minutes</item>
-<item>5 minutes</item>
-<item>10 minutes</item>
-<item>15 minutes</item>
-<item>30 minutes</item>
-<item>60 minutes</item>
-</string-array>
+	<string-array name="duration_choices">
+		<item>1 minute</item>
+		<item>3 minutes</item>
+		<item>5 minutes</item>
+		<item>10 minutes</item>
+		<item>15 minutes</item>
+		<item>30 minutes</item>
+		<item>60 minutes</item>
+	</string-array>
 </resources>
