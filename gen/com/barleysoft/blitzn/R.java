@@ -9,8 +9,9 @@ package com.barleysoft.blitzn;
 
 public final class R {
     public static final class array {
-        public static final int duration_choices=0x7f050000;
-        public static final int increment_choices=0x7f050001;
+        public static final int delay_methods=0x7f050000;
+        public static final int delay_times=0x7f050001;
+        public static final int duration_choices=0x7f050002;
     }
     public static final class attr {
     }
@@ -23,11 +24,11 @@ public final class R {
         public static final int RelativeLayout01=0x7f08000c;
         public static final int TextView01=0x7f080001;
         public static final int TextView02=0x7f080003;
+        public static final int delayLabel=0x7f080007;
+        public static final int delayTimeSpinner=0x7f080008;
         public static final int durationLabel=0x7f080005;
         public static final int durationSpinner=0x7f080006;
         public static final int flipCheckbox=0x7f08000a;
-        public static final int incrementLabel=0x7f080007;
-        public static final int incrementSpinner=0x7f080008;
         public static final int mainLayout=0x7f080000;
         public static final int pauseMenu=0x7f080010;
         public static final int player1Clock=0x7f080002;
@@ -52,9 +53,9 @@ public final class R {
     public static final class string {
         public static final int app_name=0x7f060003;
         public static final int clock_font=0x7f060006;
+        public static final int delay=0x7f060005;
         public static final int duration=0x7f060004;
         public static final int flip_to_pause=0x7f060010;
-        public static final int increment=0x7f060005;
         public static final int intro_text=0x7f06000d;
         public static final int intro_title=0x7f06000c;
         public static final int leave_in_progress=0x7f06000a;

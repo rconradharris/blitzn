@@ -7,7 +7,7 @@ Mechanics
       puased and re-emit the paused dialog.
 
 Time Control
-    - Increment should increase time in clock when appropriate
+    - Delay should increase time in clock when appropriate
 
 Persistence
     - The app should persist configuration options when activity is left and

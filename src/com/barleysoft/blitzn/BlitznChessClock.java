@@ -211,7 +211,7 @@ public class BlitznChessClock extends Activity implements ChessClock {
 	void restorePreferences() {
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		mDuration = settings.getLong("duration", 5 * 60 * 1000L);
-		mDelay.setDelay(settings.getLong("increment", 0L));
+		mDelay.setDelay(settings.getLong("delay", 0L));
 		mShakeEnabled = settings.getBoolean("shakeEnabled", true);
 		mFlipEnabled = settings.getBoolean("flipEnabled", true);
 		mSoundEnabled = settings.getBoolean("soundEnabled", true);
@@ -222,7 +222,7 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putLong("duration", mDuration);
-		editor.putLong("increment", mDelay.getDelay());
+		editor.putLong("delay", mDelay.getDelay());
 		editor.putBoolean("shakeEnabled", mShakeEnabled);
 		editor.putBoolean("flipEnabled", mFlipEnabled);
 		editor.putBoolean("soundEnabled", mSoundEnabled);
@@ -490,10 +490,10 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		// results and RETURN_OK
 		Bundle extras = intent.getExtras();
 		long old_duration = mDuration;
-		mDuration = extras.getInt("durationMinutes") * 60 * 1000;
+		mDuration = extras.getLong("durationMinutes") * 60 * 1000;
 
 		long old_delay = mDelay.getDelay();
-		mDelay.setDelay(extras.getInt("incrementSeconds") * 1000);
+		mDelay.setDelay(extras.getLong("delaySeconds") * 1000);
 
 		mShakeEnabled = extras.getBoolean("shakeEnabled");
 		mFlipEnabled = extras.getBoolean("flipEnabled");
@@ -506,15 +506,11 @@ public class BlitznChessClock extends Activity implements ChessClock {
 
 	private void setTime() {
 		Intent setTimeIntent = new Intent(this, SetTime.class);
-		Log.i("Blitzn", "Launching SetTime Intent");
-
-		setTimeIntent.putExtra("durationMinutes", (int) mDuration / 60 / 1000);
-		// FIXME(sirp) change to long
-		setTimeIntent.putExtra("incrementSeconds", (int) mDelay.getDelay() / 1000);
+		setTimeIntent.putExtra("durationMinutes", mDuration / 60 / 1000);
+		setTimeIntent.putExtra("delaySeconds", mDelay.getDelay() / 1000);
 		setTimeIntent.putExtra("shakeEnabled", mShakeEnabled);
 		setTimeIntent.putExtra("flipEnabled", mFlipEnabled);
 		setTimeIntent.putExtra("soundEnabled", mSoundEnabled);
-
 		startActivityForResult(setTimeIntent, ACTIVITY_SET_TIME);
 	}
 

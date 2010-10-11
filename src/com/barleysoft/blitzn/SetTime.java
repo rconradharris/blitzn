@@ -13,21 +13,21 @@ import android.widget.TextView;
 
 public class SetTime extends Activity {
 	private Spinner durationSpinner;
-	private Spinner incrementSpinner;
+	private Spinner delayTimeSpinner;
 	private CheckBox shakeCheckbox;
 	private CheckBox flipCheckbox;
 	private CheckBox soundCheckbox;
 
-	int getIndexOfChoice(String[] choices, int value) {
+	int getIndexOfChoice(String[] choices, long value) {
 		for (int i = 0; i < choices.length; i++) {
-			int cur = Integer.parseInt(choices[i].split(" ")[0]);
+			long cur = Long.parseLong(choices[i].split(" ")[0]);
 			if (cur == value)
 				return i;
 		}
 		return -1;
 	}
 
-	Spinner setupSpinner(int spinnerId, int choicesId, int value) {
+	Spinner setupSpinner(int spinnerId, int choicesId, long value) {
 		// value is value of the selection to pre-pop the spinner with
 
 		Spinner spinner = (Spinner) findViewById(spinnerId);
@@ -54,9 +54,9 @@ public class SetTime extends Activity {
 
 		Bundle extras = getIntent().getExtras();
 		durationSpinner = setupSpinner(R.id.durationSpinner,
-				R.array.duration_choices, extras.getInt("durationMinutes"));
-		incrementSpinner = setupSpinner(R.id.incrementSpinner,
-				R.array.increment_choices, extras.getInt("incrementSeconds"));
+				R.array.duration_choices, extras.getLong("durationMinutes"));
+		delayTimeSpinner = setupSpinner(R.id.delayTimeSpinner,
+				R.array.delay_times, extras.getLong("delaySeconds"));
 
 		// Setup Shake To Reset Checkbox
 		shakeCheckbox = (CheckBox) findViewById(R.id.shakeCheckbox);
@@ -95,15 +95,15 @@ public class SetTime extends Activity {
 		// Duration selection
 		String minuteChoice = (String) durationSpinner.getSelectedItem();
 		if (minuteChoice != null) {
-			int minutes = Integer.parseInt(minuteChoice.split(" ")[0]);
-			extras.putInt("durationMinutes", minutes);
+			long minutes = Long.parseLong(minuteChoice.split(" ")[0]);
+			extras.putLong("durationMinutes", minutes);
 		}
 
-		// Increment selection
-		String incrementChoice = (String) incrementSpinner.getSelectedItem();
-		if (incrementChoice != null) {
-			int increment = Integer.parseInt(incrementChoice.split(" ")[0]);
-			extras.putInt("incrementSeconds", increment);
+		// Delay Time selection
+		String delayTimeChoice = (String) delayTimeSpinner.getSelectedItem();
+		if (delayTimeChoice != null) {
+			long delay = Long.parseLong(delayTimeChoice.split(" ")[0]);
+			extras.putLong("delaySeconds", delay);
 		}
 
 		// Shake to Reset selection

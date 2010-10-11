@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string-array name="increment_choices">
+<string-array name="delay_times">
 <item>0 seconds</item>
 <item>1 second</item>
 <item>2 seconds</item>

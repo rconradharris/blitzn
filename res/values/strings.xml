@@ -7,7 +7,7 @@
     <string name="app_name">Blitzn</string>
 
 <string name="duration">Duration</string>
-<string name="increment">Increment</string>
+<string name="delay">Delay</string>
 <string name="clock_font">fonts/lcd_mono_normal.ttf</string>
 <string name="yes">Yes</string>
 <string name="no">No</string>
@@ -17,7 +17,7 @@
 <string name="intro_title">Blitzn Hints</string>
 <string name="intro_text">
 <li>Pick from common game lengths, including Bullet and Blitz</li>\n\n
-<li>Supports Fischer increment</li>\n\n
+<li>Supports Fischer After Delay</li>\n\n
 <li>Flip the phone onto its face to pause</li>\n\n
 <li>Shake the phone to reset the clock</li></string>
 <string name="ok">OK</string>
