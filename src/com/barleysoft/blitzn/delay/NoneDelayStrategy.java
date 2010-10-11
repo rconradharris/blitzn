@@ -28,4 +28,8 @@ public class NoneDelayStrategy implements DelayStrategy {
 
 	}
 
+	public boolean shouldClockTickForPlayer(DelayContext context, Player player) {
+		return true;
+	}
+
 }

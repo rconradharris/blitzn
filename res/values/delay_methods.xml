@@ -3,5 +3,6 @@
 	<string-array name="delay_methods">
 		<item>None</item>
 		<item>Fischer After</item>
+		<item>Simple</item>
 	</string-array>
 </resources>

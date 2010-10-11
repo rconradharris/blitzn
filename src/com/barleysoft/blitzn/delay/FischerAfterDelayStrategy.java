@@ -30,4 +30,8 @@ public class FischerAfterDelayStrategy implements DelayStrategy {
 		context.setDelayLeftForPlayer(player, context.getDelay());
 	}
 
+	public boolean shouldClockTickForPlayer(DelayContext context, Player player) {
+		return true;
+	}
+
 }

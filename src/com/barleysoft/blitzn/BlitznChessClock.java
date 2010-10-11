@@ -479,11 +479,13 @@ public class BlitznChessClock extends Activity implements ChessClock {
 
 			switch (mClockState) {
 			case PLAYER1_RUNNING:
-				tickForPlayer(Player.ONE);
+				if (mDelayContext.shouldClockTickForPlayer(Player.ONE))
+					tickForPlayer(Player.ONE);
 				mDelayContext.tickForPlayer(Player.ONE);
 				break;
 			case PLAYER2_RUNNING:
-				tickForPlayer(Player.TWO);
+				if (mDelayContext.shouldClockTickForPlayer(Player.TWO))
+					tickForPlayer(Player.TWO);
 				mDelayContext.tickForPlayer(Player.TWO);
 				break;
 			}

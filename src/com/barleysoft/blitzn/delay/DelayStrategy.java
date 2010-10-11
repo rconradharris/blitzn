@@ -4,6 +4,8 @@ import com.barleysoft.blitzn.BlitznChessClock.Player;
 
 public interface DelayStrategy {
 
+	boolean shouldClockTickForPlayer(DelayContext context, Player player);
+
 	void tickForPlayer(DelayContext context, Player player);
 
 	void startDelayForPlayer(DelayContext context, Player player);

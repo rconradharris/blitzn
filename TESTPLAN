@@ -8,6 +8,8 @@ Mechanics
 
 Time Control
     - Delay should increase time in clock when appropriate
+    _ Delay Time selection should disappear when Delay Method "None" is
+      selected, otherwise, it should appear
 
 Persistence
     - The app should persist configuration options when activity is left and

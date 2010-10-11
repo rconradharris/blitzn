@@ -1,33 +1,19 @@
-Barleysoft:
-    Rebrand Blitzn as Blitzn Pro
-    Create free limited version of Blitzn.
-    Make small demonstration video
-    Create Small website. "What's Brewing?"/ Colors Yellow & Brown.
-    Create Barleysoft logo: Barley leaf
-    Create email acct that forwards to gmail (rick@barleysoft.com)
-    Take a photo of blitzn used on a park table
-    Play inaugural game, then tweet it
+Blitzn Next Release v1.1
+========================
 
-Blitzn Next Release v1.1:
     Features:
+        Add delay counter on main page.
 
         Improved Time-delay code, support:
             * None [DONE]
             * Fischer After [DONE]
-            * Fischer
+            * Simple Delay [DONE]
             * Bronstein
-            * Simple Delay
+            * Fischer
             * Hourglass
             
-        Add delay counter on main page.
-        
         Menu Icons
         
-        Improve UI Phase 1:
-            Make LED timer look more realistic
-            Add 3D to the buttons.
-            Add glowing red light to indicate time is running.
-
     Code-cleanup:
         Spinners currently parse directly, we should use IDs to decouple the
         spinner logic from a particular language.
@@ -39,7 +25,30 @@ Blitzn Next Release v1.1:
         Unpause dialog currently shakes as the screen returns to full-screen.
         Is there a fix here?
 
-== Unpriortizied ==
+Unpriortizied
+=============
+
+Hints - When the user clicks on a particular delay method for the first time,
+it should pop a box that contains an explanation of that particular method.
+The box should include a Show Tips checkbox.
+
+Rather than use DelayStrategyFactory, maybe we can embed this logic into
+DelayContext. DelayContext would take a delayStrategyId and look up the
+strategy factory. DelayContext would also add getDelayStrategyId().
+
+Create better launch icon
+
+Create Time Control menu: set duration and delay there. This page will reset
+the clock if the values are manipulated. Settings page will no longer reset
+clock if values tweaked.
+
+Rebrand Blitzn as Blitzn Pro and Create free limited version of Blitzn.
+Tournament Version
+
+Improve UI Phase 1:
+    Make LED timer look more realistic
+    Add 3D to the buttons.
+    Add glowing red light to indicate time is running.
 
 Decouple ChessClock from BlitznActivity
 
@@ -47,9 +56,17 @@ Use Amazon Turk to internationalize strings.xml
 
 Provide a way to get back to the hints page
 
-Tournament Version
+Add Favorites:
+    Favorites will a tuple of (duration, delay_method, delay_time)
+    Bullet (1, None, _)
+    Lightning (3, FISCHER_AFTER, 2)
+    Blitz  (1, None, _)
+    Custom 1
+    Custom 2
 
-From Wikipedia:
+
+
+Add FIDE tournament mode, from Wikipedia:
 "The World Chess Federation FIDE sets a single time control for all major FIDE
 events: 90 minutes for the first 40 moves followed by 30 minutes for the rest
 of the game with an addition of 30 seconds per move starting from move one."
@@ -60,32 +77,64 @@ Replicated this by hitting settings button, then hit back. Bottom margin
 should be missing. Now hit menu again, layout should be pushed up and margin
 restored.
 
-Add setting for "Keep Screen On Running" ?
-
-Add milliseconds (just under 5 seconds, or forever?)
-
-Show Opponent Time right side up for each player
-
 Splash Screen
 
 About Page
 
 Save Activity State - see onSaveInstanceState() onRestoreInstanceState()
 
-Perhaps pull "Settings" onto different page, and leave time related settings on
-SetTime. Idea is "Settings" is rare, "SetTime" is common.
-
 Settings page with swipe-to-set widget:
     * Support common settings
     * Support custom times
     * Allow favoriting of custom times
 
-Themes?
-
-Rotate numbers sideways vs mirror
-
-Font options (non LED?) Underline perhaps? or a different font
 
 Allow player to click on Paused dialog to unapuse it. Tried this, more
 difficult than I thought it would be. Punting for now.
+
+Low Time Mode
+    Make warning noise (siren)
+    Flash clock?
+    Add milliseconds (just under 5 seconds, or forever?)
+
+Themes?
+
+Add link to webpage help
+
+
+Maybe Not
+=========
+
+Font options (non LED?) Underline perhaps? or a different font
+
+Rotate numbers sideways vs mirror
+
+Add setting for "Keep Screen On Running" ?
+
+Show Opponent Time right side up for each player
+
+
+Ideas
+=====
+
+Free will have limited features and be ad-supported.
+
+Port Blitzn to iPhone.
+
+Release in GetJar, Amazon and Verizon app stores.
+
+
+Barleysoft
+==========
+
+    Create email acct that forwards to gmail (rick@barleysoft.com)
+    Create Small website. "What's Brewing?"/ Colors Yellow & Brown.
+    Create Barleysoft logo: Barley leaf
+    Play inaugural game, then tweet it
+
+    Create help page:
+        barleysoft.com/blitzn/help, include:
+            * Real life photos, shot of blitzn used on a park table
+            * Video to demonstrate Shake-to-Reset, Flip-To-Pause
+
 

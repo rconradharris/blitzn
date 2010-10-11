@@ -4,6 +4,8 @@ public class DelayStrategyFactory {
 
 	public static DelayStrategy getDelayStrategyById(int strategyId) {
 		switch (strategyId) {
+		case 2:
+			return new SimpleDelayStrategy();
 		case 1:
 			return new FischerAfterDelayStrategy();
 		case 0:
@@ -14,7 +16,9 @@ public class DelayStrategyFactory {
 	}
 
 	public static int getIdForDelayStrategy(DelayStrategy delayStrategy) {
-		if (delayStrategy instanceof FischerAfterDelayStrategy)
+		if (delayStrategy instanceof SimpleDelayStrategy)
+			return 2;
+		else if (delayStrategy instanceof FischerAfterDelayStrategy)
 			return 1;
 		else
 			return 0;

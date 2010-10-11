@@ -80,6 +80,10 @@ public class DelayContext {
 
 	// Strategy dispatchers
 
+	public boolean shouldClockTickForPlayer(Player player) {
+		return mDelayStrategy.shouldClockTickForPlayer(this, player);
+	}
+
 	public void tickForPlayer(Player player) {
 		mDelayStrategy.tickForPlayer(this, player);
 	}
