@@ -64,7 +64,8 @@ public class SetTime extends Activity {
 
 		delayMethodSpinner = setupSpinner(R.id.delayMethodSpinner,
 				R.array.delay_methods);
-		delayMethodSpinner.setSelection(extras.getInt("delayMethodSpinner"));
+
+		delayMethodSpinner.setSelection(extras.getInt("delayMethod"));
 
 		// Setup Shake To Reset Checkbox
 		shakeCheckbox = (CheckBox) findViewById(R.id.shakeCheckbox);

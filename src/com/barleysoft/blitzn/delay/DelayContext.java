@@ -15,6 +15,14 @@ public class DelayContext {
 		mDelayStrategy = delayStrategy;
 	}
 
+	public void setStrategy(DelayStrategy delayStrategy) {
+		mDelayStrategy = delayStrategy;
+	}
+
+	public DelayStrategy getStrategy() {
+		return mDelayStrategy;
+	}
+
 	public void setDelay(long delay) {
 		mDelay = delay;
 	}

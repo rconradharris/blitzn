@@ -1,7 +1,8 @@
 package com.barleysoft.blitzn;
 
 import com.barleysoft.blitzn.delay.DelayContext;
-import com.barleysoft.blitzn.delay.FischerAfterDelayStrategy;
+import com.barleysoft.blitzn.delay.DelayStrategy;
+import com.barleysoft.blitzn.delay.DelayStrategyFactory;
 import com.barleysoft.motion.PitchFlipListener;
 import com.barleysoft.motion.ShakeListener;
 
@@ -220,12 +221,16 @@ public class BlitznChessClock extends Activity implements ChessClock {
 	}
 
 	void setDelayMethodFromInt(int delayMethod) {
-		// TODO: use delayMethod
-		mDelayContext = new DelayContext(this, new FischerAfterDelayStrategy());
+		// TODO(sirp): rename setDelayMethodById
+		DelayStrategy delayStrategy = DelayStrategyFactory
+				.getDelayStrategyById(delayMethod);
+		// TODO(sirp): should we just use setStrategy here
+		mDelayContext = new DelayContext(this, delayStrategy);
 	}
 
 	int getDelayMethodAsInt() {
-		return 1;
+		DelayStrategy delayStrategy = mDelayContext.getStrategy();
+		return DelayStrategyFactory.getIdForDelayStrategy(delayStrategy);
 	}
 
 	void restorePreferences() {
