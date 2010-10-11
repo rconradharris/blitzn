@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.CheckBox;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 public class SetTime extends Activity {
 	private Spinner durationSpinner;
 	private Spinner delayTimeSpinner;
+	private Spinner delayMethodSpinner;
 	private CheckBox shakeCheckbox;
 	private CheckBox flipCheckbox;
 	private CheckBox soundCheckbox;
@@ -27,36 +27,44 @@ public class SetTime extends Activity {
 		return -1;
 	}
 
-	Spinner setupSpinner(int spinnerId, int choicesId, long value) {
-		// value is value of the selection to pre-pop the spinner with
-
+	Spinner setupSpinner(int spinnerId, int choicesId) {
 		Spinner spinner = (Spinner) findViewById(spinnerId);
 		ArrayAdapter<?> arrayAdapter = ArrayAdapter.createFromResource(this,
 				choicesId, android.R.layout.simple_spinner_item);
 		arrayAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(arrayAdapter);
+		return spinner;
+	}
 
+	void prePopSpinnerLong(Spinner spinner, int choicesId, long value) {
 		// Pre-pop the duration spinner
 		String[] arrayChoices = getResources().getStringArray(choicesId);
 		int spinnerSelection = getIndexOfChoice(arrayChoices, value);
 		if (spinnerSelection != -1)
 			spinner.setSelection(spinnerSelection);
-
-		return spinner;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.i("Blitzn", "SetTime Activity started");
 		setContentView(R.layout.set_time);
 
 		Bundle extras = getIntent().getExtras();
+
 		durationSpinner = setupSpinner(R.id.durationSpinner,
-				R.array.duration_choices, extras.getLong("durationMinutes"));
+				R.array.duration_choices);
+		prePopSpinnerLong(durationSpinner, R.array.duration_choices,
+				extras.getLong("durationMinutes"));
+
 		delayTimeSpinner = setupSpinner(R.id.delayTimeSpinner,
-				R.array.delay_times, extras.getLong("delaySeconds"));
+				R.array.delay_times);
+		prePopSpinnerLong(delayTimeSpinner, R.array.delay_times,
+				extras.getLong("delaySeconds"));
+
+		delayMethodSpinner = setupSpinner(R.id.delayMethodSpinner,
+				R.array.delay_methods);
+		delayMethodSpinner.setSelection(extras.getInt("delayMethodSpinner"));
 
 		// Setup Shake To Reset Checkbox
 		shakeCheckbox = (CheckBox) findViewById(R.id.shakeCheckbox);
@@ -105,6 +113,10 @@ public class SetTime extends Activity {
 			long delay = Long.parseLong(delayTimeChoice.split(" ")[0]);
 			extras.putLong("delaySeconds", delay);
 		}
+
+		// Delay Method selection
+		extras.putInt("delayMethod",
+				delayMethodSpinner.getSelectedItemPosition());
 
 		// Shake to Reset selection
 		extras.putBoolean("shakeEnabled", shakeCheckbox.isChecked());

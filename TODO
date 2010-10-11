@@ -20,6 +20,8 @@ Blitzn Next Release v1.1:
             Add glowing red light to indicate time is running.
 
     Code-cleanup:
+        Spinners currently parse directly, we should use IDs to decouple the
+        spinner logic from a particular language.
 
     Bugs:
         Catch UnsupportedOperation exceptions from ShakeListener and
@@ -29,6 +31,8 @@ Blitzn Next Release v1.1:
         Is there a fix here?
 
 == Unpriortizied ==
+
+Use Amazon Turk to internationalize strings.xml
 
 Provide a way to get back to the hints page
 

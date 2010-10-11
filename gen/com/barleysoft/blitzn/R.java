@@ -20,24 +20,25 @@ public final class R {
         public static final int woodgrain=0x7f020001;
     }
     public static final class id {
-        public static final int Copyright=0x7f08000e;
-        public static final int RelativeLayout01=0x7f08000c;
+        public static final int Copyright=0x7f08000f;
+        public static final int RelativeLayout01=0x7f08000d;
         public static final int TextView01=0x7f080001;
         public static final int TextView02=0x7f080003;
         public static final int delayLabel=0x7f080007;
+        public static final int delayMethodSpinner=0x7f080009;
         public static final int delayTimeSpinner=0x7f080008;
         public static final int durationLabel=0x7f080005;
         public static final int durationSpinner=0x7f080006;
-        public static final int flipCheckbox=0x7f08000a;
+        public static final int flipCheckbox=0x7f08000b;
         public static final int mainLayout=0x7f080000;
-        public static final int pauseMenu=0x7f080010;
+        public static final int pauseMenu=0x7f080011;
         public static final int player1Clock=0x7f080002;
         public static final int player2Clock=0x7f080004;
-        public static final int resetMenu=0x7f08000f;
-        public static final int settingsMenu=0x7f080011;
-        public static final int shakeCheckbox=0x7f080009;
-        public static final int soundCheckbox=0x7f08000b;
-        public static final int versionLabel=0x7f08000d;
+        public static final int resetMenu=0x7f080010;
+        public static final int settingsMenu=0x7f080012;
+        public static final int shakeCheckbox=0x7f08000a;
+        public static final int soundCheckbox=0x7f08000c;
+        public static final int versionLabel=0x7f08000e;
     }
     public static final class layout {
         public static final int main=0x7f030000;

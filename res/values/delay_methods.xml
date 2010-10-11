@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="delay_methods">
-<item>FischerAfter</item>
+<item>None</item>
+<item>Fischer After</item>
 </string-array>
 </resources>

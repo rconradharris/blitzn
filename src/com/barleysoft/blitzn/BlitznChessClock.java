@@ -1,6 +1,7 @@
 package com.barleysoft.blitzn;
 
-import com.barleysoft.blitzn.delay.FischerAfterDelay;
+import com.barleysoft.blitzn.delay.DelayContext;
+import com.barleysoft.blitzn.delay.FischerAfterDelayStrategy;
 import com.barleysoft.motion.PitchFlipListener;
 import com.barleysoft.motion.ShakeListener;
 
@@ -25,6 +26,15 @@ import android.view.Window;
 import android.view.WindowManager;
 
 public class BlitznChessClock extends Activity implements ChessClock {
+	// NOTE(sirp); Android optimization document[1] considers enum bad since
+	// they
+	// add overhead. They recommend using a static final int instead.
+	// I am purposefully ignoring this advice since performance isn't critical
+	// here,
+	// and writing correct code is.
+	//
+	// [1]
+	// http://developer.android.com/guide/practices/design/performance.html#avoid_enums
 	public enum Player {
 		ONE, TWO
 	}
@@ -46,12 +56,12 @@ public class BlitznChessClock extends Activity implements ChessClock {
 
 	private long mPlayer2TimeLeft = 0L;
 	private ClockButton mPlayer2Clock;
-	
-	private FischerAfterDelay mDelay;
-	
+
+	private DelayContext mDelayContext;
+
 	private ShakeListener mShakeListener;
 	private PitchFlipListener mPitchFlipListener;
-	
+
 	private Handler mHandler = new Handler();
 	private AlertDialog mPausedDialog;
 
@@ -101,13 +111,14 @@ public class BlitznChessClock extends Activity implements ChessClock {
 				.setOnClickListener((android.view.View.OnClickListener) player2ClickListener);
 
 		// Initialize everything
-		mDelay = new FischerAfterDelay(this);
+
 		mPausedDialog = createPausedDialog();
 		restorePreferences();
 		initializeSound();
 		installShakeListener();
 		installPitchFlipListener();
 		resetClock();
+
 		if (mShowIntroDialog)
 			showIntroDialogBox();
 	}
@@ -208,10 +219,20 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		mGameOverSoundPlayer.start();
 	}
 
+	void setDelayMethodFromInt(int delayMethod) {
+		// TODO: use delayMethod
+		mDelayContext = new DelayContext(this, new FischerAfterDelayStrategy());
+	}
+
+	int getDelayMethodAsInt() {
+		return 1;
+	}
+
 	void restorePreferences() {
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		mDuration = settings.getLong("duration", 5 * 60 * 1000L);
-		mDelay.setDelay(settings.getLong("delay", 0L));
+		setDelayMethodFromInt(settings.getInt("delayMethod", 0));
+		mDelayContext.setDelay(settings.getLong("delay", 0L));
 		mShakeEnabled = settings.getBoolean("shakeEnabled", true);
 		mFlipEnabled = settings.getBoolean("flipEnabled", true);
 		mSoundEnabled = settings.getBoolean("soundEnabled", true);
@@ -222,7 +243,8 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putLong("duration", mDuration);
-		editor.putLong("delay", mDelay.getDelay());
+		editor.putLong("delay", mDelayContext.getDelay());
+		editor.putInt("delayMethod", getDelayMethodAsInt());
 		editor.putBoolean("shakeEnabled", mShakeEnabled);
 		editor.putBoolean("flipEnabled", mFlipEnabled);
 		editor.putBoolean("soundEnabled", mSoundEnabled);
@@ -327,9 +349,9 @@ public class BlitznChessClock extends Activity implements ChessClock {
 	void resetClock() {
 		setKeepScreenOn(false);
 		stopClockTimer();
-		
-		mDelay.resetDelayForPlayer(Player.ONE);
-		mDelay.resetDelayForPlayer(Player.TWO);
+
+		mDelayContext.resetDelayForPlayer(Player.ONE);
+		mDelayContext.resetDelayForPlayer(Player.TWO);
 
 		mPlayer1TimeLeft = mDuration;
 		mPlayer1Clock.setIsActivated(true);
@@ -344,13 +366,13 @@ public class BlitznChessClock extends Activity implements ChessClock {
 	void toggleClock() {
 		switch (mClockState) {
 		case PLAYER1_RUNNING:
-			mDelay.stopDelayForPlayer(Player.ONE);
-			mDelay.startDelayForPlayer(Player.TWO);
+			mDelayContext.stopDelayForPlayer(Player.ONE);
+			mDelayContext.startDelayForPlayer(Player.TWO);
 			activateClock(Player.TWO);
 			break;
 		case PLAYER2_RUNNING:
-			mDelay.stopDelayForPlayer(Player.TWO);
-			mDelay.startDelayForPlayer(Player.ONE);
+			mDelayContext.stopDelayForPlayer(Player.TWO);
+			mDelayContext.startDelayForPlayer(Player.ONE);
 			activateClock(Player.ONE);
 			break;
 		default:
@@ -443,7 +465,7 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		else
 			mPlayer2TimeLeft -= CLOCK_RESOLUTION;
 	}
-	
+
 	private Runnable updateTimeTask = new Runnable() {
 		public void run() {
 			// Check for either clock expiring
@@ -455,11 +477,11 @@ public class BlitznChessClock extends Activity implements ChessClock {
 			switch (mClockState) {
 			case PLAYER1_RUNNING:
 				tickForPlayer(Player.ONE);
-				mDelay.tickForPlayer(Player.ONE);
+				mDelayContext.tickForPlayer(Player.ONE);
 				break;
 			case PLAYER2_RUNNING:
 				tickForPlayer(Player.TWO);
-				mDelay.tickForPlayer(Player.TWO);
+				mDelayContext.tickForPlayer(Player.TWO);
 				break;
 			}
 
@@ -492,22 +514,28 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		long old_duration = mDuration;
 		mDuration = extras.getLong("durationMinutes") * 60 * 1000;
 
-		long old_delay = mDelay.getDelay();
-		mDelay.setDelay(extras.getLong("delaySeconds") * 1000);
+		int old_delayMethod = getDelayMethodAsInt();
+		setDelayMethodFromInt(extras.getInt("delayMethod"));
+
+		long old_delay = mDelayContext.getDelay();
+		mDelayContext.setDelay(extras.getLong("delaySeconds") * 1000);
 
 		mShakeEnabled = extras.getBoolean("shakeEnabled");
 		mFlipEnabled = extras.getBoolean("flipEnabled");
 		mSoundEnabled = extras.getBoolean("soundEnabled");
 
 		// Only reset the clock if we changed something related to time-keeping
-		if ((old_duration != mDuration) || (old_delay != mDelay.getDelay()))
+		if ((old_duration != mDuration)
+				|| (old_delay != mDelayContext.getDelay())
+				|| (old_delayMethod != getDelayMethodAsInt()))
 			resetClock();
 	}
 
 	private void setTime() {
 		Intent setTimeIntent = new Intent(this, SetTime.class);
+		setTimeIntent.putExtra("delayMethod", getDelayMethodAsInt());
 		setTimeIntent.putExtra("durationMinutes", mDuration / 60 / 1000);
-		setTimeIntent.putExtra("delaySeconds", mDelay.getDelay() / 1000);
+		setTimeIntent.putExtra("delaySeconds", mDelayContext.getDelay() / 1000);
 		setTimeIntent.putExtra("shakeEnabled", mShakeEnabled);
 		setTimeIntent.putExtra("flipEnabled", mFlipEnabled);
 		setTimeIntent.putExtra("soundEnabled", mSoundEnabled);
@@ -606,5 +634,5 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		else
 			mPlayer2TimeLeft += adjustment;
 	}
-	
+
 }
