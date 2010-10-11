@@ -517,10 +517,13 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		long old_duration = mDuration;
 		mDuration = extras.getLong("durationMinutes") * 60 * 1000;
 
-		int old_delayMethod = getDelayMethodAsInt();
+		// NOTE(sirp): setDelayMethodFromInt has the side-effect of clearing the
+		// delay so we must store the old delay before calling it
+		long oldDelay = mDelayContext.getDelay();
+
+		int oldDelayMethod = getDelayMethodAsInt();
 		setDelayMethodFromInt(extras.getInt("delayMethod"));
 
-		long old_delay = mDelayContext.getDelay();
 		mDelayContext.setDelay(extras.getLong("delaySeconds") * 1000);
 
 		mShakeEnabled = extras.getBoolean("shakeEnabled");
@@ -529,9 +532,10 @@ public class BlitznChessClock extends Activity implements ChessClock {
 
 		// Only reset the clock if we changed something related to time-keeping
 		if ((old_duration != mDuration)
-				|| (old_delay != mDelayContext.getDelay())
-				|| (old_delayMethod != getDelayMethodAsInt()))
+				|| (oldDelay != mDelayContext.getDelay())
+				|| (oldDelayMethod != getDelayMethodAsInt())) {
 			resetClock();
+		}
 	}
 
 	private void setTime() {

@@ -1,4 +1,6 @@
 Barleysoft:
+    Rebrand Blitzn as Blitzn Pro
+    Create free limited version of Blitzn.
     Make small demonstration video
     Create Small website. "What's Brewing?"/ Colors Yellow & Brown.
     Create Barleysoft logo: Barley leaf
@@ -8,11 +10,18 @@ Barleysoft:
 
 Blitzn Next Release v1.1:
     Features:
-        Menu Icons
 
-        Improved Time-delay code:
-            Support Bronstein, Fischer, Fischer after, Simple delay, Hourglass
-            Add delay counter on main page.
+        Improved Time-delay code, support:
+            * None [DONE]
+            * Fischer After [DONE]
+            * Fischer
+            * Bronstein
+            * Simple Delay
+            * Hourglass
+            
+        Add delay counter on main page.
+        
+        Menu Icons
         
         Improve UI Phase 1:
             Make LED timer look more realistic
@@ -31,6 +40,8 @@ Blitzn Next Release v1.1:
         Is there a fix here?
 
 == Unpriortizied ==
+
+Decouple ChessClock from BlitznActivity
 
 Use Amazon Turk to internationalize strings.xml
 
