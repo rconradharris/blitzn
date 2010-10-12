@@ -2,13 +2,13 @@ Blitzn Next Release v1.1
 ========================
 
     Features:
-        Menu Icons
         
     Code-cleanup:
         Spinners currently parse directly, we should use IDs to decouple the
         spinner logic from a particular language.
 
     Bugs:
+
         Catch UnsupportedOperation exceptions from ShakeListener and
         PitchFlipListener
         
@@ -18,12 +18,11 @@ Blitzn Next Release v1.1
 Unpriortizied
 =============
 
+Pause Icon is a little too light gray
+
 Add delay counter on main page.
 
 Add Hourglass
-
-Should we round the the numbers? Adding +5 delay looks like 4 because after
-the first 100th of a second, it becomes 4.99 which truncates down to 4.
 
 Hints - When the user clicks on a particular delay method for the first time,
 it should pop a box that contains an explanation of that particular method.
@@ -113,6 +112,9 @@ Show Opponent Time right side up for each player
 
 Ideas
 =====
+
+Maybe git commit msg should just be used rather than CHANGELOG (no need to
+duplicate effort)
 
 Free will have limited features and be ad-supported.
 
