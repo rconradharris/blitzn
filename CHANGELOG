@@ -2,6 +2,7 @@
 * Increment now called delay
 * Renamed Fischer delay to "Accumulate"
 * Added Bronstein delay
+* Initiate now properly starts opposing clock
 
 1.0
 * Initial release

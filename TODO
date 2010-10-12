@@ -2,11 +2,6 @@ Blitzn Next Release v1.1
 ========================
 
     Features:
-        Improved Time-delay code, support:
-            * None [DONE]
-            * Fischer [DONE]
-            * Bronstein [DONE]
-            
         Menu Icons
         
     Code-cleanup:

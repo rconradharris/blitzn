@@ -297,7 +297,7 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		if (which == Player.ONE) {
 			switch (mClockState) {
 			case READY:
-				initiateClock(Player.ONE);
+				initiateClock(Player.TWO);
 				break;
 			case PLAYER1_RUNNING:
 				toggleClock();
@@ -306,7 +306,7 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		} else {
 			switch (mClockState) {
 			case READY:
-				initiateClock(Player.TWO);
+				initiateClock(Player.ONE);
 				break;
 			case PLAYER2_RUNNING:
 				toggleClock();
