@@ -1,6 +1,7 @@
 1.1
 * Increment now called delay
-* Improved Settings page layout
+* Renamed Fischer delay to "Accumulate"
+* Added Bronstein delay
 
 1.0
 * Initial release

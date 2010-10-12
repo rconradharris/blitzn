@@ -2,15 +2,10 @@ Blitzn Next Release v1.1
 ========================
 
     Features:
-        Add delay counter on main page.
-
         Improved Time-delay code, support:
             * None [DONE]
-            * Fischer After [DONE]
-            * Simple Delay [DONE]
-            * Bronstein
-            * Fischer
-            * Hourglass
+            * Fischer [DONE]
+            * Bronstein [DONE]
             
         Menu Icons
         
@@ -27,6 +22,13 @@ Blitzn Next Release v1.1
 
 Unpriortizied
 =============
+
+Add delay counter on main page.
+
+Add Hourglass
+
+Should we round the the numbers? Adding +5 delay looks like 4 because after
+the first 100th of a second, it becomes 4.99 which truncates down to 4.
 
 Hints - When the user clicks on a particular delay method for the first time,
 it should pop a box that contains an explanation of that particular method.

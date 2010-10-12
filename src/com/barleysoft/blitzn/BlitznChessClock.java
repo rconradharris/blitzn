@@ -337,11 +337,15 @@ public class BlitznChessClock extends Activity implements ChessClock {
 
 	void activateClock(Player which) {
 		if (which == Player.ONE) {
+			mDelayContext.stopDelayForPlayer(Player.TWO);
+			mDelayContext.startDelayForPlayer(Player.ONE);
 			mPlayer1Clock.setIsActivated(true);
 			mPlayer2Clock.setIsActivated(false);
 			playClick();
 			mClockState = ClockState.PLAYER1_RUNNING;
 		} else {
+			mDelayContext.stopDelayForPlayer(Player.ONE);
+			mDelayContext.startDelayForPlayer(Player.TWO);
 			mPlayer2Clock.setIsActivated(true);
 			mPlayer1Clock.setIsActivated(false);
 			playClick();
@@ -369,13 +373,9 @@ public class BlitznChessClock extends Activity implements ChessClock {
 	void toggleClock() {
 		switch (mClockState) {
 		case PLAYER1_RUNNING:
-			mDelayContext.stopDelayForPlayer(Player.ONE);
-			mDelayContext.startDelayForPlayer(Player.TWO);
 			activateClock(Player.TWO);
 			break;
 		case PLAYER2_RUNNING:
-			mDelayContext.stopDelayForPlayer(Player.TWO);
-			mDelayContext.startDelayForPlayer(Player.ONE);
 			activateClock(Player.ONE);
 			break;
 		default:

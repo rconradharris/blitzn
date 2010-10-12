@@ -2,7 +2,7 @@
 <resources>
 	<string-array name="delay_methods">
 		<item>None</item>
-		<item>Fischer After</item>
-		<item>Simple</item>
+		<item>Accumulate</item>
+		<item>Bronstein</item>
 	</string-array>
 </resources>
