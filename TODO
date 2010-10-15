@@ -1,14 +1,16 @@
+Create email acct that forwards to gmail (rick@barleysoft.com)
+Create Small website. "What's Brewing?"/ Colors Yellow & Brown.
+
 Blitzn Next Release v1.1
 ========================
 
     Features:
-        
+
     Code-cleanup:
         Spinners currently parse directly, we should use IDs to decouple the
         spinner logic from a particular language.
 
     Bugs:
-
         Catch UnsupportedOperation exceptions from ShakeListener and
         PitchFlipListener
         
@@ -17,6 +19,9 @@ Blitzn Next Release v1.1
 
 Unpriortizied
 =============
+
+Increase accuracy of timing logic (you can hear discrepencies in Time Pressure
+mode, it doesn't quite keep the beat)
 
 Pause Icon is a little too light gray
 
@@ -88,11 +93,6 @@ Settings page with swipe-to-set widget:
 Allow player to click on Paused dialog to unapuse it. Tried this, more
 difficult than I thought it would be. Punting for now.
 
-Low Time Mode
-    Make warning noise (siren)
-    Flash clock?
-    Add milliseconds (just under 5 seconds, or forever?)
-
 Themes?
 
 Add link to webpage help
@@ -126,8 +126,6 @@ Release in GetJar, Amazon and Verizon app stores.
 Barleysoft
 ==========
 
-    Create email acct that forwards to gmail (rick@barleysoft.com)
-    Create Small website. "What's Brewing?"/ Colors Yellow & Brown.
     Create Barleysoft logo: Barley leaf
     Play inaugural game, then tweet it
 
@@ -136,4 +134,8 @@ Barleysoft
             * Real life photos, shot of blitzn used on a park table
             * Video to demonstrate Shake-to-Reset, Flip-To-Pause
 
+Notes
+=====
 
+For Android Icon and Grpahics
+http://androiddrawableexplorer.appspot.com/

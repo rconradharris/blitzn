@@ -22,6 +22,7 @@ public class SetTime extends Activity {
 	private CheckBox shakeCheckbox;
 	private CheckBox flipCheckbox;
 	private CheckBox soundCheckbox;
+	private CheckBox timePressureWarningCheckbox;
 
 	int getIndexOfChoice(String[] choices, long value) {
 		for (int i = 0; i < choices.length; i++) {
@@ -108,6 +109,10 @@ public class SetTime extends Activity {
 		soundCheckbox = (CheckBox) findViewById(R.id.soundCheckbox);
 		soundCheckbox.setChecked(extras.getBoolean("soundEnabled"));
 
+		// Setup Time Pressure Warning Checkbox
+		timePressureWarningCheckbox = (CheckBox) findViewById(R.id.timePressureWarningCheckbox);
+		timePressureWarningCheckbox.setChecked(extras
+				.getBoolean("timePressureWarningEnabled"));
 		setVersionLabel();
 		toggleDelayTimeSpinnerVisibility();
 	}
@@ -157,6 +162,10 @@ public class SetTime extends Activity {
 
 		// Sound selection
 		extras.putBoolean("soundEnabled", soundCheckbox.isChecked());
+
+		// Time Pressure Warning selection
+		extras.putBoolean("timePressureWarningEnabled",
+				timePressureWarningCheckbox.isChecked());
 
 		Intent intent = new Intent();
 		intent.putExtras(extras);

@@ -26,4 +26,5 @@
 	<string name="shake_to_reset">Shake to Reset</string>
 	<string name="flip_to_pause">Flip to Pause</string>
 	<string name="sounds">Sounds</string>
+<string name="time_pressure_warning">Time Pressure Warning</string>
 </resources>

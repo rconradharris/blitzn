@@ -11,6 +11,11 @@ Time Control
     _ Delay Time selection should disappear when Delay Method "None" is
       selected, otherwise, it should appear
 
+Time Pressure Warning
+    - Under 10 seconds (and Time Pressure warning enabled from settings page),
+      the clock should tick down in deci-seconds. Also, every second a sound
+      should play indicating still under time-pressure.
+
 Persistence
     - The app should persist configuration options when activity is left and
       returned to

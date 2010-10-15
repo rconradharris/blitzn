@@ -44,6 +44,8 @@ public class BlitznChessClock extends Activity implements ChessClock {
 
 	// Constants
 	public static final int CLOCK_RESOLUTION = 100; // ms
+	public static final long TIME_PRESSURE_THRESHOLD = 10 * 1000; // ms
+	public static final long TIME_PRESSURE_SIREN_INTERVAL = 1000; // ms
 	public static final String PREFS_NAME = "BlitznPrefs";
 	public static final int ACTIVITY_SET_TIME = 0;
 
@@ -52,8 +54,10 @@ public class BlitznChessClock extends Activity implements ChessClock {
 
 	private ClockButton mPlayer1Clock;
 	private long mPlayer1TimeLeft = 0L;
-
 	private long mPlayer2TimeLeft = 0L;
+
+	long mClockTicks = 0L;
+
 	private ClockButton mPlayer2Clock;
 
 	private DelayContext mDelayContext;
@@ -68,6 +72,7 @@ public class BlitznChessClock extends Activity implements ChessClock {
 	private MediaPlayer mClockClicker1;
 	private MediaPlayer mClockClicker2;
 	private MediaPlayer mGameOverSoundPlayer;
+	private MediaPlayer mTimePressureSiren;
 
 	// Configurations
 	private long mDuration = 5 * 1 * 1000L;
@@ -75,6 +80,7 @@ public class BlitznChessClock extends Activity implements ChessClock {
 	private boolean mFlipEnabled = true;
 	private boolean mSoundEnabled = true;
 	private boolean mShowIntroDialog = true;
+	private boolean mTimePressureWarningEnabled = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -190,6 +196,7 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		mClockClicker1 = createMediaPlayer(R.raw.click1);
 		mClockClicker2 = createMediaPlayer(R.raw.click1);
 		mGameOverSoundPlayer = createMediaPlayer(R.raw.gameover);
+		mTimePressureSiren = createMediaPlayer(R.raw.timepressure);
 	}
 
 	private MediaPlayer createMediaPlayer(int resId) {
@@ -218,6 +225,12 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		mGameOverSoundPlayer.start();
 	}
 
+	void playTimePressureSiren() {
+		if ((mTimePressureSiren == null) || !mSoundEnabled)
+			return;
+		mTimePressureSiren.start();
+	}
+
 	void setDelayMethodFromInt(int delayMethod) {
 		// TODO(sirp): rename setDelayMethodById
 		DelayStrategy delayStrategy = DelayStrategyFactory
@@ -240,6 +253,8 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		mFlipEnabled = settings.getBoolean("flipEnabled", true);
 		mSoundEnabled = settings.getBoolean("soundEnabled", true);
 		mShowIntroDialog = settings.getBoolean("showIntroDialog", true);
+		mTimePressureWarningEnabled = settings.getBoolean(
+				"mTimePressureWarningEnabled", true);
 	}
 
 	void savePreferences() {
@@ -251,7 +266,8 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		editor.putBoolean("shakeEnabled", mShakeEnabled);
 		editor.putBoolean("flipEnabled", mFlipEnabled);
 		editor.putBoolean("soundEnabled", mSoundEnabled);
-		editor.putBoolean("showIntroDialog", mShowIntroDialog);
+		editor.putBoolean("mTimePressureWarningEnabled",
+				mTimePressureWarningEnabled);
 		editor.commit();
 	}
 
@@ -463,10 +479,19 @@ public class BlitznChessClock extends Activity implements ChessClock {
 	}
 
 	void tickForPlayer(Player player) {
-		if (player == Player.ONE)
+		if (isPlayerUnderTimePressure(player) && mTimePressureWarningEnabled) {
+			if (((mClockTicks * CLOCK_RESOLUTION) % TIME_PRESSURE_SIREN_INTERVAL) == 0) {
+				playTimePressureSiren();
+			}
+		}
+
+		mClockTicks++;
+
+		if (player == Player.ONE) {
 			mPlayer1TimeLeft -= CLOCK_RESOLUTION;
-		else
+		} else {
 			mPlayer2TimeLeft -= CLOCK_RESOLUTION;
+		}
 	}
 
 	private Runnable updateTimeTask = new Runnable() {
@@ -499,16 +524,42 @@ public class BlitznChessClock extends Activity implements ChessClock {
 	};
 
 	private void updateClockDisplays() {
-		updateClockForPlayer(mPlayer1Clock, mPlayer1TimeLeft);
-		updateClockForPlayer(mPlayer2Clock, mPlayer2TimeLeft);
+		updateClockForPlayer(Player.ONE);
+		updateClockForPlayer(Player.TWO);
 	}
 
-	private void updateClockForPlayer(ClockButton clockView, long timeLeft) {
+	private void _updateClock(ClockButton clockView, long timeLeft) {
+		// MM:SS
 		int seconds = (int) timeLeft / 1000;
 		int minutes = seconds / 60;
 		seconds = seconds % 60;
 		String clockText = String.format("%02d:%02d", minutes, seconds);
 		clockView.setText(clockText);
+	}
+
+	private void _updateTimePressureClock(ClockButton clockView, long timeLeft) {
+		// SS.D
+		int seconds = (int) timeLeft / 1000;
+		int remainder = (int) timeLeft % 1000;
+		remainder = remainder / 100;
+		String clockText = String.format("%02d.%d", seconds, remainder);
+		clockView.setText(clockText);
+	}
+
+	private void updateClockForPlayer(Player player) {
+		if (player == Player.ONE) {
+			if (isPlayerUnderTimePressure(player)
+					&& mTimePressureWarningEnabled)
+				_updateTimePressureClock(mPlayer1Clock, mPlayer1TimeLeft);
+			else
+				_updateClock(mPlayer1Clock, mPlayer1TimeLeft);
+		} else {
+			if (isPlayerUnderTimePressure(player)
+					&& mTimePressureWarningEnabled)
+				_updateTimePressureClock(mPlayer2Clock, mPlayer2TimeLeft);
+			else
+				_updateClock(mPlayer2Clock, mPlayer2TimeLeft);
+		}
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode,
@@ -531,6 +582,8 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		mShakeEnabled = extras.getBoolean("shakeEnabled");
 		mFlipEnabled = extras.getBoolean("flipEnabled");
 		mSoundEnabled = extras.getBoolean("soundEnabled");
+		mTimePressureWarningEnabled = extras
+				.getBoolean("timePressureWarningEnabled");
 
 		// Only reset the clock if we changed something related to time-keeping
 		if ((old_duration != mDuration)
@@ -548,6 +601,8 @@ public class BlitznChessClock extends Activity implements ChessClock {
 		setTimeIntent.putExtra("shakeEnabled", mShakeEnabled);
 		setTimeIntent.putExtra("flipEnabled", mFlipEnabled);
 		setTimeIntent.putExtra("soundEnabled", mSoundEnabled);
+		setTimeIntent.putExtra("timePressureWarningEnabled",
+				mTimePressureWarningEnabled);
 		startActivityForResult(setTimeIntent, ACTIVITY_SET_TIME);
 	}
 
@@ -635,6 +690,12 @@ public class BlitznChessClock extends Activity implements ChessClock {
 
 	public boolean isDelayEnabled() {
 		return mDelayContext.isDelayEnabled();
+	}
+
+	public boolean isPlayerUnderTimePressure(Player player) {
+		long timeLeft = (player == Player.ONE) ? mPlayer1TimeLeft
+				: mPlayer2TimeLeft;
+		return timeLeft <= TIME_PRESSURE_THRESHOLD;
 	}
 
 	public long getTimeLeftForPlayer(Player player) {
