@@ -56,5 +56,7 @@ public interface ChessClock {
 	boolean isStarted();
 	
 	boolean isReady();
+	
+	long getClockResolution();
 
 }

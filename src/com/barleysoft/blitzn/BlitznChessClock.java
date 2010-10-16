@@ -2,7 +2,7 @@ package com.barleysoft.blitzn;
 
 public class BlitznChessClock implements ChessClock {
 
-	public static final int CLOCK_RESOLUTION = 100; // ms
+	public static final long CLOCK_RESOLUTION = 100L; // ms
 
 	private ClockState mClockState = ClockState.NOSTATE;
 	private DelayMode mDelayMode = DelayMode.NODELAY;
@@ -179,6 +179,10 @@ public class BlitznChessClock implements ChessClock {
 	public long getDelayTime() {
 		return mDelayTime;
 
+	}
+
+	public long getClockResolution() {
+		return CLOCK_RESOLUTION;
 	}
 
 }

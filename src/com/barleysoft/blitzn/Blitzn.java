@@ -1,8 +1,7 @@
 package com.barleysoft.blitzn;
 
-import com.barleysoft.blitzn.delay.DelayContext;
-import com.barleysoft.blitzn.delay.DelayStrategy;
-import com.barleysoft.blitzn.delay.DelayStrategyFactory;
+import com.barleysoft.blitzn.ChessClock.DelayMode;
+import com.barleysoft.blitzn.ChessClock.Player;
 import com.barleysoft.motion.PitchFlipListener;
 import com.barleysoft.motion.ShakeListener;
 
@@ -33,16 +32,14 @@ public class Blitzn extends Activity {
 	public static final int ACTIVITY_SET_TIME = 0;
 
 	// Member variables
-
-
-	private ClockButton mPlayer2Clock;
-
-	private DelayContext mDelayContext;
+	private ChessClock mChessClock;
+	private ClockButton mPlayer1ClockButton;
+	private ClockButton mPlayer2ClockButton;
 
 	private ShakeListener mShakeListener;
 	private PitchFlipListener mPitchFlipListener;
 
-	private Handler mHandler = new Handler();
+	private Handler mTimerHandler = new Handler();
 	private AlertDialog mPausedDialog;
 
 
@@ -53,60 +50,69 @@ public class Blitzn extends Activity {
 	private boolean mSoundEnabled = true;
 	private boolean mShowIntroDialog = true;
 	private boolean mTimePressureWarningEnabled = true;
+	private DelayMode mDelayMode = DelayMode.NODELAY;
+	private long mDelayTime = 0L;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
+	private void initializeMainWindow() {
 		// Go full screen
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.main);
-
-		// Setup Player 1
-		mPlayer1Clock = (ClockButton) findViewById(R.id.player1Clock);
-		mPlayer1Clock.setIsFlipped(true);
-		OnClickListener player1ClickListener = new OnClickListener() {
+	}
+	
+	private ClockButton initializeClockButton(final Player player, int resId, boolean isFlipped) {
+		ClockButton button = (ClockButton) findViewById(resId);
+		button.setIsFlipped(isFlipped);
+		OnClickListener clickListener = new OnClickListener() {
 			public void onClick(View v) {
-				onPlayerClick(Player.ONE);
+				mChessClock.activatePlayer(player);
 			}
 		};
-		mPlayer1Clock
-				.setOnClickListener((android.view.View.OnClickListener) player1ClickListener);
+		button.setOnClickListener(clickListener);
+		return button;
+	}
 
-		// Setup Player 2
-		mPlayer2Clock = (ClockButton) findViewById(R.id.player2Clock);
-		OnClickListener player2ClickListener = new OnClickListener() {
-			public void onClick(View v) {
-				onPlayerClick(Player.TWO);
-			}
-		};
+	void initializeChessClock() {
+		mChessClock = new BlitznChessClock();
+		mChessClock.setDuration(mDuration);
+		mChessClock.setDelayMode(mDelayMode);
+		mChessClock.setDelayTime(mDelayTime);
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-		mPlayer2Clock
-				.setOnClickListener((android.view.View.OnClickListener) player2ClickListener);
-
-		// Initialize everything
-
+		initializeMainWindow();
+		
+		mPlayer1ClockButton = initializeClockButton(Player.ONE, R.id.player1Clock, true);
+		mPlayer2ClockButton = initializeClockButton(Player.TWO, R.id.player2Clock, false);
+		
 		mPausedDialog = createPausedDialog();
+		
 		restorePreferences();
+		initializeChessClock();
+
 		installShakeListener();
 		installPitchFlipListener();
-		resetClock();
-
-		if (mShowIntroDialog)
+		if (mShowIntroDialog) {
 			showIntroDialogBox();
+		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if ((mShakeListener != null) && !mShakeListener.isListening())
+		if ((mShakeListener != null) && !mShakeListener.isListening()) {
 			mShakeListener.resume();
+		}
 
-		if ((mPitchFlipListener != null) && !mPitchFlipListener.isListening())
+		if ((mPitchFlipListener != null) && !mPitchFlipListener.isListening()) {
 			mPitchFlipListener.resume();
+		}
 
 		// When a paused game is resumed, we don't want to immediately start the
 		// clock,
@@ -114,30 +120,36 @@ public class Blitzn extends Activity {
 		// box. Since the
 		// clock was placed into the PAUSED state in onPause, we're in a
 		// consistent state.
-		if (isGamePaused() && !mPausedDialog.isShowing())
+		if (mChessClock.isPaused() && !mPausedDialog.isShowing()) {
 			mPausedDialog.show();
+		}
 	}
 
 	@Override
 	protected void onPause() {
-		if (mShakeListener != null)
+		if (mShakeListener != null) {
 			mShakeListener.pause();
-		if (mPitchFlipListener != null)
+		}
+		
+		if (mPitchFlipListener != null) {
 			mPitchFlipListener.pause();
+		}
 
 		// Don't show the dialog box on a system initiated pause
-		if (isGameInProgress())
+		if (mChessClock.isStarted()) {
 			pauseClock(false);
+		}
 
 		super.onPause();
 	}
 
 	@Override
 	public void onBackPressed() {
-		if (isGameInProgress())
+		if (mChessClock.isStarted()) {
 			showExitDialog();
-		else
+		} else {
 			super.onBackPressed();
+		}
 	}
 
 	private AlertDialog createPausedDialog() {
@@ -147,8 +159,9 @@ public class Blitzn extends Activity {
 		alertDialog
 				.setOnDismissListener(new DialogInterface.OnDismissListener() {
 					public void onDismiss(DialogInterface dialog) {
-						if (isGamePaused())
+						if (mChessClock.isPaused()) {
 							unPauseClock();
+						}
 					}
 				});
 		return alertDialog;
@@ -164,23 +177,33 @@ public class Blitzn extends Activity {
 	}
 
 	void setDelayMethodFromInt(int delayMethod) {
-		// TODO(sirp): rename setDelayMethodById
-		DelayStrategy delayStrategy = DelayStrategyFactory
-				.getDelayStrategyById(delayMethod);
-		// TODO(sirp): should we just use setStrategy here
-		mDelayContext = new DelayContext(this, delayStrategy);
+		// TODO(sirp): these methods should go away and be replaced with something more elegant
+		switch (delayMethod) {
+		case 1:
+			mDelayMode = DelayMode.FISCHER;
+		case 2:
+			mDelayMode = DelayMode.BRONSTEIN;
+		default:
+			mDelayMode = DelayMode.NODELAY;
+		}
 	}
 
 	int getDelayMethodAsInt() {
-		DelayStrategy delayStrategy = mDelayContext.getStrategy();
-		return DelayStrategyFactory.getIdForDelayStrategy(delayStrategy);
+		switch (mDelayMode) {
+		case FISCHER:
+			return 1;
+		case BRONSTEIN:
+			return 2;
+		default:
+			return 0;
+		}
 	}
 
 	void restorePreferences() {
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		mDuration = settings.getLong("duration", 5 * 60 * 1000L);
 		setDelayMethodFromInt(settings.getInt("delayMethod", 0));
-		mDelayContext.setDelay(settings.getLong("delay", 0L));
+		mDelayTime = settings.getLong("delay", 0L);
 		mShakeEnabled = settings.getBoolean("shakeEnabled", true);
 		mFlipEnabled = settings.getBoolean("flipEnabled", true);
 		mSoundEnabled = settings.getBoolean("soundEnabled", true);
@@ -193,7 +216,7 @@ public class Blitzn extends Activity {
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putLong("duration", mDuration);
-		editor.putLong("delay", mDelayContext.getDelay());
+		editor.putLong("delay", mDelayTime);
 		editor.putInt("delayMethod", getDelayMethodAsInt());
 		editor.putBoolean("shakeEnabled", mShakeEnabled);
 		editor.putBoolean("flipEnabled", mFlipEnabled);
@@ -209,7 +232,7 @@ public class Blitzn extends Activity {
 		mShakeListener = new ShakeListener(this);
 		mShakeListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
 			public void onShake() {
-				if (mShakeEnabled && !isGamePaused() && !isGameReady()) {
+				if (mShakeEnabled && !mChessClock.isPaused() && !mChessClock.isReady()) {
 					vibe.vibrate(100);
 					resetClock();
 				}
@@ -224,14 +247,14 @@ public class Blitzn extends Activity {
 		mPitchFlipListener
 				.setOnPitchFlipListener(new PitchFlipListener.OnPitchFlipListener() {
 					public void onPitchFlip(PitchFlipListener.State state) {
-						if (mFlipEnabled && isGameInProgress()) {
+						if (mFlipEnabled && mChessClock.isStarted()) {
 							if ((state == PitchFlipListener.State.UP)
-									&& isGamePaused()) {
+									&& mChessClock.isPaused()) {
 								Log.i("Blitzn", "flip detected, unpausing");
 								vibe.vibrate(100);
 								unPauseClock();
 							} else if ((state == PitchFlipListener.State.DOWN)
-									&& !isGamePaused()) {
+									&& !mChessClock.isPaused()) {
 								Log.i("Blitzn", "flip detected, pausing");
 								vibe.vibrate(100);
 								pauseClock(true);
@@ -241,36 +264,15 @@ public class Blitzn extends Activity {
 				});
 	}
 
-	void onPlayerClick(Player which) {
-		if (which == Player.ONE) {
-			switch (mClockState) {
-			case READY:
-				initiateClock(Player.TWO);
-				break;
-			case PLAYER1_RUNNING:
-				toggleClock();
-				break;
-			}
-		} else {
-			switch (mClockState) {
-			case READY:
-				initiateClock(Player.ONE);
-				break;
-			case PLAYER2_RUNNING:
-				toggleClock();
-				break;
-			}
-		}
-
-	}
-
 	void startClockTimer() {
-		mHandler.removeCallbacks(updateTimeTask);
-		mHandler.postDelayed(updateTimeTask, CLOCK_RESOLUTION);
+		mTimerHandler.removeCallbacks(updateTimeTask);
+		// TODO(sirp): perhaps CLOCK_RESOLUTION should be defined in the app and passed into
+		// the ChessClock object
+		mTimerHandler.postDelayed(updateTimeTask, mChessClock.getClockResolution());
 	}
 
 	void stopClockTimer() {
-		mHandler.removeCallbacks(updateTimeTask);
+		mTimerHandler.removeCallbacks(updateTimeTask);
 	}
 
 	void initiateClock(Player which) {
@@ -287,15 +289,15 @@ public class Blitzn extends Activity {
 		if (which == Player.ONE) {
 			mDelayContext.stopDelayForPlayer(Player.TWO);
 			mDelayContext.startDelayForPlayer(Player.ONE);
-			mPlayer1Clock.enable();
-			mPlayer2Clock.disable();
+			mPlayer1ClockButton.enable();
+			mPlayer2ClockButton.disable();
 			playClick();
 			mClockState = ClockState.PLAYER1_RUNNING;
 		} else {
 			mDelayContext.stopDelayForPlayer(Player.ONE);
 			mDelayContext.startDelayForPlayer(Player.TWO);
-			mPlayer2Clock.enable();
-			mPlayer1Clock.disable();
+			mPlayer2ClockButton.enable();
+			mPlayer1ClockButton.disable();
 			playClick();
 			mClockState = ClockState.PLAYER2_RUNNING;
 		}
@@ -309,10 +311,10 @@ public class Blitzn extends Activity {
 		mDelayContext.resetDelayForPlayer(Player.TWO);
 
 		mPlayer1TimeLeft = mDuration;
-		mPlayer1Clock.setIsActivated(true);
+		mPlayer1ClockButton.setIsActivated(true);
 
 		mPlayer2TimeLeft = mDuration;
-		mPlayer2Clock.setIsActivated(true);
+		mPlayer2ClockButton.setIsActivated(true);
 
 		updateClockDisplays();
 		mClockState = ClockState.READY;
@@ -395,11 +397,11 @@ public class Blitzn extends Activity {
 		}
 
 		if (player1Lost) {
-			mPlayer1Clock.setLost();
+			mPlayer1ClockButton.setLost();
 		}
 
 		if (player2Lost) {
-			mPlayer2Clock.setLost();
+			mPlayer2ClockButton.setLost();
 		}
 		playGameOverSound();
 	}
@@ -446,7 +448,7 @@ public class Blitzn extends Activity {
 
 			// Reschedule the next tick
 			long nextUpdate = SystemClock.uptimeMillis() + CLOCK_RESOLUTION;
-			mHandler.postAtTime(this, nextUpdate);
+			mTimerHandler.postAtTime(this, nextUpdate);
 		}
 	};
 
