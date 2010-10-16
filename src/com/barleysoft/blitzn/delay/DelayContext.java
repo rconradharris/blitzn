@@ -1,16 +1,16 @@
 package com.barleysoft.blitzn.delay;
 
-import com.barleysoft.blitzn.BlitznChessClock;
-import com.barleysoft.blitzn.BlitznChessClock.Player;
+import com.barleysoft.blitzn.Blitzn;
+import com.barleysoft.blitzn.Blitzn.Player;
 
 public class DelayContext {
 	private DelayStrategy mDelayStrategy;
 	private long mDelay;
 	private long mPlayer1DelayLeft;
 	private long mPlayer2DelayLeft;
-	protected BlitznChessClock mChessClock;
+	protected Blitzn mChessClock;
 
-	public DelayContext(BlitznChessClock chessClock, DelayStrategy delayStrategy) {
+	public DelayContext(Blitzn chessClock, DelayStrategy delayStrategy) {
 		mChessClock = chessClock;
 		mDelayStrategy = delayStrategy;
 	}
@@ -59,15 +59,15 @@ public class DelayContext {
 	public void decrementDelayLeftForPlayer(Player player) {
 		// Convenience method to apply one tick to a player
 		if (player == Player.ONE)
-			mPlayer1DelayLeft -= BlitznChessClock.CLOCK_RESOLUTION;
+			mPlayer1DelayLeft -= Blitzn.CLOCK_RESOLUTION;
 		else
-			mPlayer2DelayLeft -= BlitznChessClock.CLOCK_RESOLUTION;
+			mPlayer2DelayLeft -= Blitzn.CLOCK_RESOLUTION;
 	}
 
 	// Chess Clock dispatchers
 
 	public long getClockResolution() {
-		return BlitznChessClock.CLOCK_RESOLUTION;
+		return Blitzn.CLOCK_RESOLUTION;
 	}
 
 	public long getTimeLeftForPlayer(Player player) {

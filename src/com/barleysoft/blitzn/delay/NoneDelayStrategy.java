@@ -1,6 +1,6 @@
 package com.barleysoft.blitzn.delay;
 
-import com.barleysoft.blitzn.BlitznChessClock.Player;
+import com.barleysoft.blitzn.Blitzn.Player;
 
 public class NoneDelayStrategy implements DelayStrategy {
 	// All ChessClocks relate to a Delay object even if it doesn't have

@@ -1,6 +1,6 @@
 package com.barleysoft.blitzn.delay;
 
-import com.barleysoft.blitzn.BlitznChessClock.Player;
+import com.barleysoft.blitzn.Blitzn.Player;
 
 public class BronsteinDelayStrategy implements DelayStrategy {
 
