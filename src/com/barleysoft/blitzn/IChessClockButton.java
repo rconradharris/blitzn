@@ -17,10 +17,14 @@ public interface IChessClockButton {
 	
 	public boolean getIsFlipped();
 	
-	public void enable();
+	public void initialize();
 	
-	public void disable();
+	public void activate();
 	
-	public void updateTimeLeft();
-		
+	public void deactivate();
+	
+	public void reset();
+	
+	public void tick();
+			
 }

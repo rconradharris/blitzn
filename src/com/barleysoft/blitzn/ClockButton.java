@@ -69,13 +69,13 @@ public class ClockButton extends Button implements IChessClockButton {
 		super.onDraw(canvas);
 	}
 
-	public void enable() {
-		play(mClicker);
+	public void activate() {
 		setClickable(true);
 		setBackgroundColor(Color.BLACK);
 	}
 
-	public void disable() {
+	public void deactivate() {
+		play(mClicker);
 		setBackgroundColor(Color.TRANSPARENT);
 		setClickable(false);
 	}
@@ -102,7 +102,7 @@ public class ClockButton extends Button implements IChessClockButton {
 		return mChessPlayer;
 	}
 
-	public void updateTimeLeft() {
+	private void updateTimeLeft() {
 		if (mChessPlayer.isUnderTimePressure() && mIsTimePressureWarningEnabled) {
 			// SS.D
 			long timeLeft = mChessPlayer.getTimeLeft();
@@ -127,6 +127,20 @@ public class ClockButton extends Button implements IChessClockButton {
 
 	public boolean getIsTimePressureWarningEnabled() {
 		return mIsTimePressureWarningEnabled;
+	}
+
+	public void initialize() {
+		activate();
+		updateTimeLeft();
+	}
+
+	public void reset() {
+		activate();
+		updateTimeLeft();
+	}
+
+	public void tick() {
+		updateTimeLeft();
 	}
 
 }

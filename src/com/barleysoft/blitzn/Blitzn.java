@@ -61,17 +61,23 @@ public class Blitzn extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.main);
+		mPausedDialog = createPausedDialog();
+		if (mShowIntroDialog) {
+			showIntroDialogBox();
+		}
 	}
 	
-	private ClockButton initializeClockButton(final Player player, int resId, boolean isFlipped) {
+	private ClockButton initializeClockButton(final Player player, int resId, boolean isFlipped, ChessPlayer chessPlayer) {
 		ClockButton button = (ClockButton) findViewById(resId);
 		button.setIsFlipped(isFlipped);
+		button.setChessPlayer(chessPlayer);
 		OnClickListener clickListener = new OnClickListener() {
 			public void onClick(View v) {
-				mChessClock.activatePlayer(player);
+				activatePlayer(player);
 			}
 		};
 		button.setOnClickListener(clickListener);
+		button.initialize();
 		return button;
 	}
 
@@ -80,27 +86,25 @@ public class Blitzn extends Activity {
 		mChessClock.setDuration(mDuration);
 		mChessClock.setDelayMode(mDelayMode);
 		mChessClock.setDelayTime(mDelayTime);
+		
+		ChessPlayer chessPlayer1 = new BlitznChessPlayer();
+		ChessPlayer chessPlayer2 = new BlitznChessPlayer();
+		
+		mChessClock.setChessPlayer(Player.ONE, chessPlayer1);
+		mChessClock.setChessPlayer(Player.TWO, chessPlayer2);
+		
+		mPlayer1ClockButton = initializeClockButton(Player.ONE, R.id.player1Clock, true, chessPlayer1);
+		mPlayer2ClockButton = initializeClockButton(Player.TWO, R.id.player2Clock, false, chessPlayer2);
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		initializeMainWindow();
-		
-		mPlayer1ClockButton = initializeClockButton(Player.ONE, R.id.player1Clock, true);
-		mPlayer2ClockButton = initializeClockButton(Player.TWO, R.id.player2Clock, false);
-		
-		mPausedDialog = createPausedDialog();
-		
 		restorePreferences();
 		initializeChessClock();
-
 		installShakeListener();
 		installPitchFlipListener();
-		if (mShowIntroDialog) {
-			showIntroDialogBox();
-		}
+		initializeMainWindow();
 	}
 
 	@Override
@@ -275,49 +279,27 @@ public class Blitzn extends Activity {
 		mTimerHandler.removeCallbacks(updateTimeTask);
 	}
 
-	void initiateClock(Player which) {
-		if (mClockState != ClockState.READY) {
-			// throw new ClockStateException("already started");
+	void activatePlayer(Player player) {
+		if (mChessClock.isReady()) {
+			startClockTimer();
+			setKeepScreenOn(true);
 		}
-
-		activateClock(which);
-		startClockTimer();
-		setKeepScreenOn(true);
-	}
-
-	void activateClock(Player which) {
-		if (which == Player.ONE) {
-			mDelayContext.stopDelayForPlayer(Player.TWO);
-			mDelayContext.startDelayForPlayer(Player.ONE);
-			mPlayer1ClockButton.enable();
-			mPlayer2ClockButton.disable();
-			playClick();
-			mClockState = ClockState.PLAYER1_RUNNING;
+		mChessClock.activatePlayer(player);
+		if (player == Player.ONE) {
+			mPlayer1ClockButton.activate();
+			mPlayer2ClockButton.deactivate();
 		} else {
-			mDelayContext.stopDelayForPlayer(Player.ONE);
-			mDelayContext.startDelayForPlayer(Player.TWO);
-			mPlayer2ClockButton.enable();
-			mPlayer1ClockButton.disable();
-			playClick();
-			mClockState = ClockState.PLAYER2_RUNNING;
+			mPlayer1ClockButton.deactivate();
+			mPlayer2ClockButton.activate();
 		}
 	}
 
 	void resetClock() {
 		setKeepScreenOn(false);
 		stopClockTimer();
-
-		mDelayContext.resetDelayForPlayer(Player.ONE);
-		mDelayContext.resetDelayForPlayer(Player.TWO);
-
-		mPlayer1TimeLeft = mDuration;
-		mPlayer1ClockButton.setIsActivated(true);
-
-		mPlayer2TimeLeft = mDuration;
-		mPlayer2ClockButton.setIsActivated(true);
-
-		updateClockDisplays();
-		mClockState = ClockState.READY;
+		mChessClock.reset();
+		mPlayer1ClockButton.reset();
+		mPlayer2ClockButton.reset();
 	}
 
 	void toggleClock() {
