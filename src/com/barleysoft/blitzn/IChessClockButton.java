@@ -25,6 +25,12 @@ public interface IChessClockButton {
 	
 	public void reset();
 	
+	public void stop();
+	
 	public void tick();
+	
+	public void setClockResolution(long clockResolution);
+	
+	public long getClockResolution();
 			
 }

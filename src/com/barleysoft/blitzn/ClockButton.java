@@ -19,7 +19,9 @@ public class ClockButton extends Button implements IChessClockButton {
 	private boolean mIsTimePressureWarningEnabled = false;
 	private MediaPlayer mClicker;
 	private MediaPlayer mGameOverDinger;
-	private MediaPlayer mTimePressureSiren; // TODO add back siren
+	private MediaPlayer mTimePressureSiren;
+	private long mTicks = 0L;
+	private long mClockResolution;
 
 	public ClockButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -80,12 +82,6 @@ public class ClockButton extends Button implements IChessClockButton {
 		setClickable(false);
 	}
 
-	public void setLost() {
-		play(mGameOverDinger);
-		setBackgroundColor(Color.RED);
-		setClickable(false);
-	}
-
 	public void setIsSoundEnabled(boolean isSoundEnabled) {
 		mIsSoundEnabled = isSoundEnabled;
 	}
@@ -137,10 +133,36 @@ public class ClockButton extends Button implements IChessClockButton {
 	public void reset() {
 		activate();
 		updateTimeLeft();
+		mTicks = 0L;
 	}
 
 	public void tick() {
 		updateTimeLeft();
+		if (mChessPlayer.isUnderTimePressure() && mIsTimePressureWarningEnabled) {
+			if (((mTicks * mClockResolution) % TIME_PRESSURE_SIREN_INTERVAL) == 0) {
+				play(mTimePressureSiren);
+			}
+		}
+		mTicks++;
+	}
+
+	public void stop() {
+		if (mChessPlayer.hasTimeExpired()) {
+			play(mGameOverDinger);
+			setBackgroundColor(Color.RED);
+			setClickable(false);
+		} else {
+			setBackgroundColor(Color.TRANSPARENT);
+			setClickable(false);
+		}		
+	}
+
+	public void setClockResolution(long clockResolution) {
+		mClockResolution = clockResolution;
+	}
+
+	public long getClockResolution() {
+		return mClockResolution;
 	}
 
 }

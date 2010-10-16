@@ -57,6 +57,8 @@ public interface ChessClock {
 	
 	boolean isReady();
 	
+	void setClockResolution(long clockResolution);
+	
 	long getClockResolution();
 
 }

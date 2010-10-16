@@ -2,7 +2,6 @@ package com.barleysoft.blitzn;
 
 public class BlitznChessClock implements ChessClock {
 
-	public static final long CLOCK_RESOLUTION = 100L; // ms
 
 	private ClockState mClockState = ClockState.NOSTATE;
 	private DelayMode mDelayMode = DelayMode.NODELAY;
@@ -10,6 +9,7 @@ public class BlitznChessClock implements ChessClock {
 	private ChessPlayer mChessPlayer1;
 	private ChessPlayer mChessPlayer2;
 
+	private long mClockResolution;
 	private long mDuration = 0L;
 	private long mTicks = 0L;
 	
@@ -52,13 +52,13 @@ public class BlitznChessClock implements ChessClock {
 
 	public void initialize() {
 		mChessPlayer1.initialize();
-		mChessPlayer1.setClockResolution(CLOCK_RESOLUTION);
+		mChessPlayer1.setClockResolution(mClockResolution);
 		mChessPlayer1.setDuration(mDuration);
 		mChessPlayer1.setDelayMode(mDelayMode);
 		mChessPlayer1.setDelayTime(mDelayTime);
 		
 		mChessPlayer2.initialize();
-		mChessPlayer2.setClockResolution(CLOCK_RESOLUTION);
+		mChessPlayer2.setClockResolution(mClockResolution);
 		mChessPlayer2.setDuration(mDuration);
 		mChessPlayer2.setDelayMode(mDelayMode);
 		mChessPlayer2.setDelayTime(mDelayTime);
@@ -182,7 +182,13 @@ public class BlitznChessClock implements ChessClock {
 	}
 
 	public long getClockResolution() {
-		return CLOCK_RESOLUTION;
+		return mClockResolution;
+	}
+
+	public void setClockResolution(long clockResolution) {
+		mClockResolution = clockResolution;
+		mChessPlayer1.setClockResolution(clockResolution);
+		mChessPlayer2.setClockResolution(clockResolution);		
 	}
 
 }

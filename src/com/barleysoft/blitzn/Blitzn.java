@@ -28,6 +28,7 @@ import android.view.WindowManager;
 public class Blitzn extends Activity {
 
 	// Constants
+	public static final long CLOCK_RESOLUTION = 100L; // ms
 	public static final String PREFS_NAME = "BlitznPrefs";
 	public static final int ACTIVITY_SET_TIME = 0;
 
@@ -71,6 +72,8 @@ public class Blitzn extends Activity {
 		ClockButton button = (ClockButton) findViewById(resId);
 		button.setIsFlipped(isFlipped);
 		button.setChessPlayer(chessPlayer);
+		button.setIsSoundEnabled(mSoundEnabled);
+		button.setIsTimePressureWarningEnabled(mTimePressureWarningEnabled);
 		OnClickListener clickListener = new OnClickListener() {
 			public void onClick(View v) {
 				activatePlayer(player);
@@ -83,15 +86,17 @@ public class Blitzn extends Activity {
 
 	void initializeChessClock() {
 		mChessClock = new BlitznChessClock();
-		mChessClock.setDuration(mDuration);
-		mChessClock.setDelayMode(mDelayMode);
-		mChessClock.setDelayTime(mDelayTime);
-		
 		ChessPlayer chessPlayer1 = new BlitznChessPlayer();
 		ChessPlayer chessPlayer2 = new BlitznChessPlayer();
 		
+		mChessClock.setClockResolution(CLOCK_RESOLUTION);
+		mChessClock.setDuration(mDuration);
+		mChessClock.setDelayMode(mDelayMode);
+		mChessClock.setDelayTime(mDelayTime);
 		mChessClock.setChessPlayer(Player.ONE, chessPlayer1);
 		mChessClock.setChessPlayer(Player.TWO, chessPlayer2);
+		
+		mChessClock.initialize();
 		
 		mPlayer1ClockButton = initializeClockButton(Player.ONE, R.id.player1Clock, true, chessPlayer1);
 		mPlayer2ClockButton = initializeClockButton(Player.TWO, R.id.player2Clock, false, chessPlayer2);
@@ -302,19 +307,6 @@ public class Blitzn extends Activity {
 		mPlayer2ClockButton.reset();
 	}
 
-	void toggleClock() {
-		switch (mClockState) {
-		case PLAYER1_RUNNING:
-			activateClock(Player.TWO);
-			break;
-		case PLAYER2_RUNNING:
-			activateClock(Player.ONE);
-			break;
-		default:
-			// throw ClockStateException("wrong state");
-		}
-	}
-
 	void pauseClock(boolean showDialog) {
 		// There are two types of pauses:
 		// a) Player initiated, where the player flips the phone over
@@ -324,120 +316,45 @@ public class Blitzn extends Activity {
 		//
 		// For a) we want to display a paused dialog; however, for b)
 		// we do not.
-		switch (mClockState) {
-		case PLAYER1_RUNNING:
-			stopClockTimer();
-			mClockState = ClockState.PLAYER1_PAUSED;
-			if (showDialog)
-				mPausedDialog.show();
-			break;
-		case PLAYER2_RUNNING:
-			stopClockTimer();
-			mClockState = ClockState.PLAYER2_PAUSED;
-			if (showDialog)
-				mPausedDialog.show();
-			break;
-		default:
-			// throw ClockStateException("wrong state");
+		// TODO should be mShowDialog
+		stopClockTimer();
+		mChessClock.pause();
+		if (showDialog) {
+			mPausedDialog.show();
 		}
 	}
 
 	void unPauseClock() {
-		switch (mClockState) {
-		case PLAYER1_PAUSED:
-			startClockTimer();
-			mClockState = ClockState.PLAYER1_RUNNING;
-			if (mPausedDialog.isShowing())
-				mPausedDialog.dismiss();
-			break;
-		case PLAYER2_PAUSED:
-			startClockTimer();
-			mClockState = ClockState.PLAYER2_RUNNING;
-			if (mPausedDialog.isShowing())
-				mPausedDialog.dismiss();
-			break;
-		default:
-			// throw ClockStateException("wrong state");
+		if (mPausedDialog.isShowing()) {
+			mPausedDialog.dismiss();
 		}
+		mChessClock.unpause();
+		startClockTimer();
 	}
 
 	void setKeepScreenOn(boolean keepScreenOn) {
-		View layout = (View) findViewById(R.id.mainLayout);
-		layout.setKeepScreenOn(keepScreenOn);
+		findViewById(R.id.mainLayout).setKeepScreenOn(keepScreenOn);
 	}
 
-	void stopClock() {
+	// TODO this will need to be a callback
+	void onChessClockStop() {
 		setKeepScreenOn(false);
 		stopClockTimer();
-		mClockState = ClockState.STOPPED;
-
-		boolean player1Lost = hasPlayerLost(Player.ONE);
-		boolean player2Lost = hasPlayerLost(Player.TWO);
-
-		if (player1Lost && player2Lost) {
-			Log.e("Blitzn", "both players lost, we have a problem!");
-		}
-
-		if (player1Lost) {
-			mPlayer1ClockButton.setLost();
-		}
-
-		if (player2Lost) {
-			mPlayer2ClockButton.setLost();
-		}
-		playGameOverSound();
-	}
-
-
-	void tickForPlayer(Player player) {
-		if (isPlayerUnderTimePressure(player) && mTimePressureWarningEnabled) {
-			if (((mClockTicks * CLOCK_RESOLUTION) % TIME_PRESSURE_SIREN_INTERVAL) == 0) {
-				playTimePressureSiren();
-			}
-		}
-
-		mClockTicks++;
-
-		if (player == Player.ONE) {
-			mPlayer1TimeLeft -= CLOCK_RESOLUTION;
-		} else {
-			mPlayer2TimeLeft -= CLOCK_RESOLUTION;
-		}
+		mPlayer1ClockButton.stop();
+		mPlayer2ClockButton.stop();
 	}
 
 	private Runnable updateTimeTask = new Runnable() {
 		public void run() {
-			// Check for either clock expiring
-			if (hasPlayerLost(Player.ONE) || hasPlayerLost(Player.TWO)) {
-				stopClock();
-				return;
-			}
-
-			switch (mClockState) {
-			case PLAYER1_RUNNING:
-				if (mDelayContext.shouldClockTickForPlayer(Player.ONE))
-					tickForPlayer(Player.ONE);
-				mDelayContext.tickForPlayer(Player.ONE);
-				break;
-			case PLAYER2_RUNNING:
-				if (mDelayContext.shouldClockTickForPlayer(Player.TWO))
-					tickForPlayer(Player.TWO);
-				mDelayContext.tickForPlayer(Player.TWO);
-				break;
-			}
-
-			updateClockDisplays();
+			mChessClock.tick();
+			mPlayer1ClockButton.tick();
+			mPlayer2ClockButton.tick();
 
 			// Reschedule the next tick
 			long nextUpdate = SystemClock.uptimeMillis() + CLOCK_RESOLUTION;
 			mTimerHandler.postAtTime(this, nextUpdate);
 		}
 	};
-
-	private void updateClockDisplays() {
-		updateClockForPlayer(Player.ONE);
-		updateClockForPlayer(Player.TWO);
-	}
 
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
