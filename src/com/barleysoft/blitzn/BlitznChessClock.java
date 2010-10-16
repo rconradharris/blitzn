@@ -5,10 +5,15 @@ public class BlitznChessClock implements ChessClock {
 	public static final int CLOCK_RESOLUTION = 100; // ms
 
 	private ClockState mClockState = ClockState.NOSTATE;
-	private ChessPlayer mPlayer1 = new BlitznChessPlayer();
-	private ChessPlayer mPlayer2 = new BlitznChessPlayer();
+	private DelayMode mDelayMode = DelayMode.NODELAY;
+	
+	private ChessPlayer mChessPlayer1;
+	private ChessPlayer mChessPlayer2;
+
 	private long mDuration = 0L;
 	private long mTicks = 0L;
+	
+	private long mDelayTime;
 
 	private void setState(ClockState state) {
 		mClockState = state;
@@ -20,7 +25,7 @@ public class BlitznChessClock implements ChessClock {
 			return;
 		}
 
-		if (mPlayer1.hasTimeExpired() || mPlayer2.hasTimeExpired()) {
+		if (mChessPlayer1.hasTimeExpired() || mChessPlayer2.hasTimeExpired()) {
 			setState(ClockState.STOPPED);
 			return;
 		}
@@ -29,14 +34,16 @@ public class BlitznChessClock implements ChessClock {
 
 		switch (mClockState) {
 		case PLAYER1_RUNNING:
-			mPlayer1.tick();
+			mChessPlayer1.tick();
 		case PLAYER2_RUNNING:
-			mPlayer2.tick();
+			mChessPlayer2.tick();
 		}
 	}
 
 	public void setDuration(long duration) {
 		mDuration = duration;
+		mChessPlayer1.setDuration(duration);
+		mChessPlayer2.setDuration(duration);
 	}
 
 	public long getDuration() {
@@ -44,14 +51,25 @@ public class BlitznChessClock implements ChessClock {
 	}
 
 	public void initialize() {
-		mPlayer1.setClockResolution(CLOCK_RESOLUTION);
-		mPlayer2.setClockResolution(CLOCK_RESOLUTION);
+		mChessPlayer1.initialize();
+		mChessPlayer1.setClockResolution(CLOCK_RESOLUTION);
+		mChessPlayer1.setDuration(mDuration);
+		mChessPlayer1.setDelayMode(mDelayMode);
+		mChessPlayer1.setDelayTime(mDelayTime);
+		
+		mChessPlayer2.initialize();
+		mChessPlayer2.setClockResolution(CLOCK_RESOLUTION);
+		mChessPlayer2.setDuration(mDuration);
+		mChessPlayer2.setDelayMode(mDelayMode);
+		mChessPlayer2.setDelayTime(mDelayTime);
+		
+		reset();
 	}
 
 	public void reset() {
 		mTicks = 0L;
-		mPlayer1.setTimeLeft(mDuration);
-		mPlayer2.setTimeLeft(mDuration);
+		mChessPlayer1.reset();
+		mChessPlayer2.reset();
 		setState(ClockState.READY);
 	}
 
@@ -107,17 +125,60 @@ public class BlitznChessClock implements ChessClock {
 				// The first move is untimed, so when player 1 clicks, we
 				// actually begin counting down for player 2
 				setState(ClockState.PLAYER2_RUNNING);
+				mChessPlayer2.activate();
 			case PLAYER2_RUNNING:
 				setState(ClockState.PLAYER1_RUNNING);
+				mChessPlayer2.deactivate();
+				mChessPlayer1.activate();
 			}
 		} else {
 			switch (mClockState) {
 			case READY:
 				setState(ClockState.PLAYER1_RUNNING);
+				mChessPlayer1.activate();
 			case PLAYER1_RUNNING:
 				setState(ClockState.PLAYER2_RUNNING);
+				mChessPlayer1.deactivate();
+				mChessPlayer2.activate();
 			}
 		}
+	}
+
+	public void setChessPlayer(Player player, ChessPlayer chessPlayer) {
+		if (player == Player.ONE) {
+			mChessPlayer1 = chessPlayer;
+		} else {
+			mChessPlayer2 = chessPlayer;
+		}		
+	}
+
+	public ChessPlayer getChessPlayer(Player player) {
+		if (player == Player.ONE) {
+			return mChessPlayer1;
+		} else {
+			return mChessPlayer2;
+		}
+	}
+
+	public void setDelayMode(DelayMode delayMode) {
+		mDelayMode = delayMode;
+		mChessPlayer1.setDelayMode(delayMode);
+		mChessPlayer2.setDelayMode(delayMode);
+	}
+
+	public DelayMode getDelayMode() {
+		return mDelayMode;
+	}
+
+	public void setDelayTime(long delayTime) {
+		mDelayTime = delayTime;
+		mChessPlayer1.setDelayTime(delayTime);
+		mChessPlayer2.setDelayTime(delayTime);
+	}
+
+	public long getDelayTime() {
+		return mDelayTime;
+
 	}
 
 }

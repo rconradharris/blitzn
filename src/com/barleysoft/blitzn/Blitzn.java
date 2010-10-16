@@ -29,7 +29,6 @@ import android.view.WindowManager;
 public class Blitzn extends Activity {
 
 	// Constants
-
 	public static final String PREFS_NAME = "BlitznPrefs";
 	public static final int ACTIVITY_SET_TIME = 0;
 

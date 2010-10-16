@@ -17,11 +17,27 @@ public interface ChessClock {
 		NOSTATE, READY, PLAYER1_RUNNING, PLAYER2_RUNNING, PLAYER1_PAUSED, PLAYER2_PAUSED, STOPPED
 	}
 	
+	public enum DelayMode {
+		NODELAY, FISCHER, BRONSTEIN
+	}
+	
 	void tick();
+	
+	void setChessPlayer(Player player, ChessPlayer chessPlayer);
+	
+	ChessPlayer getChessPlayer(Player player);
 	
 	void setDuration(long duration);
 	
 	long getDuration();
+	
+	void setDelayMode(DelayMode delayMode);
+	
+	DelayMode getDelayMode();
+	
+	void setDelayTime(long delayTime);
+	
+	long getDelayTime();
 	
 	void initialize();
 	
@@ -40,12 +56,5 @@ public interface ChessClock {
 	boolean isStarted();
 	
 	boolean isReady();
-		
-//
-//	
-//	long getTimeLeftForPlayer(Player player);
-//
-//	void adjustTimeLeftForPlayer(Player player, long adjustment);
-//
-//	boolean isDelayEnabled();
+
 }

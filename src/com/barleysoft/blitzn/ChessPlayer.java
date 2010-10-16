@@ -1,6 +1,16 @@
 package com.barleysoft.blitzn;
 
+import com.barleysoft.blitzn.ChessClock.DelayMode;
+
 public interface ChessPlayer {
+	
+	void initialize();
+	
+	void reset();
+	
+	void activate();
+	
+	void deactivate();
 	
 	void tick();
 	
@@ -15,5 +25,19 @@ public interface ChessPlayer {
 	boolean isUnderTimePressure();
 	
 	boolean hasTimeExpired();
+	
+	void setDelayMode(DelayMode delayMode);
+	
+	DelayMode getDelayMode();
+	
+	void setDelayTime(long delayTime);
+	
+	long getDelayTime();
+	
+	long getDelayLeft();
+	
+	void setDuration(long duration);
+	
+	long getDuration();
 	
 }
