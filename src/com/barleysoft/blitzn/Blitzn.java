@@ -29,7 +29,7 @@ import android.view.WindowManager;
 public class Blitzn extends Activity {
 
 	// Constants
-	public static final long TIME_PRESSURE_SIREN_INTERVAL = 1000; // ms
+
 	public static final String PREFS_NAME = "BlitznPrefs";
 	public static final int ACTIVITY_SET_TIME = 0;
 
@@ -46,11 +46,6 @@ public class Blitzn extends Activity {
 	private Handler mHandler = new Handler();
 	private AlertDialog mPausedDialog;
 
-	// Two players are used to get fast playback
-	private MediaPlayer mClockClicker1;
-	private MediaPlayer mClockClicker2;
-	private MediaPlayer mGameOverSoundPlayer;
-	private MediaPlayer mTimePressureSiren;
 
 	// Configurations
 	private long mDuration = 5 * 1 * 1000L;
@@ -97,7 +92,6 @@ public class Blitzn extends Activity {
 
 		mPausedDialog = createPausedDialog();
 		restorePreferences();
-		initializeSound();
 		installShakeListener();
 		installPitchFlipListener();
 		resetClock();
@@ -168,45 +162,6 @@ public class Blitzn extends Activity {
 				.setTitle(R.string.intro_title).setMessage(R.string.intro_text)
 				.setNegativeButton(R.string.ok, null).show();
 		mShowIntroDialog = false;
-	}
-
-	private void initializeSound() {
-		mClockClicker1 = createMediaPlayer(R.raw.click1);
-		mClockClicker2 = createMediaPlayer(R.raw.click1);
-		mGameOverSoundPlayer = createMediaPlayer(R.raw.gameover);
-		mTimePressureSiren = createMediaPlayer(R.raw.timepressure);
-	}
-
-	private MediaPlayer createMediaPlayer(int resId) {
-		MediaPlayer clicker = MediaPlayer.create(this, resId);
-		// clicker will be null if sound is not supported on device
-		if (clicker != null)
-			clicker.setVolume(1.0f, 1.0f);
-		return clicker;
-	}
-
-	void playClick() {
-		if ((mClockClicker1 == null) || !mSoundEnabled)
-			return;
-
-		// Fall-back to second clicker so that we can play clicks nearly
-		// simultaneously
-		if (mClockClicker1.isPlaying())
-			mClockClicker2.start();
-		else
-			mClockClicker1.start();
-	}
-
-	void playGameOverSound() {
-		if ((mGameOverSoundPlayer == null) || !mSoundEnabled)
-			return;
-		mGameOverSoundPlayer.start();
-	}
-
-	void playTimePressureSiren() {
-		if ((mTimePressureSiren == null) || !mSoundEnabled)
-			return;
-		mTimePressureSiren.start();
 	}
 
 	void setDelayMethodFromInt(int delayMethod) {
@@ -333,15 +288,15 @@ public class Blitzn extends Activity {
 		if (which == Player.ONE) {
 			mDelayContext.stopDelayForPlayer(Player.TWO);
 			mDelayContext.startDelayForPlayer(Player.ONE);
-			mPlayer1Clock.setIsActivated(true);
-			mPlayer2Clock.setIsActivated(false);
+			mPlayer1Clock.enable();
+			mPlayer2Clock.disable();
 			playClick();
 			mClockState = ClockState.PLAYER1_RUNNING;
 		} else {
 			mDelayContext.stopDelayForPlayer(Player.ONE);
 			mDelayContext.startDelayForPlayer(Player.TWO);
-			mPlayer2Clock.setIsActivated(true);
-			mPlayer1Clock.setIsActivated(false);
+			mPlayer2Clock.enable();
+			mPlayer1Clock.disable();
 			playClick();
 			mClockState = ClockState.PLAYER2_RUNNING;
 		}
@@ -499,40 +454,6 @@ public class Blitzn extends Activity {
 	private void updateClockDisplays() {
 		updateClockForPlayer(Player.ONE);
 		updateClockForPlayer(Player.TWO);
-	}
-
-	private void _updateClock(ClockButton clockView, long timeLeft) {
-		// MM:SS
-		int seconds = (int) timeLeft / 1000;
-		int minutes = seconds / 60;
-		seconds = seconds % 60;
-		String clockText = String.format("%02d:%02d", minutes, seconds);
-		clockView.setText(clockText);
-	}
-
-	private void _updateTimePressureClock(ClockButton clockView, long timeLeft) {
-		// SS.D
-		int seconds = (int) timeLeft / 1000;
-		int remainder = (int) timeLeft % 1000;
-		remainder = remainder / 100;
-		String clockText = String.format("%02d.%d", seconds, remainder);
-		clockView.setText(clockText);
-	}
-
-	private void updateClockForPlayer(Player player) {
-		if (player == Player.ONE) {
-			if (isPlayerUnderTimePressure(player)
-					&& mTimePressureWarningEnabled)
-				_updateTimePressureClock(mPlayer1Clock, mPlayer1TimeLeft);
-			else
-				_updateClock(mPlayer1Clock, mPlayer1TimeLeft);
-		} else {
-			if (isPlayerUnderTimePressure(player)
-					&& mTimePressureWarningEnabled)
-				_updateTimePressureClock(mPlayer2Clock, mPlayer2TimeLeft);
-			else
-				_updateClock(mPlayer2Clock, mPlayer2TimeLeft);
-		}
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode,
