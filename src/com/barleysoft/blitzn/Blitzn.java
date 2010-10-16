@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -195,6 +194,7 @@ public class Blitzn extends Activity {
 		default:
 			mDelayMode = DelayMode.NODELAY;
 		}
+		mChessClock.setDelayMode(mDelayMode);
 	}
 
 	int getDelayMethodAsInt() {
@@ -355,23 +355,32 @@ public class Blitzn extends Activity {
 			mTimerHandler.postAtTime(this, nextUpdate);
 		}
 	};
-
+	
+	private void setDuration(long duration) {
+		mDuration = duration;
+		mChessClock.setDuration(duration);
+	}
+	
+	private void setDelayTime(long delayTime) {
+		mDelayTime = delayTime;
+		mChessClock.setDelayTime(delayTime);
+	}
+	
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
 		// Back button on SetTime sub-Activity is overridden to bundle the
 		// results and RETURN_OK
 		Bundle extras = intent.getExtras();
 		long old_duration = mDuration;
-		mDuration = extras.getLong("durationMinutes") * 60 * 1000;
+		setDuration(extras.getLong("durationMinutes") * 60 * 1000);
 
 		// NOTE(sirp): setDelayMethodFromInt has the side-effect of clearing the
 		// delay so we must store the old delay before calling it
-		long oldDelay = mDelayContext.getDelay();
-
-		int oldDelayMethod = getDelayMethodAsInt();
+		long oldDelayTime = mDelayTime;
+		setDelayTime((extras.getLong("delaySeconds") * 1000));
+		
+		DelayMode oldDelayMode = mDelayMode;		
 		setDelayMethodFromInt(extras.getInt("delayMethod"));
-
-		mDelayContext.setDelay(extras.getLong("delaySeconds") * 1000);
 
 		mShakeEnabled = extras.getBoolean("shakeEnabled");
 		mFlipEnabled = extras.getBoolean("flipEnabled");
@@ -381,8 +390,8 @@ public class Blitzn extends Activity {
 
 		// Only reset the clock if we changed something related to time-keeping
 		if ((old_duration != mDuration)
-				|| (oldDelay != mDelayContext.getDelay())
-				|| (oldDelayMethod != getDelayMethodAsInt())) {
+				|| (oldDelayTime != mDelayTime)
+				|| (oldDelayMode != mDelayMode)) {
 			resetClock();
 		}
 	}
@@ -391,7 +400,7 @@ public class Blitzn extends Activity {
 		Intent setTimeIntent = new Intent(this, SetTime.class);
 		setTimeIntent.putExtra("delayMethod", getDelayMethodAsInt());
 		setTimeIntent.putExtra("durationMinutes", mDuration / 60 / 1000);
-		setTimeIntent.putExtra("delaySeconds", mDelayContext.getDelay() / 1000);
+		setTimeIntent.putExtra("delaySeconds", mDelayTime / 1000);
 		setTimeIntent.putExtra("shakeEnabled", mShakeEnabled);
 		setTimeIntent.putExtra("flipEnabled", mFlipEnabled);
 		setTimeIntent.putExtra("soundEnabled", mSoundEnabled);
@@ -427,11 +436,10 @@ public class Blitzn extends Activity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		MenuItem pauseMenu = menu.findItem(R.id.pauseMenu);
-		pauseMenu.setEnabled(isGameInProgress() && !isGamePaused());
+		pauseMenu.setEnabled(mChessClock.isStarted() && !mChessClock.isPaused());
 
 		MenuItem resetMenu = menu.findItem(R.id.resetMenu);
-		resetMenu.setEnabled((mClockState != ClockState.READY)
-				&& !isGamePaused());
+		resetMenu.setEnabled(!mChessClock.isReady() && !mChessClock.isPaused());
 
 		return super.onPrepareOptionsMenu(menu);
 	}
@@ -458,22 +466,4 @@ public class Blitzn extends Activity {
 							}
 						}).setNegativeButton(R.string.no, null).show();
 	}
-
-
-	public boolean isDelayEnabled() {
-		return mDelayContext.isDelayEnabled();
-	}
-
-
-	public long getTimeLeftForPlayer(Player player) {
-		return (player == Player.ONE) ? mPlayer1TimeLeft : mPlayer2TimeLeft;
-	}
-
-	public void adjustTimeLeftForPlayer(Player player, long adjustment) {
-		if (player == Player.ONE)
-			mPlayer1TimeLeft += adjustment;
-		else
-			mPlayer2TimeLeft += adjustment;
-	}
-
 }
