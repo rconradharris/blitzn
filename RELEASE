@@ -10,6 +10,7 @@ Sign w/ release key
     Use Eclipse ADT Wizard to Export signed apk
 
 Zipalign apk
+    zipalign -v 4 blitzn1_1_unaligned.apk blitzn1_1.apk
 
 Create screen shots
     Use sdk/tools/ddms
