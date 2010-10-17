@@ -1,8 +1,7 @@
-package com.barleysoft.blitzn;
+package com.barleysoft.blitzn.chessclock;
 
-import android.util.Log;
+import com.barleysoft.blitzn.chessclock.ChessClock.DelayMode;
 
-import com.barleysoft.blitzn.ChessClock.DelayMode;
 
 public class BlitznChessPlayer implements ChessPlayer {
 	public static final long TIME_PRESSURE_THRESHOLD = 10 * 1000; // ms

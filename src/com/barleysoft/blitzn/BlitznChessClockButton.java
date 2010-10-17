@@ -1,5 +1,8 @@
 package com.barleysoft.blitzn;
 
+import com.barleysoft.blitzn.chessclock.ChessClock;
+import com.barleysoft.blitzn.chessclock.ChessPlayer;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,8 +12,7 @@ import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.widget.Button;
 
-// TODO rename BlitznChessClockButton and rename IChessClockButton -> ChessClockButton
-public class ClockButton extends Button implements IChessClockButton {
+public class BlitznChessClockButton extends Button implements ChessClockButton {
 	public static final long TIME_PRESSURE_SIREN_INTERVAL = 1000; // ms
 	
 	private ChessClock mChessClock;
@@ -24,7 +26,7 @@ public class ClockButton extends Button implements IChessClockButton {
 	private long mTicks = 0L;
 	private long mClockResolution;
 
-	public ClockButton(Context context, AttributeSet attrs) {
+	public BlitznChessClockButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		String fontLocation = context.getString(R.string.clock_font);
 		Typeface face = Typeface.createFromAsset(context.getAssets(),

@@ -1,4 +1,5 @@
-package com.barleysoft.blitzn;
+package com.barleysoft.blitzn.chessclock;
+
 
 public class BlitznChessClock implements ChessClock {
 

@@ -1,6 +1,7 @@
-package com.barleysoft.blitzn;
+package com.barleysoft.blitzn.chessclock;
 
-import com.barleysoft.blitzn.ChessClock.DelayMode;
+import com.barleysoft.blitzn.chessclock.ChessClock.DelayMode;
+
 
 public interface ChessPlayer {
 	

@@ -1,7 +1,12 @@
 package com.barleysoft.blitzn;
 
-import com.barleysoft.blitzn.ChessClock.DelayMode;
-import com.barleysoft.blitzn.ChessClock.Player;
+import com.barleysoft.blitzn.chessclock.BlitznChessClock;
+import com.barleysoft.blitzn.chessclock.BlitznChessPlayer;
+import com.barleysoft.blitzn.chessclock.ChessClock;
+import com.barleysoft.blitzn.chessclock.ChessPlayer;
+import com.barleysoft.blitzn.chessclock.OnChessClockStopListener;
+import com.barleysoft.blitzn.chessclock.ChessClock.DelayMode;
+import com.barleysoft.blitzn.chessclock.ChessClock.Player;
 import com.barleysoft.motion.PitchFlipListener;
 import com.barleysoft.motion.ShakeListener;
 
@@ -33,8 +38,8 @@ public class Blitzn extends Activity {
 
 	// Member variables
 	private ChessClock mChessClock;
-	private ClockButton mPlayer1ClockButton;
-	private ClockButton mPlayer2ClockButton;
+	private BlitznChessClockButton mPlayer1ClockButton;
+	private BlitznChessClockButton mPlayer2ClockButton;
 
 	private ShakeListener mShakeListener;
 	private PitchFlipListener mPitchFlipListener;
@@ -65,8 +70,8 @@ public class Blitzn extends Activity {
 
 	}
 	
-	private ClockButton initializeClockButton(final Player player, int resId, boolean isFlipped, ChessClock chessClock, ChessPlayer chessPlayer) {
-		ClockButton button = (ClockButton) findViewById(resId);
+	private BlitznChessClockButton initializeClockButton(final Player player, int resId, boolean isFlipped, ChessClock chessClock, ChessPlayer chessPlayer) {
+		BlitznChessClockButton button = (BlitznChessClockButton) findViewById(resId);
 		button.setIsFlipped(isFlipped);
 		button.setChessClock(chessClock);
 		button.setChessPlayer(chessPlayer);
