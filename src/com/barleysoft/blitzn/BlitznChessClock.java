@@ -35,8 +35,10 @@ public class BlitznChessClock implements ChessClock {
 		switch (mClockState) {
 		case PLAYER1_RUNNING:
 			mChessPlayer1.tick();
+			break;
 		case PLAYER2_RUNNING:
 			mChessPlayer2.tick();
+			break;
 		}
 	}
 
@@ -71,8 +73,10 @@ public class BlitznChessClock implements ChessClock {
 		switch (mClockState) {
 		case PLAYER1_RUNNING:
 			setState(ClockState.PLAYER1_PAUSED);
+			break;
 		case PLAYER2_RUNNING:
 			setState(ClockState.PLAYER2_PAUSED);
+			break;
 		}
 	}
 
@@ -80,8 +84,10 @@ public class BlitznChessClock implements ChessClock {
 		switch (mClockState) {
 		case PLAYER1_PAUSED:
 			setState(ClockState.PLAYER1_RUNNING);
+			break;
 		case PLAYER2_PAUSED:
 			setState(ClockState.PLAYER2_RUNNING);
+			break;
 		}
 	}
 
@@ -108,28 +114,34 @@ public class BlitznChessClock implements ChessClock {
 		return mClockState == ClockState.READY;
 	}
 
-	public void activatePlayer(Player player) {
+	public void deactivatePlayer(Player player) {
 		if (player == Player.ONE) {
 			switch (mClockState) {
 			case READY:
 				// The first move is untimed, so when player 1 clicks, we
 				// actually begin counting down for player 2
 				setState(ClockState.PLAYER2_RUNNING);
+				mChessPlayer1.deactivate();
 				mChessPlayer2.activate();
-			case PLAYER2_RUNNING:
-				setState(ClockState.PLAYER1_RUNNING);
-				mChessPlayer2.deactivate();
-				mChessPlayer1.activate();
+				break;
+			case PLAYER1_RUNNING:
+				setState(ClockState.PLAYER2_RUNNING);
+				mChessPlayer1.deactivate();
+				mChessPlayer2.activate();
+				break;
 			}
 		} else {
 			switch (mClockState) {
 			case READY:
 				setState(ClockState.PLAYER1_RUNNING);
 				mChessPlayer1.activate();
-			case PLAYER1_RUNNING:
-				setState(ClockState.PLAYER2_RUNNING);
-				mChessPlayer1.deactivate();
-				mChessPlayer2.activate();
+				mChessPlayer2.deactivate();
+				break;
+			case PLAYER2_RUNNING:
+				setState(ClockState.PLAYER1_RUNNING);
+				mChessPlayer1.activate();
+				mChessPlayer2.deactivate();
+				break;
 			}
 		}
 	}

@@ -75,7 +75,7 @@ public class Blitzn extends Activity {
 		button.setIsTimePressureWarningEnabled(mTimePressureWarningEnabled);
 		OnClickListener clickListener = new OnClickListener() {
 			public void onClick(View v) {
-				activatePlayer(player);
+				deactivatePlayer(player);
 			}
 		};
 		button.setOnClickListener(clickListener);
@@ -284,18 +284,18 @@ public class Blitzn extends Activity {
 		mTimerHandler.removeCallbacks(updateTimeTask);
 	}
 
-	void activatePlayer(Player player) {
+	void deactivatePlayer(Player player) {
 		if (mChessClock.isReady()) {
 			startClockTimer();
 			setKeepScreenOn(true);
 		}
-		mChessClock.activatePlayer(player);
+		mChessClock.deactivatePlayer(player);
 		if (player == Player.ONE) {
-			mPlayer1ClockButton.activate();
-			mPlayer2ClockButton.deactivate();
-		} else {
-			mPlayer1ClockButton.deactivate();
 			mPlayer2ClockButton.activate();
+			mPlayer1ClockButton.deactivate();
+		} else {
+			mPlayer2ClockButton.deactivate();
+			mPlayer1ClockButton.activate();
 		}
 	}
 

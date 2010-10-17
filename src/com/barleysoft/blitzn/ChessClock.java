@@ -45,7 +45,7 @@ public interface ChessClock {
 	
 	long getTicks();
 	
-	void activatePlayer(Player player);
+	void deactivatePlayer(Player player);
 	
 	void pause();
 	
