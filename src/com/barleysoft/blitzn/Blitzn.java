@@ -367,6 +367,18 @@ public class Blitzn extends Activity {
 		mChessClock.setDelayMode(delayMode);
 	}
 
+	private void setSoundEnabled(boolean soundEnabled) {
+		mSoundEnabled = soundEnabled;
+		mPlayer1ClockButton.setIsSoundEnabled(soundEnabled);
+		mPlayer2ClockButton.setIsSoundEnabled(soundEnabled);
+	}
+
+	private void setTimePressureWarningEnabled(boolean timePressure) {
+		mTimePressureWarningEnabled = timePressure;
+		mPlayer1ClockButton.setIsTimePressureWarningEnabled(timePressure);
+		mPlayer2ClockButton.setIsTimePressureWarningEnabled(timePressure);
+	}
+
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
 		// Back button on SetTime sub-Activity is overridden to bundle the
@@ -385,9 +397,10 @@ public class Blitzn extends Activity {
 
 		mShakeEnabled = extras.getBoolean("shakeEnabled");
 		mFlipEnabled = extras.getBoolean("flipEnabled");
-		mSoundEnabled = extras.getBoolean("soundEnabled");
-		mTimePressureWarningEnabled = extras
-				.getBoolean("timePressureWarningEnabled");
+
+		setSoundEnabled(extras.getBoolean("soundEnabled"));
+		setTimePressureWarningEnabled(extras
+				.getBoolean("timePressureWarningEnabled"));
 
 		// Only reset the clock if we changed something related to time-keeping
 		if ((old_duration != mDuration) || (oldDelayTime != mDelayTime)
