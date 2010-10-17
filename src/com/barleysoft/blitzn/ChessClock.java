@@ -18,7 +18,18 @@ public interface ChessClock {
 	}
 	
 	public enum DelayMode {
-		NODELAY, FISCHER, BRONSTEIN
+		NODELAY, FISCHER, BRONSTEIN;
+		
+		static public DelayMode fromOrdinal(int ordinal) {
+			switch(ordinal) {
+			case 1:
+				return FISCHER;
+			case 2:
+				return BRONSTEIN;
+			default:
+				return NODELAY;
+			}
+		}
 	}
 	
 	void tick();

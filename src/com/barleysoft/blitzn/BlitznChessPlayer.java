@@ -19,7 +19,6 @@ public class BlitznChessPlayer implements ChessPlayer {
 			if (mDelayLeft < mClockResolution) {
 				mDelayLeft = 0;
 			}
-			return;
 		}
 		
 		mTimeLeft -= mClockResolution;		

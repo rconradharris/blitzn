@@ -193,33 +193,10 @@ public class Blitzn extends Activity {
 		mShowIntroDialog = false;
 	}
 
-	void setDelayMethodFromInt(int delayMethod) {
-		// TODO(sirp): these methods should go away and be replaced with something more elegant
-		switch (delayMethod) {
-		case 1:
-			mDelayMode = DelayMode.FISCHER;
-		case 2:
-			mDelayMode = DelayMode.BRONSTEIN;
-		default:
-			mDelayMode = DelayMode.NODELAY;
-		}
-	}
-
-	int getDelayMethodAsInt() {
-		switch (mDelayMode) {
-		case FISCHER:
-			return 1;
-		case BRONSTEIN:
-			return 2;
-		default:
-			return 0;
-		}
-	}
-
 	void restorePreferences() {
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		mDuration = settings.getLong("duration", 5 * 60 * 1000L);
-		setDelayMethodFromInt(settings.getInt("delayMethod", 0));
+		mDelayMode = DelayMode.fromOrdinal(settings.getInt("delayMethod", 0));
 		mDelayTime = settings.getLong("delay", 0L);
 		mShakeEnabled = settings.getBoolean("shakeEnabled", true);
 		mFlipEnabled = settings.getBoolean("flipEnabled", true);
@@ -234,7 +211,7 @@ public class Blitzn extends Activity {
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putLong("duration", mDuration);
 		editor.putLong("delay", mDelayTime);
-		editor.putInt("delayMethod", getDelayMethodAsInt());
+		editor.putInt("delayMethod", mDelayMode.ordinal());
 		editor.putBoolean("shakeEnabled", mShakeEnabled);
 		editor.putBoolean("flipEnabled", mFlipEnabled);
 		editor.putBoolean("soundEnabled", mSoundEnabled);
@@ -379,6 +356,11 @@ public class Blitzn extends Activity {
 		mChessClock.setDelayTime(delayTime);
 	}
 	
+	private void setDelayMode(DelayMode delayMode) {
+		mDelayMode = delayMode;
+		mChessClock.setDelayMode(delayMode);
+	}
+	
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
 		// Back button on SetTime sub-Activity is overridden to bundle the
@@ -393,10 +375,8 @@ public class Blitzn extends Activity {
 		setDelayTime((extras.getLong("delaySeconds") * 1000));
 		
 		DelayMode oldDelayMode = mDelayMode;
-		// TODO(sirp) clean this up
-		setDelayMethodFromInt(extras.getInt("delayMethod"));
-		mChessClock.setDelayMode(mDelayMode);
-
+		setDelayMode(DelayMode.fromOrdinal(extras.getInt("delayMethod")));
+		
 		mShakeEnabled = extras.getBoolean("shakeEnabled");
 		mFlipEnabled = extras.getBoolean("flipEnabled");
 		mSoundEnabled = extras.getBoolean("soundEnabled");
@@ -413,7 +393,7 @@ public class Blitzn extends Activity {
 
 	private void setTime() {
 		Intent setTimeIntent = new Intent(this, SetTime.class);
-		setTimeIntent.putExtra("delayMethod", getDelayMethodAsInt());
+		setTimeIntent.putExtra("delayMethod", mDelayMode.ordinal());
 		setTimeIntent.putExtra("durationMinutes", mDuration / 60 / 1000);
 		setTimeIntent.putExtra("delaySeconds", mDelayTime / 1000);
 		setTimeIntent.putExtra("shakeEnabled", mShakeEnabled);
