@@ -13,6 +13,7 @@ import android.widget.Button;
 public class ClockButton extends Button implements IChessClockButton {
 	public static final long TIME_PRESSURE_SIREN_INTERVAL = 1000; // ms
 	
+	private ChessClock mChessClock;
 	private ChessPlayer mChessPlayer;
 	private boolean mIsFlipped = false;
 	private boolean mIsSoundEnabled = false;
@@ -163,6 +164,14 @@ public class ClockButton extends Button implements IChessClockButton {
 
 	public long getClockResolution() {
 		return mClockResolution;
+	}
+
+	public void setChessClock(ChessClock chessClock) {
+		mChessClock = chessClock;
+	}
+
+	public ChessClock getChessClock() {
+		return mChessClock;
 	}
 
 }

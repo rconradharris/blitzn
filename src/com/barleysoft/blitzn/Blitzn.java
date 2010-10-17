@@ -67,9 +67,10 @@ public class Blitzn extends Activity {
 		}
 	}
 	
-	private ClockButton initializeClockButton(final Player player, int resId, boolean isFlipped, ChessPlayer chessPlayer) {
+	private ClockButton initializeClockButton(final Player player, int resId, boolean isFlipped, ChessClock chessClock, ChessPlayer chessPlayer) {
 		ClockButton button = (ClockButton) findViewById(resId);
 		button.setIsFlipped(isFlipped);
+		button.setChessClock(chessClock);
 		button.setChessPlayer(chessPlayer);
 		button.setIsSoundEnabled(mSoundEnabled);
 		button.setIsTimePressureWarningEnabled(mTimePressureWarningEnabled);
@@ -98,8 +99,15 @@ public class Blitzn extends Activity {
 
 		mChessClock.initialize();
 		
-		mPlayer1ClockButton = initializeClockButton(Player.ONE, R.id.player1Clock, true, chessPlayer1);
-		mPlayer2ClockButton = initializeClockButton(Player.TWO, R.id.player2Clock, false, chessPlayer2);
+		mPlayer1ClockButton = initializeClockButton(Player.ONE, R.id.player1Clock, true, mChessClock, chessPlayer1);
+		mPlayer2ClockButton = initializeClockButton(Player.TWO, R.id.player2Clock, false, mChessClock, chessPlayer2);
+	
+		mChessClock.setOnChessClockStopListener(new OnChessClockStopListener() {
+			public void onStop() {
+				stopClock();
+			}
+		});
+	
 	}
 	
 	@Override
@@ -336,8 +344,7 @@ public class Blitzn extends Activity {
 		findViewById(R.id.mainLayout).setKeepScreenOn(keepScreenOn);
 	}
 
-	// TODO this will need to be a callback
-	void onChessClockStop() {
+	void stopClock() {
 		setKeepScreenOn(false);
 		stopClockTimer();
 		mPlayer1ClockButton.stop();
@@ -347,8 +354,14 @@ public class Blitzn extends Activity {
 	private Runnable updateTimeTask = new Runnable() {
 		public void run() {
 			mChessClock.tick();
-			mPlayer1ClockButton.tick();
-			mPlayer2ClockButton.tick();
+			
+			if (mChessClock.isRunningForPlayer(Player.ONE)) {
+				mPlayer1ClockButton.tick();
+			}
+			
+			if (mChessClock.isRunningForPlayer(Player.TWO)) {
+				mPlayer2ClockButton.tick();
+			}
 
 			// Reschedule the next tick
 			long nextUpdate = SystemClock.uptimeMillis() + CLOCK_RESOLUTION;

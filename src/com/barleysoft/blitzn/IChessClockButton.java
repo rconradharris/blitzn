@@ -1,6 +1,10 @@
 package com.barleysoft.blitzn;
 
 public interface IChessClockButton {
+	public void setChessClock(ChessClock chessClock);
+	
+	public ChessClock getChessClock();
+	
 	public void setChessPlayer(ChessPlayer chessPlayer);
 	
 	public ChessPlayer getChessPlayer();

@@ -57,8 +57,14 @@ public interface ChessClock {
 	
 	boolean isReady();
 	
+	boolean isRunning();
+	
+	boolean isRunningForPlayer(Player player);
+	
 	void setClockResolution(long clockResolution);
 	
 	long getClockResolution();
+	
+	void setOnChessClockStopListener(OnChessClockStopListener listener);
 
 }

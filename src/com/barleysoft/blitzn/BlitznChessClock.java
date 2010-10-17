@@ -14,6 +14,7 @@ public class BlitznChessClock implements ChessClock {
 	private long mTicks = 0L;
 	
 	private long mDelayTime;
+	OnChessClockStopListener mStopListener;
 
 	private void setState(ClockState state) {
 		mClockState = state;
@@ -27,6 +28,7 @@ public class BlitznChessClock implements ChessClock {
 
 		if (mChessPlayer1.hasTimeExpired() || mChessPlayer2.hasTimeExpired()) {
 			setState(ClockState.STOPPED);
+			mStopListener.onStop();
 			return;
 		}
 
@@ -191,6 +193,28 @@ public class BlitznChessClock implements ChessClock {
 		mClockResolution = clockResolution;
 		mChessPlayer1.setClockResolution(clockResolution);
 		mChessPlayer2.setClockResolution(clockResolution);		
+	}
+
+	public void setOnChessClockStopListener(OnChessClockStopListener listener) {
+		mStopListener = listener;		
+	}
+
+	public boolean isRunning() {
+		switch (mClockState) {
+		case PLAYER1_RUNNING:
+		case PLAYER2_RUNNING:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public boolean isRunningForPlayer(Player player) {
+		if (player == Player.ONE) {
+			return mClockState == ClockState.PLAYER1_RUNNING;
+		} else {
+			return mClockState == ClockState.PLAYER2_RUNNING;
+		}
 	}
 
 }
