@@ -51,18 +51,8 @@ public class BlitznChessClock implements ChessClock {
 	}
 
 	public void initialize() {
-		mChessPlayer1.initialize();
-		mChessPlayer1.setClockResolution(mClockResolution);
-		mChessPlayer1.setDuration(mDuration);
-		mChessPlayer1.setDelayMode(mDelayMode);
-		mChessPlayer1.setDelayTime(mDelayTime);
-		
+		mChessPlayer1.initialize();		
 		mChessPlayer2.initialize();
-		mChessPlayer2.setClockResolution(mClockResolution);
-		mChessPlayer2.setDuration(mDuration);
-		mChessPlayer2.setDelayMode(mDelayMode);
-		mChessPlayer2.setDelayTime(mDelayTime);
-		
 		reset();
 	}
 

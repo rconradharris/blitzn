@@ -85,16 +85,17 @@ public class Blitzn extends Activity {
 
 	void initializeChessClock() {
 		mChessClock = new BlitznChessClock();
+		
 		ChessPlayer chessPlayer1 = new BlitznChessPlayer();
 		ChessPlayer chessPlayer2 = new BlitznChessPlayer();
+		mChessClock.setChessPlayer(Player.ONE, chessPlayer1);
+		mChessClock.setChessPlayer(Player.TWO, chessPlayer2);
 		
 		mChessClock.setClockResolution(CLOCK_RESOLUTION);
 		mChessClock.setDuration(mDuration);
 		mChessClock.setDelayMode(mDelayMode);
 		mChessClock.setDelayTime(mDelayTime);
-		mChessClock.setChessPlayer(Player.ONE, chessPlayer1);
-		mChessClock.setChessPlayer(Player.TWO, chessPlayer2);
-		
+
 		mChessClock.initialize();
 		
 		mPlayer1ClockButton = initializeClockButton(Player.ONE, R.id.player1Clock, true, chessPlayer1);
@@ -104,11 +105,11 @@ public class Blitzn extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		initializeMainWindow();
 		restorePreferences();
 		initializeChessClock();
 		installShakeListener();
 		installPitchFlipListener();
-		initializeMainWindow();
 	}
 
 	@Override
@@ -194,7 +195,6 @@ public class Blitzn extends Activity {
 		default:
 			mDelayMode = DelayMode.NODELAY;
 		}
-		mChessClock.setDelayMode(mDelayMode);
 	}
 
 	int getDelayMethodAsInt() {
@@ -379,8 +379,10 @@ public class Blitzn extends Activity {
 		long oldDelayTime = mDelayTime;
 		setDelayTime((extras.getLong("delaySeconds") * 1000));
 		
-		DelayMode oldDelayMode = mDelayMode;		
+		DelayMode oldDelayMode = mDelayMode;
+		// TODO(sirp) clean this up
 		setDelayMethodFromInt(extras.getInt("delayMethod"));
+		mChessClock.setDelayMode(mDelayMode);
 
 		mShakeEnabled = extras.getBoolean("shakeEnabled");
 		mFlipEnabled = extras.getBoolean("flipEnabled");
