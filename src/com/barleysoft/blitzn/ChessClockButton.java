@@ -5,40 +5,40 @@ import com.barleysoft.blitzn.chessclock.ChessPlayer;
 
 public interface ChessClockButton {
 	
-	public void setChessClock(ChessClock chessClock);
+	void setChessClock(ChessClock chessClock);
 	
-	public ChessClock getChessClock();
+	ChessClock getChessClock();
 	
-	public void setChessPlayer(ChessPlayer chessPlayer);
+	void setChessPlayer(ChessPlayer chessPlayer);
 	
-	public ChessPlayer getChessPlayer();
+	ChessPlayer getChessPlayer();
 	
-	public void setIsSoundEnabled(boolean isSoundEnabled);
+	void setIsSoundEnabled(boolean isSoundEnabled);
 	
-	public boolean getIsSoundEnabled();	
+	boolean getIsSoundEnabled();	
 	
-	public void setIsTimePressureWarningEnabled(boolean isTimePressureWarningEnabled);
+	void setIsTimePressureWarningEnabled(boolean isTimePressureWarningEnabled);
 	
-	public boolean getIsTimePressureWarningEnabled();
+	boolean getIsTimePressureWarningEnabled();
 	
-	public void setIsFlipped(boolean isFlipped);
+	void setIsFlipped(boolean isFlipped);
 	
-	public boolean getIsFlipped();
+	boolean getIsFlipped();
 	
-	public void initialize();
+	void initialize();
 	
-	public void activate();
+	void activate();
 	
-	public void deactivate();
+	void deactivate();
 	
-	public void reset();
+	void reset();
 	
-	public void stop();
+	void stop();
 	
-	public void tick();
+	void tick();
 	
-	public void setClockResolution(long clockResolution);
+	void setClockResolution(long clockResolution);
 	
-	public long getClockResolution();
+	long getClockResolution();
 			
 }
