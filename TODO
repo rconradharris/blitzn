@@ -11,6 +11,10 @@ Blitzn Next Release v1.1
         spinner logic from a particular language.
 
     Bugs:
+        In initial READY mode screen stays on forever.
+
+        Timepressure siren is ticking two quickly.
+
         Catch UnsupportedOperation exceptions from ShakeListener and
         PitchFlipListener
         
@@ -50,8 +54,6 @@ Improve UI Phase 1:
     Make LED timer look more realistic
     Add 3D to the buttons.
     Add glowing red light to indicate time is running.
-
-Decouple ChessClock from BlitznActivity
 
 Use Amazon Turk to internationalize strings.xml
 
