@@ -47,7 +47,6 @@ public class Blitzn extends Activity {
 	private Handler mTimerHandler = new Handler();
 	private AlertDialog mPausedDialog;
 
-
 	// Configurations
 	private long mDuration = 5 * 1 * 1000L;
 	private boolean mShakeEnabled = true;
@@ -61,16 +60,18 @@ public class Blitzn extends Activity {
 	private void initializeMainWindow() {
 		// Go full screen
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
+
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		
+
 		setContentView(R.layout.main);
 		mPausedDialog = createPausedDialog();
 
 	}
-	
-	private BlitznChessClockButton initializeClockButton(final Player player, int resId, boolean isFlipped, ChessClock chessClock, ChessPlayer chessPlayer) {
+
+	private BlitznChessClockButton initializeClockButton(final Player player,
+			int resId, boolean isFlipped, ChessClock chessClock,
+			ChessPlayer chessPlayer) {
 		BlitznChessClockButton button = (BlitznChessClockButton) findViewById(resId);
 		button.setIsFlipped(isFlipped);
 		button.setChessClock(chessClock);
@@ -89,30 +90,32 @@ public class Blitzn extends Activity {
 
 	void initializeChessClock() {
 		mChessClock = new BlitznChessClock();
-		
+
 		ChessPlayer chessPlayer1 = new BlitznChessPlayer();
 		ChessPlayer chessPlayer2 = new BlitznChessPlayer();
 		mChessClock.setChessPlayer(Player.ONE, chessPlayer1);
 		mChessClock.setChessPlayer(Player.TWO, chessPlayer2);
-		
+
 		mChessClock.setClockResolution(CLOCK_RESOLUTION);
 		mChessClock.setDuration(mDuration);
 		mChessClock.setDelayMode(mDelayMode);
 		mChessClock.setDelayTime(mDelayTime);
 
 		mChessClock.initialize();
-		
-		mPlayer1ClockButton = initializeClockButton(Player.ONE, R.id.player1Clock, true, mChessClock, chessPlayer1);
-		mPlayer2ClockButton = initializeClockButton(Player.TWO, R.id.player2Clock, false, mChessClock, chessPlayer2);
-	
+
+		mPlayer1ClockButton = initializeClockButton(Player.ONE,
+				R.id.player1Clock, true, mChessClock, chessPlayer1);
+		mPlayer2ClockButton = initializeClockButton(Player.TWO,
+				R.id.player2Clock, false, mChessClock, chessPlayer2);
+
 		mChessClock.setOnChessClockStopListener(new OnChessClockStopListener() {
 			public void onStop() {
 				stopClock();
 			}
 		});
-	
+
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -153,7 +156,7 @@ public class Blitzn extends Activity {
 		if (mShakeListener != null) {
 			mShakeListener.pause();
 		}
-		
+
 		if (mPitchFlipListener != null) {
 			mPitchFlipListener.pause();
 		}
@@ -233,7 +236,8 @@ public class Blitzn extends Activity {
 		mShakeListener = new ShakeListener(this);
 		mShakeListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
 			public void onShake() {
-				if (mShakeEnabled && !mChessClock.isPaused() && !mChessClock.isReady()) {
+				if (mShakeEnabled && !mChessClock.isPaused()
+						&& !mChessClock.isReady()) {
 					vibe.vibrate(100);
 					resetClock();
 				}
@@ -267,9 +271,11 @@ public class Blitzn extends Activity {
 
 	void startClockTimer() {
 		mTimerHandler.removeCallbacks(updateTimeTask);
-		// TODO(sirp): perhaps CLOCK_RESOLUTION should be defined in the app and passed into
+		// TODO(sirp): perhaps CLOCK_RESOLUTION should be defined in the app and
+		// passed into
 		// the ChessClock object
-		mTimerHandler.postDelayed(updateTimeTask, mChessClock.getClockResolution());
+		mTimerHandler.postDelayed(updateTimeTask,
+				mChessClock.getClockResolution());
 	}
 
 	void stopClockTimer() {
@@ -338,11 +344,11 @@ public class Blitzn extends Activity {
 	private Runnable updateTimeTask = new Runnable() {
 		public void run() {
 			mChessClock.tick();
-			
+
 			if (mChessClock.isRunningForPlayer(Player.ONE)) {
 				mPlayer1ClockButton.tick();
 			}
-			
+
 			if (mChessClock.isRunningForPlayer(Player.TWO)) {
 				mPlayer2ClockButton.tick();
 			}
@@ -352,22 +358,22 @@ public class Blitzn extends Activity {
 			mTimerHandler.postAtTime(this, nextUpdate);
 		}
 	};
-	
+
 	private void setDuration(long duration) {
 		mDuration = duration;
 		mChessClock.setDuration(duration);
 	}
-	
+
 	private void setDelayTime(long delayTime) {
 		mDelayTime = delayTime;
 		mChessClock.setDelayTime(delayTime);
 	}
-	
+
 	private void setDelayMode(DelayMode delayMode) {
 		mDelayMode = delayMode;
 		mChessClock.setDelayMode(delayMode);
 	}
-	
+
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
 		// Back button on SetTime sub-Activity is overridden to bundle the
@@ -380,10 +386,10 @@ public class Blitzn extends Activity {
 		// delay so we must store the old delay before calling it
 		long oldDelayTime = mDelayTime;
 		setDelayTime((extras.getLong("delaySeconds") * 1000));
-		
+
 		DelayMode oldDelayMode = mDelayMode;
 		setDelayMode(DelayMode.fromOrdinal(extras.getInt("delayMethod")));
-		
+
 		mShakeEnabled = extras.getBoolean("shakeEnabled");
 		mFlipEnabled = extras.getBoolean("flipEnabled");
 		mSoundEnabled = extras.getBoolean("soundEnabled");
@@ -391,8 +397,7 @@ public class Blitzn extends Activity {
 				.getBoolean("timePressureWarningEnabled");
 
 		// Only reset the clock if we changed something related to time-keeping
-		if ((old_duration != mDuration)
-				|| (oldDelayTime != mDelayTime)
+		if ((old_duration != mDuration) || (oldDelayTime != mDelayTime)
 				|| (oldDelayMode != mDelayMode)) {
 			resetClock();
 		}
@@ -438,7 +443,8 @@ public class Blitzn extends Activity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		MenuItem pauseMenu = menu.findItem(R.id.pauseMenu);
-		pauseMenu.setEnabled(mChessClock.isStarted() && !mChessClock.isPaused());
+		pauseMenu
+				.setEnabled(mChessClock.isStarted() && !mChessClock.isPaused());
 
 		MenuItem resetMenu = menu.findItem(R.id.resetMenu);
 		resetMenu.setEnabled(!mChessClock.isReady() && !mChessClock.isPaused());

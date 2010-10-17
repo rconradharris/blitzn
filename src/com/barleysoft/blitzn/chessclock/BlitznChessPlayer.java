@@ -2,10 +2,9 @@ package com.barleysoft.blitzn.chessclock;
 
 import com.barleysoft.blitzn.chessclock.ChessClock.DelayMode;
 
-
 public class BlitznChessPlayer implements ChessPlayer {
 	public static final long TIME_PRESSURE_THRESHOLD = 10 * 1000; // ms
-	
+
 	private long mClockResolution = 0L;
 	private long mDuration = 0L;
 	private DelayMode mDelayMode = DelayMode.NODELAY;
@@ -13,20 +12,21 @@ public class BlitznChessPlayer implements ChessPlayer {
 
 	private long mTimeLeft = 0L;
 	private long mDelayLeft = 0L;
-	
+
 	public void tick() {
-		if ((mDelayLeft >= mClockResolution) && (mDelayMode != DelayMode.NODELAY)) {
+		if ((mDelayLeft >= mClockResolution)
+				&& (mDelayMode != DelayMode.NODELAY)) {
 			mDelayLeft -= mClockResolution;
 			if (mDelayLeft < mClockResolution) {
 				mDelayLeft = 0;
 			}
 		}
-		
-		mTimeLeft -= mClockResolution;		
+
+		mTimeLeft -= mClockResolution;
 	}
 
 	public void setTimeLeft(long timeLeft) {
-		mTimeLeft = timeLeft;		
+		mTimeLeft = timeLeft;
 	}
 
 	public long getTimeLeft() {
@@ -38,7 +38,7 @@ public class BlitznChessPlayer implements ChessPlayer {
 	}
 
 	public void setClockResolution(long clockResolution) {
-		mClockResolution = clockResolution;		
+		mClockResolution = clockResolution;
 	}
 
 	public long getClockResolution() {
@@ -52,7 +52,7 @@ public class BlitznChessPlayer implements ChessPlayer {
 	public void activate() {
 		if (mDelayMode == DelayMode.FISCHER) {
 			mTimeLeft += mDelayTime;
-		}		
+		}
 	}
 
 	public void deactivate() {
@@ -60,11 +60,11 @@ public class BlitznChessPlayer implements ChessPlayer {
 			// Add back to player's clock any remaining delay
 			mTimeLeft += (mDelayTime - mDelayLeft);
 			mDelayLeft = mDelayTime;
-		}		
+		}
 	}
 
 	public void setDelayMode(DelayMode delayMode) {
-		mDelayMode = delayMode;		
+		mDelayMode = delayMode;
 	}
 
 	public DelayMode getDelayMode() {
@@ -72,7 +72,7 @@ public class BlitznChessPlayer implements ChessPlayer {
 	}
 
 	public void setDelayTime(long delayTime) {
-		mDelayTime = delayTime;		
+		mDelayTime = delayTime;
 	}
 
 	public long getDelayTime() {
@@ -85,12 +85,12 @@ public class BlitznChessPlayer implements ChessPlayer {
 
 	public void reset() {
 		mTimeLeft = mDuration;
-		mDelayLeft = mDelayTime;		
+		mDelayLeft = mDelayTime;
 	}
 
 	public void setDuration(long duration) {
 		mDuration = duration;
-		
+
 	}
 
 	public long getDuration() {
@@ -99,7 +99,7 @@ public class BlitznChessPlayer implements ChessPlayer {
 
 	public void initialize() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

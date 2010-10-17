@@ -14,7 +14,7 @@ import android.widget.Button;
 
 public class BlitznChessClockButton extends Button implements ChessClockButton {
 	public static final long TIME_PRESSURE_SIREN_INTERVAL = 1000; // ms
-	
+
 	private ChessClock mChessClock;
 	private ChessPlayer mChessPlayer;
 	private boolean mIsFlipped = false;
@@ -110,20 +110,20 @@ public class BlitznChessClockButton extends Button implements ChessClockButton {
 			long seconds = timeLeft / 1000;
 			long remainder = (timeLeft % 1000) / 100;
 			String clockText = String.format("%02d.%d", seconds, remainder);
-			setText(clockText);			
+			setText(clockText);
 		} else {
 			// MM:SS
 			long seconds = mChessPlayer.getTimeLeft() / 1000;
 			long minutes = seconds / 60;
 			seconds = seconds % 60;
 			String clockText = String.format("%02d:%02d", minutes, seconds);
-			setText(clockText);	
-		}		
+			setText(clockText);
+		}
 	}
 
 	public void setIsTimePressureWarningEnabled(
 			boolean isTimePressureWarningEnabled) {
-		mIsTimePressureWarningEnabled = isTimePressureWarningEnabled;		
+		mIsTimePressureWarningEnabled = isTimePressureWarningEnabled;
 	}
 
 	public boolean getIsTimePressureWarningEnabled() {
@@ -159,7 +159,7 @@ public class BlitznChessClockButton extends Button implements ChessClockButton {
 		} else {
 			setBackgroundColor(Color.TRANSPARENT);
 			setClickable(false);
-		}		
+		}
 	}
 
 	public void setClockResolution(long clockResolution) {

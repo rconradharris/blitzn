@@ -1,25 +1,22 @@
 package com.barleysoft.blitzn.chessclock;
 
-
 public class BlitznChessClock implements ChessClock {
-
 
 	private ClockState mClockState = ClockState.NOSTATE;
 	private DelayMode mDelayMode = DelayMode.NODELAY;
-	
+
 	private ChessPlayer mChessPlayer1;
 	private ChessPlayer mChessPlayer2;
 
 	private long mClockResolution;
 	private long mDuration = 0L;
 	private long mTicks = 0L;
-	
+
 	private long mDelayTime;
 	OnChessClockStopListener mStopListener;
 
 	private void setState(ClockState state) {
 		mClockState = state;
-		// TODO callback onChessClockStateChange(ClockState state)
 	}
 
 	public void tick() {
@@ -56,7 +53,7 @@ public class BlitznChessClock implements ChessClock {
 	}
 
 	public void initialize() {
-		mChessPlayer1.initialize();		
+		mChessPlayer1.initialize();
 		mChessPlayer2.initialize();
 		reset();
 	}
@@ -154,7 +151,7 @@ public class BlitznChessClock implements ChessClock {
 			mChessPlayer1 = chessPlayer;
 		} else {
 			mChessPlayer2 = chessPlayer;
-		}		
+		}
 	}
 
 	public ChessPlayer getChessPlayer(Player player) {
@@ -193,11 +190,11 @@ public class BlitznChessClock implements ChessClock {
 	public void setClockResolution(long clockResolution) {
 		mClockResolution = clockResolution;
 		mChessPlayer1.setClockResolution(clockResolution);
-		mChessPlayer2.setClockResolution(clockResolution);		
+		mChessPlayer2.setClockResolution(clockResolution);
 	}
 
 	public void setOnChessClockStopListener(OnChessClockStopListener listener) {
-		mStopListener = listener;		
+		mStopListener = listener;
 	}
 
 	public boolean isRunning() {
