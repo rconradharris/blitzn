@@ -75,12 +75,14 @@ public class ClockButton extends Button implements IChessClockButton {
 	public void activate() {
 		setClickable(true);
 		setBackgroundColor(Color.BLACK);
+		updateTimeLeft();
 	}
 
 	public void deactivate() {
 		play(mClicker);
 		setBackgroundColor(Color.TRANSPARENT);
 		setClickable(false);
+		updateTimeLeft();
 	}
 
 	public void setIsSoundEnabled(boolean isSoundEnabled) {

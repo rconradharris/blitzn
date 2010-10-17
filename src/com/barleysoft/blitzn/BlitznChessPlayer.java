@@ -1,5 +1,7 @@
 package com.barleysoft.blitzn;
 
+import android.util.Log;
+
 import com.barleysoft.blitzn.ChessClock.DelayMode;
 
 public class BlitznChessPlayer implements ChessPlayer {

@@ -59,12 +59,10 @@ public class Blitzn extends Activity {
 		
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+		
 		setContentView(R.layout.main);
 		mPausedDialog = createPausedDialog();
-		if (mShowIntroDialog) {
-			showIntroDialogBox();
-		}
+
 	}
 	
 	private ClockButton initializeClockButton(final Player player, int resId, boolean isFlipped, ChessClock chessClock, ChessPlayer chessPlayer) {
@@ -118,6 +116,9 @@ public class Blitzn extends Activity {
 		initializeChessClock();
 		installShakeListener();
 		installPitchFlipListener();
+		if (mShowIntroDialog) {
+			showIntroDialogBox();
+		}
 	}
 
 	@Override
@@ -215,8 +216,9 @@ public class Blitzn extends Activity {
 		editor.putBoolean("shakeEnabled", mShakeEnabled);
 		editor.putBoolean("flipEnabled", mFlipEnabled);
 		editor.putBoolean("soundEnabled", mSoundEnabled);
-		editor.putBoolean("mTimePressureWarningEnabled",
+		editor.putBoolean("timePressureWarningEnabled",
 				mTimePressureWarningEnabled);
+		editor.putBoolean("showIntroDialog", mShowIntroDialog);
 		editor.commit();
 	}
 
