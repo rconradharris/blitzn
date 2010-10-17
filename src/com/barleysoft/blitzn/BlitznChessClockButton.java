@@ -13,7 +13,7 @@ import android.util.AttributeSet;
 import android.widget.Button;
 
 public class BlitznChessClockButton extends Button implements ChessClockButton {
-	public static final long TIME_PRESSURE_SIREN_INTERVAL = 1000; // ms
+	public static final long TIME_PRESSURE_SIREN_INTERVAL = 500; // ms
 
 	private ChessClock mChessClock;
 	private ChessPlayer mChessPlayer;
@@ -141,13 +141,22 @@ public class BlitznChessClockButton extends Button implements ChessClockButton {
 		mTicks = 0L;
 	}
 
+	private void playTimePressureSiren() {
+		if (!mIsTimePressureWarningEnabled
+				|| !mChessPlayer.isUnderTimePressure()) {
+			return;
+		}
+
+		long ticks = mChessClock.getTicks();
+		long remainder = ((ticks * mClockResolution) % TIME_PRESSURE_SIREN_INTERVAL);
+		if (remainder == 0) {
+			play(mTimePressureSiren);
+		}
+	}
+
 	public void tick() {
 		updateTimeLeft();
-		if (mChessPlayer.isUnderTimePressure() && mIsTimePressureWarningEnabled) {
-			if (((mTicks * mClockResolution) % TIME_PRESSURE_SIREN_INTERVAL) == 0) {
-				play(mTimePressureSiren);
-			}
-		}
+		playTimePressureSiren();
 		mTicks++;
 	}
 

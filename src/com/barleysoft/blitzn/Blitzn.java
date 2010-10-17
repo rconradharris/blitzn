@@ -77,6 +77,7 @@ public class Blitzn extends Activity {
 		button.setChessClock(chessClock);
 		button.setChessPlayer(chessPlayer);
 		button.setIsSoundEnabled(mSoundEnabled);
+		button.setClockResolution(CLOCK_RESOLUTION);
 		button.setIsTimePressureWarningEnabled(mTimePressureWarningEnabled);
 		OnClickListener clickListener = new OnClickListener() {
 			public void onClick(View v) {
