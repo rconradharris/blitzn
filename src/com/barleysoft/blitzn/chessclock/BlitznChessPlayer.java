@@ -98,8 +98,7 @@ public class BlitznChessPlayer implements ChessPlayer {
 	}
 
 	public void initialize() {
-		// TODO Auto-generated method stub
-
+		// NOOP
 	}
 
 }

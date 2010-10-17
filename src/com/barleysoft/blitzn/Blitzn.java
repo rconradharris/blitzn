@@ -232,7 +232,6 @@ public class Blitzn extends Activity {
 
 	void installShakeListener() {
 		final Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		// TODO(sirp): add configuration setting for shake
 		mShakeListener = new ShakeListener(this);
 		mShakeListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
 			public void onShake() {
@@ -247,7 +246,6 @@ public class Blitzn extends Activity {
 
 	void installPitchFlipListener() {
 		final Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		// TODO(sirp): add configuration setting for shake
 		mPitchFlipListener = new PitchFlipListener(this);
 		mPitchFlipListener
 				.setOnPitchFlipListener(new PitchFlipListener.OnPitchFlipListener() {
@@ -271,11 +269,7 @@ public class Blitzn extends Activity {
 
 	void startClockTimer() {
 		mTimerHandler.removeCallbacks(updateTimeTask);
-		// TODO(sirp): perhaps CLOCK_RESOLUTION should be defined in the app and
-		// passed into
-		// the ChessClock object
-		mTimerHandler.postDelayed(updateTimeTask,
-				mChessClock.getClockResolution());
+		mTimerHandler.postDelayed(updateTimeTask, CLOCK_RESOLUTION);
 	}
 
 	void stopClockTimer() {
@@ -287,7 +281,9 @@ public class Blitzn extends Activity {
 			startClockTimer();
 			setKeepScreenOn(true);
 		}
+
 		mChessClock.deactivatePlayer(player);
+
 		if (player == Player.ONE) {
 			mPlayer2ClockButton.activate();
 			mPlayer1ClockButton.deactivate();
@@ -314,7 +310,6 @@ public class Blitzn extends Activity {
 		//
 		// For a) we want to display a paused dialog; however, for b)
 		// we do not.
-		// TODO should be mShowDialog
 		stopClockTimer();
 		mChessClock.pause();
 		if (showDialog) {
@@ -347,9 +342,7 @@ public class Blitzn extends Activity {
 
 			if (mChessClock.isRunningForPlayer(Player.ONE)) {
 				mPlayer1ClockButton.tick();
-			}
-
-			if (mChessClock.isRunningForPlayer(Player.TWO)) {
+			} else if (mChessClock.isRunningForPlayer(Player.TWO)) {
 				mPlayer2ClockButton.tick();
 			}
 
