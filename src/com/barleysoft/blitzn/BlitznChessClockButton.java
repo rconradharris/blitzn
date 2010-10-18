@@ -76,7 +76,7 @@ public class BlitznChessClockButton extends Button implements ChessClockButton {
 
 	public void activate() {
 		setClickable(true);
-		setBackgroundColor(Color.BLACK);
+		setBackgroundResource(R.drawable.greenbutton);
 		updateTimeLeft();
 	}
 
@@ -104,7 +104,8 @@ public class BlitznChessClockButton extends Button implements ChessClockButton {
 	}
 
 	private void updateTimeLeft() {
-		if (mChessPlayer.isUnderTimePressure() && mIsTimePressureWarningEnabled) {
+		// Always show deci-seconds when under time pressure
+		if (mChessPlayer.isUnderTimePressure()) {
 			// SS.D
 			long timeLeft = mChessPlayer.getTimeLeft();
 			long seconds = timeLeft / 1000;
@@ -163,7 +164,7 @@ public class BlitznChessClockButton extends Button implements ChessClockButton {
 	public void stop() {
 		if (mChessPlayer.hasTimeExpired()) {
 			play(mGameOverDinger);
-			setBackgroundColor(Color.RED);
+			setBackgroundResource(R.drawable.redbutton);
 			setClickable(false);
 		} else {
 			setBackgroundColor(Color.TRANSPARENT);

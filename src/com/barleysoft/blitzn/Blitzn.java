@@ -233,7 +233,11 @@ public class Blitzn extends Activity {
 
 	void installShakeListener() {
 		final Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		mShakeListener = new ShakeListener(this);
+		try {
+			mShakeListener = new ShakeListener(this);
+		} catch (UnsupportedOperationException e) {
+			return;
+		}
 		mShakeListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
 			public void onShake() {
 				if (mShakeEnabled && !mChessClock.isPaused()
@@ -247,7 +251,11 @@ public class Blitzn extends Activity {
 
 	void installPitchFlipListener() {
 		final Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		mPitchFlipListener = new PitchFlipListener(this);
+		try {
+			mPitchFlipListener = new PitchFlipListener(this);
+		} catch (UnsupportedOperationException e) {
+			return;
+		}
 		mPitchFlipListener
 				.setOnPitchFlipListener(new PitchFlipListener.OnPitchFlipListener() {
 					public void onPitchFlip(PitchFlipListener.State state) {

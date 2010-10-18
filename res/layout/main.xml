@@ -2,21 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/mainLayout" android:orientation="vertical"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:background="@drawable/woodgrain" android:keepScreenOn="true">
+	android:keepScreenOn="true">
 	<com.barleysoft.blitzn.BlitznChessClockButton
 		android:textColor="@android:color/white"
 		android:layout_centerHorizontal="true" android:layout_alignParentTop="true"
 		android:text="@+id/TextView01" android:layout_height="wrap_content"
-		android:id="@+id/player1Clock" android:padding="20px"
+		android:id="@+id/player1Clock" android:padding="20dip"
 		android:layout_weight="1" android:layout_width="fill_parent"
-		android:layout_margin="20px" android:textSize="100px"></com.barleysoft.blitzn.BlitznChessClockButton>
+		android:layout_margin="20dip" android:textSize="75dip">
+	</com.barleysoft.blitzn.BlitznChessClockButton>
 	<com.barleysoft.blitzn.BlitznChessClockButton
 		android:textColor="@android:color/white"
 		android:layout_centerHorizontal="true"
-		android:layout_alignParentBottom="true" android:padding="20px"
+		android:layout_alignParentBottom="true" android:padding="20dip"
 		android:text="@+id/TextView02" android:layout_height="wrap_content"
 		android:id="@+id/player2Clock" android:layout_weight="1"
-		android:layout_width="fill_parent" android:layout_margin="20px"
-		android:textSize="100px"></com.barleysoft.blitzn.BlitznChessClockButton>
+		android:layout_width="fill_parent" android:layout_margin="20dip"
+		android:textSize="75dip">
+	</com.barleysoft.blitzn.BlitznChessClockButton>
 </LinearLayout>
     

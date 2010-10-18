@@ -13,11 +13,8 @@ Blitzn Next Release v1.1
     Bugs:
         In initial READY mode screen stays on forever.
 
-        Timepressure siren is ticking two quickly.
+        Timepressure siren is ticking too quickly.
 
-        Catch UnsupportedOperation exceptions from ShakeListener and
-        PitchFlipListener
-        
         Unpause dialog currently shakes as the screen returns to full-screen.
         Is there a fix here?
 
@@ -36,10 +33,6 @@ Add Hourglass
 Hints - When the user clicks on a particular delay method for the first time,
 it should pop a box that contains an explanation of that particular method.
 The box should include a Show Tips checkbox.
-
-Rather than use DelayStrategyFactory, maybe we can embed this logic into
-DelayContext. DelayContext would take a delayStrategyId and look up the
-strategy factory. DelayContext would also add getDelayStrategyId().
 
 Create better launch icon
 
