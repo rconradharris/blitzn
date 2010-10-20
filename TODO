@@ -3,8 +3,6 @@ Blitzn Next Release v1.3
 
     Features:
 
-        Use SharedPreferences class from android
-
         About Page
 
     Code-cleanup:

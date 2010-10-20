@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
-<ListPreference android:key="durationPref" android:summary="@string/duration_summary" android:title="@string/duration" android:entryValues="@array/duration" android:entries="@array/duration_choices"></ListPreference><PreferenceCategory android:title="@string/delay"><ListPreference android:entryValues="@array/delay_method_values" android:entries="@array/delay_methods" android:key="delayMethodPref" android:summary="@string/delay_method_summary" android:title="@string/delay_method"></ListPreference>
-<ListPreference android:key="delayTimePref" android:summary="@string/delay_time_summary" android:title="@string/delay_time" android:entryValues="@array/delay_time_values" android:entries="@array/delay_times"></ListPreference>
-</PreferenceCategory><PreferenceCategory android:title="@string/sounds">
-<CheckBoxPreference android:summary="@string/clock_clicks_summary" android:title="@string/clock_clicks" android:key="soundEnabledPref" android:defaultValue="true"></CheckBoxPreference>
+<PreferenceCategory android:title="@string/time_control"><ListPreference android:key="durationPref" android:summary="@string/duration_summary" android:title="@string/duration" android:entryValues="@array/duration" android:entries="@array/duration_choices"></ListPreference><ListPreference android:entryValues="@array/delay_method_values" android:entries="@array/delay_methods" android:summary="@string/delay_mode_summary" android:title="@string/delay_mode" android:key="delayMethodPref"></ListPreference><ListPreference android:key="delayTimePref" android:summary="@string/delay_time_summary" android:title="@string/delay_time" android:entryValues="@array/delay_time_values" android:entries="@array/delay_times"></ListPreference></PreferenceCategory><PreferenceCategory android:title="@string/sounds">
+<CheckBoxPreference android:key="soundEnabledPref" android:defaultValue="true" android:title="@string/sounds" android:summary="@string/sounds_summary"></CheckBoxPreference>
 <CheckBoxPreference android:key="timePressureWarningPref" android:summary="@string/time_pressure_warning_summary" android:defaultValue="true" android:title="@string/time_pressure_warning"></CheckBoxPreference>
 
 </PreferenceCategory>
 <PreferenceCategory android:title="@string/motion_detection"><CheckBoxPreference android:key="shakeToResetPref" android:summary="@string/shake_to_reset_summary" android:defaultValue="true" android:title="@string/shake_to_reset"></CheckBoxPreference>
 <CheckBoxPreference android:key="flipToPausePref" android:summary="@string/flip_to_pause_summary" android:defaultValue="true" android:title="@string/flip_to_pause"></CheckBoxPreference>
 </PreferenceCategory>
+
 
 
 
