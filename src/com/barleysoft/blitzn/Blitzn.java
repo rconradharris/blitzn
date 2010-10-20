@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +36,7 @@ public class Blitzn extends Activity {
 	public static final long CLOCK_RESOLUTION = 100L; // ms
 	public static final String PREFS_NAME = "BlitznPrefs";
 	public static final int ACTIVITY_SET_TIME = 0;
+	public static final int ACTIVITY_PREFERENCES = 1;
 
 	// Member variables
 	private ChessClock mChessClock;
@@ -150,6 +152,8 @@ public class Blitzn extends Activity {
 		if (mChessClock.isPaused() && !mPausedDialog.isShowing()) {
 			mPausedDialog.show();
 		}
+
+		getPreferencesFromActivity();
 	}
 
 	@Override
@@ -214,6 +218,27 @@ public class Blitzn extends Activity {
 		mShowIntroDialog = settings.getBoolean("showIntroDialog", true);
 		mTimePressureWarningEnabled = settings.getBoolean(
 				"mTimePressureWarningEnabled", true);
+	}
+
+	void getPreferencesFromActivity() {
+		// Fetch Preferences from Activity
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		setSoundEnabled(prefs.getBoolean("soundEnabledPref", true));
+		setTimePressureWarningEnabled(prefs.getBoolean(
+				"timePressureWarningPref", true));
+		mShakeEnabled = prefs.getBoolean("shakeToResetPref", true);
+		mFlipEnabled = prefs.getBoolean("flipToPausePref", true);
+
+		long duration = Long.parseLong(prefs.getString("durationPref", "5"));
+		setDuration(duration * 60 * 1000);
+
+		int delayMethodId = Integer.parseInt(prefs.getString("delayMethodPref",
+				"0"));
+		setDelayMode(DelayMode.fromOrdinal(delayMethodId));
+
+		long delayTime = Long.parseLong(prefs.getString("delayTimePref", "1"));
+		setDelayTime(delayTime * 1000);
 	}
 
 	void savePreferences() {
@@ -362,18 +387,30 @@ public class Blitzn extends Activity {
 	};
 
 	private void setDuration(long duration) {
+		long oldDuration = mDuration;
 		mDuration = duration;
 		mChessClock.setDuration(duration);
+		if (oldDuration != mDuration) {
+			resetClock();
+		}
 	}
 
 	private void setDelayTime(long delayTime) {
+		long oldDelayTime = mDelayTime;
 		mDelayTime = delayTime;
 		mChessClock.setDelayTime(delayTime);
+		if (oldDelayTime != mDelayTime) {
+			resetClock();
+		}
 	}
 
 	private void setDelayMode(DelayMode delayMode) {
+		DelayMode oldDelayMode = mDelayMode;
 		mDelayMode = delayMode;
 		mChessClock.setDelayMode(delayMode);
+		if (oldDelayMode != mDelayMode) {
+			resetClock();
+		}
 	}
 
 	private void setSoundEnabled(boolean soundEnabled) {
@@ -393,15 +430,12 @@ public class Blitzn extends Activity {
 		// Back button on SetTime sub-Activity is overridden to bundle the
 		// results and RETURN_OK
 		Bundle extras = intent.getExtras();
-		long old_duration = mDuration;
 		setDuration(extras.getLong("durationMinutes") * 60 * 1000);
 
 		// NOTE(sirp): setDelayMethodFromInt has the side-effect of clearing the
 		// delay so we must store the old delay before calling it
-		long oldDelayTime = mDelayTime;
 		setDelayTime((extras.getLong("delaySeconds") * 1000));
 
-		DelayMode oldDelayMode = mDelayMode;
 		setDelayMode(DelayMode.fromOrdinal(extras.getInt("delayMethod")));
 
 		mShakeEnabled = extras.getBoolean("shakeEnabled");
@@ -410,12 +444,6 @@ public class Blitzn extends Activity {
 		setSoundEnabled(extras.getBoolean("soundEnabled"));
 		setTimePressureWarningEnabled(extras
 				.getBoolean("timePressureWarningEnabled"));
-
-		// Only reset the clock if we changed something related to time-keeping
-		if ((old_duration != mDuration) || (oldDelayTime != mDelayTime)
-				|| (oldDelayMode != mDelayMode)) {
-			resetClock();
-		}
 	}
 
 	private void setTime() {
@@ -439,6 +467,12 @@ public class Blitzn extends Activity {
 		return result;
 	}
 
+	private void startPreferencesActivity() {
+		Intent preferencesActivity = new Intent(getBaseContext(),
+				Preferences.class);
+		startActivity(preferencesActivity);
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -450,6 +484,9 @@ public class Blitzn extends Activity {
 			return true;
 		case R.id.pauseMenu:
 			pauseClock(true);
+			return true;
+		case R.id.preferencesMenu:
+			startPreferencesActivity();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

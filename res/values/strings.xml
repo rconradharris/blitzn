@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="delay_time_summary">Number of seconds of delay for each player</string>
+    <string name="delay_time">Delay Time</string>
+    <string name="delay_method_summary">The type of delay to employ</string>
+    <string name="delay_method">Method</string>
+    <string name="duration_summary">Time for each player in minutes</string>
+    <string name="flip_to_pause_summary">Flip the phone on to its face to pause both clocks</string>
+    <string name="shake_to_reset_summary">Shake the phone to reset both clocks</string>
+    <string name="motion_detection">Motion Detection</string>
+    <string name="time_pressure_warning_summary">Sounds an alert when player is under time pressure</string>
+    <string name="preferences">Preferences</string>
 	<string name="settings">Settings</string>
 	<string name="pause">Pause</string>
 	<string name="reset">Reset</string>
@@ -27,4 +37,6 @@
 	<string name="flip_to_pause">Flip to Pause</string>
 	<string name="sounds">Sounds</string>
 <string name="time_pressure_warning">Time Pressure Warning</string>
+<string name="clock_clicks">Clock Clicks</string>
+<string name="clock_clicks_summary">Enables clock clicking sound for each move</string>
 </resources>
