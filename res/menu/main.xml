@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:title="@string/reset" android:id="@+id/resetMenu" android:icon="@android:drawable/ic_menu_revert"></item>
-	<item android:title="@string/pause" android:id="@+id/pauseMenu" android:icon="@android:drawable/ic_media_pause"></item>
-	<item android:title="@string/settings" android:id="@+id/settingsMenu" android:icon="@android:drawable/ic_menu_preferences"></item>
-<item android:title="@string/preferences" android:id="@+id/preferencesMenu" android:icon="@android:drawable/ic_menu_preferences"></item>
+	<item android:title="@string/reset" android:id="@+id/resetMenu"
+		android:icon="@android:drawable/ic_menu_revert"></item>
+	<item android:title="@string/pause" android:id="@+id/pauseMenu"
+		android:icon="@android:drawable/ic_media_pause"></item>
+	<item android:title="@string/preferences" android:id="@+id/preferencesMenu"
+		android:icon="@android:drawable/ic_menu_preferences"></item>
 </menu>

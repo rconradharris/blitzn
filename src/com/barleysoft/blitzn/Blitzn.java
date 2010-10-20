@@ -35,8 +35,7 @@ public class Blitzn extends Activity {
 	// Constants
 	public static final long CLOCK_RESOLUTION = 100L; // ms
 	public static final String PREFS_NAME = "BlitznPrefs";
-	public static final int ACTIVITY_SET_TIME = 0;
-	public static final int ACTIVITY_PREFERENCES = 1;
+	public static final int ACTIVITY_PREFERENCES = 0;
 
 	// Member variables
 	private ChessClock mChessClock;
@@ -425,40 +424,6 @@ public class Blitzn extends Activity {
 		mPlayer2ClockButton.setIsTimePressureWarningEnabled(timePressure);
 	}
 
-	protected void onActivityResult(int requestCode, int resultCode,
-			Intent intent) {
-		// Back button on SetTime sub-Activity is overridden to bundle the
-		// results and RETURN_OK
-		Bundle extras = intent.getExtras();
-		setDuration(extras.getLong("durationMinutes") * 60 * 1000);
-
-		// NOTE(sirp): setDelayMethodFromInt has the side-effect of clearing the
-		// delay so we must store the old delay before calling it
-		setDelayTime((extras.getLong("delaySeconds") * 1000));
-
-		setDelayMode(DelayMode.fromOrdinal(extras.getInt("delayMethod")));
-
-		mShakeEnabled = extras.getBoolean("shakeEnabled");
-		mFlipEnabled = extras.getBoolean("flipEnabled");
-
-		setSoundEnabled(extras.getBoolean("soundEnabled"));
-		setTimePressureWarningEnabled(extras
-				.getBoolean("timePressureWarningEnabled"));
-	}
-
-	private void setTime() {
-		Intent setTimeIntent = new Intent(this, SetTime.class);
-		setTimeIntent.putExtra("delayMethod", mDelayMode.ordinal());
-		setTimeIntent.putExtra("durationMinutes", mDuration / 60 / 1000);
-		setTimeIntent.putExtra("delaySeconds", mDelayTime / 1000);
-		setTimeIntent.putExtra("shakeEnabled", mShakeEnabled);
-		setTimeIntent.putExtra("flipEnabled", mFlipEnabled);
-		setTimeIntent.putExtra("soundEnabled", mSoundEnabled);
-		setTimeIntent.putExtra("timePressureWarningEnabled",
-				mTimePressureWarningEnabled);
-		startActivityForResult(setTimeIntent, ACTIVITY_SET_TIME);
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
@@ -478,9 +443,6 @@ public class Blitzn extends Activity {
 		switch (item.getItemId()) {
 		case R.id.resetMenu:
 			resetClock();
-			return true;
-		case R.id.settingsMenu:
-			setTime();
 			return true;
 		case R.id.pauseMenu:
 			pauseClock(true);

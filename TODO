@@ -5,9 +5,11 @@ Blitzn Next Release v1.3
 
         Use SharedPreferences class from android
 
+        About Page
+
     Code-cleanup:
-        Spinners currently parse directly, we should use IDs to decouple the
-        spinner logic from a particular language.
+        Move Blitzn Preferences out to a Preference Manager (its mucking up the main
+        activity)
 
     Bugs:
         Bronstein should delay before starting clock, not add back.
@@ -26,9 +28,6 @@ Blitzn Next Release v1.3
 
 Unpriortizied
 =============
-
-Move Blitzn Preferences out to a Preference Manager (its mucking up the main
-activity)
 
 Add delay counter on main page.
 
@@ -78,8 +77,6 @@ should be missing. Now hit menu again, layout should be pushed up and margin
 restored.
 
 Splash Screen
-
-About Page
 
 Save Activity State - see onSaveInstanceState() onRestoreInstanceState()
 

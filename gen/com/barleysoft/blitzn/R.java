@@ -39,9 +39,8 @@ public final class R {
         public static final int pauseMenu=0x7f090013;
         public static final int player1Clock=0x7f090002;
         public static final int player2Clock=0x7f090004;
-        public static final int preferencesMenu=0x7f090015;
+        public static final int preferencesMenu=0x7f090014;
         public static final int resetMenu=0x7f090012;
-        public static final int settingsMenu=0x7f090014;
         public static final int shakeCheckbox=0x7f09000c;
         public static final int soundCheckbox=0x7f09000e;
         public static final int timePressureWarningCheckbox=0x7f09000b;
