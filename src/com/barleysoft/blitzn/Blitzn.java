@@ -12,10 +12,13 @@ import com.barleysoft.motion.ShakeListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -450,6 +453,9 @@ public class Blitzn extends Activity {
 		case R.id.preferencesMenu:
 			startPreferencesActivity();
 			return true;
+		case R.id.aboutMenu:
+			showAboutDialog();
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -470,6 +476,23 @@ public class Blitzn extends Activity {
 	protected void onStop() {
 		super.onStop();
 		savePreferences();
+	}
+
+	private void showAboutDialog() {
+		Dialog aboutDialog = new Dialog(this);
+		aboutDialog.setContentView(R.layout.about_dialog);
+		aboutDialog.setTitle("Blitzn v" + getVersionName());
+		aboutDialog.show();
+	}
+
+	private String getVersionName() {
+		try {
+			PackageInfo manager = getPackageManager().getPackageInfo(
+					getPackageName(), 0);
+			return manager.versionName;
+		} catch (NameNotFoundException e) {
+			return "0.0";
+		}
 	}
 
 	private void showExitDialog() {

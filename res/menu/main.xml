@@ -6,4 +6,6 @@
 		android:icon="@android:drawable/ic_media_pause"></item>
 	<item android:title="@string/preferences" android:id="@+id/preferencesMenu"
 		android:icon="@android:drawable/ic_menu_preferences"></item>
+	<item android:id="@+id/aboutMenu" android:title="@string/about"
+		android:icon="@android:drawable/ic_menu_info_details"></item>
 </menu>

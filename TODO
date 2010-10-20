@@ -3,29 +3,32 @@ Blitzn Next Release v1.3
 
     Features:
 
-        About Page
+        Improve About Page Text
 
     Code-cleanup:
-        Move Blitzn Preferences out to a Preference Manager (its mucking up the main
-        activity)
 
     Bugs:
         Bronstein should delay before starting clock, not add back.
 
         In initial READY mode screen stays on forever.
-        
-        Timepressure siren is ticking too quickly.
-
-        Unpause dialog currently shakes as the screen returns to full-screen.
-        Is there a fix here?
-
-        Increase accuracy of timing logic (you can hear discrepencies in Time Pressure
-        mode, it doesn't quite keep the beat)
 
         Pause Icon is a little too light gray
 
 Unpriortizied
 =============
+
+Create swipey number selector
+
+Unpause dialog currently shakes as the screen returns to full-screen.
+Is there a fix here?
+
+
+Increase accuracy of timing logic (you can hear discrepencies in Time Pressure
+mode, it doesn't quite keep the beat)
+Timepressure siren is ticking too quickly. Can this be fixed?
+
+Move Blitzn Preferences out to a Preference Manager (its mucking up the main
+activity)
 
 Add delay counter on main page.
 
