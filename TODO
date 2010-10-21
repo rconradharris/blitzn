@@ -3,11 +3,15 @@ Blitzn Next Release v1.3
 
     Features:
 
+        Create swipey number selector
+
         Improve About Page Text
 
     Code-cleanup:
 
     Bugs:
+        Screen is remaining on when chess clock is stopped
+
         Bronstein should delay before starting clock, not add back.
 
         In initial READY mode screen stays on forever.
@@ -17,11 +21,12 @@ Blitzn Next Release v1.3
 Unpriortizied
 =============
 
-Create swipey number selector
+Use wakelock? or Power manager?
+
+Add Move Counter to Main screen
 
 Unpause dialog currently shakes as the screen returns to full-screen.
 Is there a fix here?
-
 
 Increase accuracy of timing logic (you can hear discrepencies in Time Pressure
 mode, it doesn't quite keep the beat)

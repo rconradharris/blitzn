@@ -9,5 +9,5 @@
 		android:id="@+id/aboutDialogText"></TextView>
 	<TextView android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:text="@string/copyright_notice"
-		android:id="@+id/aboutDialogCopyright"></TextView>
+		android:id="@+id/aboutDialogCopyright" android:paddingTop="50dip"></TextView>
 </LinearLayout>
