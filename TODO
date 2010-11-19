@@ -1,9 +1,15 @@
-Blitzn Next Release v1.3
+Priorities:
+    * Rename Accumulate back to Fischer (?)
+    * Update Blog to use new launcher icon
+    * License Enforcement
+    * Touch-ups (Pause Icon, move counter, power manage tweaks)
+    * Promo Graphic?
+    * Publicize on other marketplaces?
+
+Blitzn Next Release v1.4
 ========================
 
     Features:
-
-        Create swipey number selector
 
         Improve About Page Text
 
@@ -12,14 +18,19 @@ Blitzn Next Release v1.3
     Bugs:
         Screen is remaining on when chess clock is stopped
 
-        Bronstein should delay before starting clock, not add back.
-
         In initial READY mode screen stays on forever.
 
         Pause Icon is a little too light gray
 
 Unpriortizied
 =============
+
+Bronstein should delay before starting clock, not add back. (NOTSURE)
+
+IMPORTANT: Internationalize! (German, French, Spanish)
+Use Amazon Turk to internationalize strings.xml
+
+Create swipey number selector
 
 Use wakelock? or Power manager?
 
@@ -35,41 +46,7 @@ Timepressure siren is ticking too quickly. Can this be fixed?
 Move Blitzn Preferences out to a Preference Manager (its mucking up the main
 activity)
 
-Add delay counter on main page.
-
-Add Hourglass
-
-Hints - When the user clicks on a particular delay method for the first time,
-it should pop a box that contains an explanation of that particular method.
-The box should include a Show Tips checkbox.
-
-Create better launch icon
-
-Create Time Control menu: set duration and delay there. This page will reset
-the clock if the values are manipulated. Settings page will no longer reset
-clock if values tweaked.
-
-Rebrand Blitzn as Blitzn Pro and Create free limited version of Blitzn.
-Tournament Version
-
-Improve UI Phase 1:
-    Make LED timer look more realistic
-    Add 3D to the buttons.
-    Add glowing red light to indicate time is running.
-
-Use Amazon Turk to internationalize strings.xml
-
 Provide a way to get back to the hints page
-
-Add Favorites:
-    Favorites will a tuple of (duration, delay_method, delay_time)
-    Bullet (1, None, _)
-    Lightning (3, FISCHER_AFTER, 2)
-    Blitz  (1, None, _)
-    Custom 1
-    Custom 2
-
-
 
 Add FIDE tournament mode, from Wikipedia:
 "The World Chess Federation FIDE sets a single time control for all major FIDE
@@ -81,8 +58,6 @@ Top Button to Top of screen (occurs sporadically on HTC Incredible).
 Replicated this by hitting settings button, then hit back. Bottom margin
 should be missing. Now hit menu again, layout should be pushed up and margin
 restored.
-
-Splash Screen
 
 Save Activity State - see onSaveInstanceState() onRestoreInstanceState()
 
@@ -99,9 +74,33 @@ Themes?
 
 Add link to webpage help
 
-
 Maybe Not
 =========
+
+Add delay counter on main page.
+
+Add Hourglass
+
+Hints - When the user clicks on a particular delay method for the first time,
+it should pop a box that contains an explanation of that particular method.
+The box should include a Show Tips checkbox.
+
+Create Time Control menu: set duration and delay there. This page will reset
+the clock if the values are manipulated. Settings page will no longer reset
+clock if values tweaked.
+
+Rebrand Blitzn as Blitzn Pro and Create free limited version of Blitzn.
+Tournament Version
+
+Add Favorites:
+    Favorites will a tuple of (duration, delay_method, delay_time)
+    Bullet (1, None, _)
+    Lightning (3, FISCHER_AFTER, 2)
+    Blitz  (1, None, _)
+    Custom 1
+    Custom 2
+
+Splash Screen
 
 Font options (non LED?) Underline perhaps? or a different font
 
@@ -123,8 +122,6 @@ Free will have limited features and be ad-supported.
 Port Blitzn to iPhone.
 
 Release in GetJar, Amazon and Verizon app stores.
-
-Create Small website. "What's Brewing?"/ Colors Yellow & Brown.
 
 Barleysoft
 ==========
