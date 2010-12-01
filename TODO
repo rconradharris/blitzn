@@ -1,3 +1,7 @@
+License Verification Library Steps:
+
+Obfuscate Code with ProGuard: proguard.sourceforge.net
+
 Priorities:
     * Rename Accumulate back to Fischer (?)
     * Update Blog to use new launcher icon
@@ -24,6 +28,8 @@ Blitzn Next Release v1.4
 
 Unpriortizied
 =============
+
+Volume needs to adjust media player volume not ring-tone volume
 
 Bronstein should delay before starting clock, not add back. (NOTSURE)
 
