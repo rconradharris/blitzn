@@ -9,11 +9,11 @@ import com.barleysoft.blitzn.chessclock.ChessClock.DelayMode;
 import com.barleysoft.blitzn.chessclock.ChessClock.Player;
 import com.barleysoft.motion.PitchFlipListener;
 import com.barleysoft.motion.ShakeListener;
+import android.view.HapticFeedbackConstants;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,7 +23,6 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
@@ -262,8 +261,12 @@ public class Blitzn extends Activity {
 		editor.commit();
 	}
 
+	void vibrate() {
+		findViewById(R.id.mainLayout).performHapticFeedback(
+				HapticFeedbackConstants.VIRTUAL_KEY);
+	}
+
 	void installShakeListener() {
-		final Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		try {
 			mShakeListener = new ShakeListener(this);
 		} catch (UnsupportedOperationException e) {
@@ -273,7 +276,7 @@ public class Blitzn extends Activity {
 			public void onShake() {
 				if (mShakeEnabled && !mChessClock.isPaused()
 						&& !mChessClock.isReady()) {
-					vibe.vibrate(100);
+					vibrate();
 					resetClock();
 				}
 			}
@@ -281,7 +284,6 @@ public class Blitzn extends Activity {
 	}
 
 	void installPitchFlipListener() {
-		final Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		try {
 			mPitchFlipListener = new PitchFlipListener(this);
 		} catch (UnsupportedOperationException e) {
@@ -294,12 +296,12 @@ public class Blitzn extends Activity {
 							if ((state == PitchFlipListener.State.UP)
 									&& mChessClock.isPaused()) {
 								Log.i("Blitzn", "flip detected, unpausing");
-								vibe.vibrate(100);
+								vibrate();
 								unPauseClock();
 							} else if ((state == PitchFlipListener.State.DOWN)
 									&& !mChessClock.isPaused()) {
 								Log.i("Blitzn", "flip detected, pausing");
-								vibe.vibrate(100);
+								vibrate();
 								pauseClock(true);
 							}
 						}

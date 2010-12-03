@@ -20,9 +20,6 @@ Blitzn Next Release v1.4
     Code-cleanup:
 
     Bugs:
-
-        Can we remove the warning generated due to vibration permission? Use haptic feedback?
-
         
         Screen is remaining on when chess clock is stopped
 
@@ -32,6 +29,8 @@ Blitzn Next Release v1.4
 
 Unpriortizied
 =============
+
+Using haptic feedback (sucks because it's so weak). Should we use vibration at the cost of having to request for permission?
 
 Bronstein should delay before starting clock, not add back. (NOTSURE)
 
