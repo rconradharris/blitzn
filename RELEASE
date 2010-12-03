@@ -6,6 +6,8 @@ Tag in git - v1.0
 
 Remove "debuggable=true" from manifest before release
 
+Run Projects/Clean (without this the old Manifest maybe used by Eclipse)
+
 Sign w/ release key
     Use Eclipse ADT Wizard to Export signed apk
 

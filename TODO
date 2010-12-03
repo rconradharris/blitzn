@@ -20,6 +20,10 @@ Blitzn Next Release v1.4
     Code-cleanup:
 
     Bugs:
+
+        Can we remove the warning generated due to vibration permission? Use haptic feedback?
+
+        
         Screen is remaining on when chess clock is stopped
 
         In initial READY mode screen stays on forever.
@@ -28,8 +32,6 @@ Blitzn Next Release v1.4
 
 Unpriortizied
 =============
-
-Volume needs to adjust media player volume not ring-tone volume
 
 Bronstein should delay before starting clock, not add back. (NOTSURE)
 
