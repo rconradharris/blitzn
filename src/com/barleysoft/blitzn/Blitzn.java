@@ -189,10 +189,8 @@ public class Blitzn extends Activity {
 	}
 
 	private AlertDialog createPausedDialog() {
-		AlertDialog alertDialog = new AlertDialog.Builder(this)
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setTitle(R.string.paused).create();
-		alertDialog
+		PausedDialog pausedDialog = new PausedDialog(this);
+		pausedDialog
 				.setOnDismissListener(new DialogInterface.OnDismissListener() {
 					public void onDismiss(DialogInterface dialog) {
 						if (mChessClock.isPaused()) {
@@ -200,7 +198,7 @@ public class Blitzn extends Activity {
 						}
 					}
 				});
-		return alertDialog;
+		return pausedDialog;
 	}
 
 	private void showIntroDialogBox() {
