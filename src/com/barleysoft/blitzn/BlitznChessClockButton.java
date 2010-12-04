@@ -77,12 +77,14 @@ public class BlitznChessClockButton extends Button implements ChessClockButton {
 	public void activate() {
 		setClickable(true);
 		setBackgroundResource(R.drawable.greenbutton);
+		setTextColor(Color.WHITE);
 		updateTimeLeft();
 	}
 
 	public void deactivate() {
 		play(mClicker);
 		setBackgroundColor(Color.TRANSPARENT);
+		setTextColor(Color.GRAY);
 		setClickable(false);
 		updateTimeLeft();
 	}
