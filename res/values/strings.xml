@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="copyright_notice">© 2010 Barleysoft</string>
+    <string name="copyright_notice">© 2011 Barleysoft</string>
     <string name="sounds_summary">Enable chess clock sounds</string>
     <string name="time_control">Time Control</string>
     <string name="delay_time_summary">Delay for each players in seconds</string>

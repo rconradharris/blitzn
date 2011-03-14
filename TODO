@@ -4,7 +4,6 @@ Obfuscate Code with ProGuard: proguard.sourceforge.net
 
 Priorities:
     * Rename Accumulate back to Fischer (?)
-    * Update Blog to use new launcher icon
     * License Enforcement
     * Touch-ups (Pause Icon, move counter, power manage tweaks)
     * Promo Graphic?
@@ -16,14 +15,13 @@ Blitzn Next Release v1.4
     Features:
 
         Improve About Page Text
+        Add FIDE Tournament Mode
 
     Code-cleanup:
 
     Bugs:
         
         Screen is remaining on when chess clock is stopped
-
-        In initial READY mode screen stays on forever.
 
         Pause Icon is a little too light gray
 
@@ -117,6 +115,7 @@ Show Opponent Time right side up for each player
 Ideas
 =====
 
+Move Transcription (email a log of moves to the user);  Voice Recognition?
 Maybe git commit msg should just be used rather than CHANGELOG (no need to
 duplicate effort)
 
