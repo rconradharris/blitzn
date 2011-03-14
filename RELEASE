@@ -2,6 +2,8 @@ Bump version:
     versionCode: 100
     versionName: 1.0
 
+Commit w/ "Bumping version" msg
+
 Tag in git - v1.0
 
 Remove "debuggable=true" from manifest before release
